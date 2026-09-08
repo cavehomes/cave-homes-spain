@@ -296,7 +296,7 @@ footer{
 </div>
 </section>
 
-<section id="sell" class="contact">
+  <section id="sell" class="contact">
   <h2>Sell your cave home</h2>
   <p>Want to sell your cave home in Spain? Get in touch with us.</p>
   <p>Email: hello@cavehomesspain.com</p>
@@ -304,8 +304,20 @@ footer{
 
 <section id="contact" class="contact">
   <h2>Contact Cave Homes Spain</h2>
-  <p>We would love to hear from you.</p>
-  <p>Email: hello@cavehomesspain.com</p>
+  <p>Tell us what you're looking for.</p>
+
+  <form action="mailto:hello@cavehomesspain.com" method="post" enctype="text/plain">
+    <label for="name">Name</label>
+    <input type="text" id="name" name="Name" required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="Email" required>
+
+    <label for="message">Message</label>
+    <textarea id="message" name="Message" rows="6" required></textarea>
+
+    <button type="submit">Send enquiry</button>
+  </form>
 </section>
 
 </main>
