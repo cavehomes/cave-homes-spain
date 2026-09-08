@@ -8,7 +8,7 @@
 <style>
 :root{
   --ink:#24302b;
-  --muted:#6f786f;
+  --muted:#68766f;
   --paper:#fbfaf5;
   --card:#fff;
   --accent:#9a5b38;
@@ -28,7 +28,10 @@ header{
   justify-content:space-between;
   align-items:center;
   border-bottom:1px solid var(--line);
-  background:white;
+  background:#fff;
+  position:sticky;
+  top:0;
+  z-index:10;
 }
 .brand{
   font-size:22px;
@@ -73,102 +76,148 @@ nav button{
   padding:16px;
   border:1px solid #d8d2c7;
   border-radius:12px;
-  background:white;
+  background:#fff;
   font-size:16px;
 }
-.btn{
+.search button,.cta{
   border:0;
   border-radius:12px;
-  padding:16px 22px;
   background:var(--accent);
-  color:white;
+  color:#fff;
+  padding:16px 22px;
   font-weight:700;
   cursor:pointer;
 }
-main{
-  padding:40px 6vw 70px;
-}
+main{padding:40px 6vw}
+section{scroll-margin-top:90px}
 .section-head{
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
+  align-items:end;
+  gap:20px;
 }
-.section-head h2{margin:0}
+.section-head h2{
+  font-size:30px;
+  margin:0;
+}
+.muted{color:var(--muted)}
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
   gap:22px;
+  margin-top:25px;
 }
 .card{
-  background:white;
+  background:var(--card);
   border:1px solid var(--line);
   border-radius:16px;
   overflow:hidden;
+  box-shadow:0 5px 18px #0000000a;
 }
-.card-image{
-  height:180px;
-  background:linear-gradient(135deg,#c99b76,#e5d1b7);
+.photo{
+  height:190px;
   display:flex;
   align-items:end;
-  padding:18px;
-  color:white;
-  font-weight:800;
+  padding:14px;
+  color:#fff;
+  font-weight:700;
 }
-.card-body{padding:20px}
-.card-body h3{margin:0 0 8px}
-.muted{color:var(--muted)}
+.photo.one{background:linear-gradient(135deg,#8b6b52,#d6b28c)}
+.photo.two{background:linear-gradient(135deg,#68745b,#c6a47c)}
+.photo.three{background:linear-gradient(135deg,#6f5d55,#c9a77e)}
+.card-body{padding:18px}
 .price{
-  font-size:20px;
+  font-size:25px;
   font-weight:800;
-  margin:12px 0;
 }
-.card-actions{
-  display:flex;
-  gap:8px;
+.facts{
+  color:var(--muted);
+  margin:7px 0 14px;
 }
-.card-actions button{flex:1}
-
+.card button{
+  width:100%;
+  padding:11px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#fff;
+  cursor:pointer;
+  font-weight:700;
+}
 .features{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:22px;
-  margin-top:45px;
+  gap:20px;
+  margin:45px 0;
 }
 .feature{
   padding:25px;
   border:1px solid var(--line);
-  border-radius:16px;
-  background:white;
+  border-radius:14px;
+  background:#fff;
 }
+.feature h3{margin-top:0}
 .contact{
-  margin-top:45px;
   background:var(--ink);
-  color:white;
+  color:#fff;
   border-radius:18px;
   padding:35px;
 }
-.contact h2{margin-top:0}
 .contact form{
   display:grid;
-  gap:12px;
-  max-width:650px;
+  gap:10px;
+  max-width:700px;
 }
 .contact input,.contact textarea{
   padding:14px;
-  border-radius:10px;
   border:0;
+  border-radius:9px;
   font-size:16px;
 }
 .contact textarea{min-height:120px}
+.contact button{background:var(--accent)}
+#resultsMessage{
+  margin-top:15px;
+  font-weight:600;
+}
 footer{
   padding:30px 6vw;
   color:var(--muted);
   border-top:1px solid var(--line);
+  font-size:14px;
+}
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#0008;
+  z-index:50;
+  padding:20px;
+  align-items:center;
+  justify-content:center;
+}
+.modal-box{
+  background:#fff;
+  color:var(--ink);
+  max-width:600px;
+  width:100%;
+  border-radius:16px;
+  padding:25px;
+}
+.modal-box button{
+  float:right;
+  border:0;
+  background:#eee;
+  border-radius:8px;
+  padding:8px 12px;
+  cursor:pointer;
 }
 @media(max-width:750px){
-  nav{display:none}
+  header{padding:16px 5vw}
+  nav{gap:8px}
+  nav button{font-size:13px}
+  .hero{padding:55px 5vw 40px}
   .search{grid-template-columns:1fr}
+  main{padding:35px 5vw}
   .features{grid-template-columns:1fr}
 }
 </style>
@@ -179,120 +228,47 @@ footer{
 <header>
   <div class="brand">🏡 <span class="tag">Cave Homes</span> Spain</div>
   <nav>
-    <button onclick="scrollToId('properties')">Properties</button>
-    <button onclick="scrollToId('sell')">Sell a cave</button>
-    <button onclick="scrollToId('contact')">Contact</button>
+    <button onclick="goTo('properties')">Buy</button>
+    <button onclick="goTo('sell')">Sell</button>
+    <button onclick="goTo('contact')">Contact</button>
   </nav>
 </header>
 
 <section class="hero">
   <h1>Find your own cave home in Spain.</h1>
   <p>
-    Authentic cave houses, rural retreats and investment opportunities
-    across Andalucía and beyond.
+    Authentic cave houses, rural retreats and investment
+    opportunities across Andalucía and beyond.
   </p>
 
   <div class="search">
-    <input id="q" placeholder="Town or province">
+    <input id="town" placeholder="Town or province">
 
-    <select id="max">
-      <option value="">Any price</option>
-      <option value="100000">Under €100,000</option>
-      <option value="150000">Under €150,000</option>
-      <option value="200000">Under €200,000</option>
+    <select id="price">
+      <option value="0">Any price</option>
+      <option value="100000">Up to €100,000</option>
+      <option value="150000">Up to €150,000</option>
+      <option value="200000">Up to €200,000</option>
     </select>
 
     <select id="beds">
-      <option value="">Any bedrooms</option>
-      <option value="1">1+ bedrooms</option>
+      <option value="0">Any bedrooms</option>
       <option value="2">2+ bedrooms</option>
       <option value="3">3+ bedrooms</option>
+      <option value="4">4+ bedrooms</option>
+      <option value="5">5+ bedrooms</option>
     </select>
 
-    <button class="btn" onclick="filterHomes()">Search</button>
+    <button onclick="searchHomes()">Search</button>
   </div>
+
+  <div id="resultsMessage"></div>
 </section>
 
 <main>
 
 <section id="properties">
   <div class="section-head">
-    <h2>Featured cave homes</h2>
-    <div class="muted" id="count"></div>
-  </div>
-
-  <div class="grid" id="grid"></div>
-</section>
-
-<section class="features">
-  <div class="feature">
-    <h3>📍 Explore by location</h3>
-    <p class="muted">
-      Find cave homes by town, province and region across Spain.
-    </p>
-  </div>
-
-  <div class="feature">
-    <h3>📷 Sell your experience</h3>
-    <p class="muted">
-      Sellers can submit their property details and create a featured listing.
-    </p>
-  </div>
-
-  <div class="feature">
-    <h3>💬 Capture enquiries</h3>
-    <p class="muted">
-      Buyers can contact you directly about a property.
-    </p>
-  </div>
-</section>
-
-<section id="sell" class="contact">
-  <h2>Have a cave house to sell?</h2>
-  <p>
-    Submit your details and tell us about your property.
-  </p>
-
-  <form onsubmit="submitSeller(event)">
-    <input id="sellerName" required placeholder="Your name">
-    <input id="sellerEmail" type="email" required placeholder="Your email">
-    <input id="sellerTown" required placeholder="Town / province">
-    <textarea id="sellerProperty" required placeholder="Tell us about your cave house"></textarea>
-    <button class="btn" type="submit">Submit property</button>
-  </form>
-</section>
-
-<section id="contact" class="contact">
-  <h2>Contact Cave Homes Spain</h2>
-  <p>
-    Interested in a property or have a question? Send us a message.
-  </p>
-
-  <form onsubmit="submitContact(event)">
-    <input id="contactName" required placeholder="Your name">
-    <input id="contactEmail" type="email" required placeholder="Your email">
-    <textarea id="contactMessage" required placeholder="Your message"></textarea>
-    <button class="btn" type="submit">Send enquiry</button>
-  </form>
-</section>
-
-</main>
-
-<footer>
-  Cave Homes Spain · A specialist marketplace concept for cave houses in Spain.
-</footer>
-
-<script>
-
-const homes = [
-  {
-    name:"Andalusian Cave Home",
-    town:"Galera, Granada",
-    price:80000,
-    beds:4,
-    size:235,
-    desc:"Characterful cave home with traditional features and rural surroundings."
-  },
-  {
-    name:"Renovated Cave Retreat",
-    town:"Gal
+    <div>
+      <h2>Featured cave homes</h2>
+      <p class="muted">Explore
