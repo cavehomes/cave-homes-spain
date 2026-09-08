@@ -272,3 +272,75 @@ footer{
     <div>
       <h2>Featured cave homes</h2>
       <p class="muted">Explore
+ our featured cave homes in Spain.</p>
+</div>
+
+<div class="features">
+  <div class="feature">
+    <h3>Andalusian Cave Home</h3>
+    <p>Galera, Granada</p>
+    <strong>€80,000</strong>
+  </div>
+
+  <div class="feature">
+    <h3>Renovated Cave Retreat</h3>
+    <p>Galera, Granada</p>
+    <strong>€135,000</strong>
+  </div>
+
+  <div class="feature">
+    <h3>Luxury Cave House</h3>
+    <p>Galera, Granada</p>
+    <strong>€189,000</strong>
+  </div>
+</div>
+</section>
+
+<section id="sell" class="contact">
+  <h2>Sell your cave home</h2>
+  <p>Want to sell your cave home in Spain? Get in touch with us.</p>
+  <p>Email: hello@cavehomesspain.com</p>
+</section>
+
+<section id="contact" class="contact">
+  <h2>Contact Cave Homes Spain</h2>
+  <p>We would love to hear from you.</p>
+  <p>Email: hello@cavehomesspain.com</p>
+</section>
+
+</main>
+
+<footer>
+  Cave Homes Spain — Authentic cave homes in Spain.
+</footer>
+
+<script>
+function goTo(id) {
+  const section = document.getElementById(id);
+
+  if (section) {
+    section.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+}
+
+function searchHomes() {
+  const town = document.getElementById("town").value.trim();
+  const price = document.getElementById("price").value;
+  const beds = document.getElementById("beds").value;
+  const message = document.getElementById("resultsMessage");
+
+  if (!town && price === "0" && beds === "0") {
+    message.textContent = "Showing all available cave homes.";
+  } else {
+    message.textContent = "Searching for cave homes matching your criteria...";
+  }
+
+  goTo("properties");
+}
+</script>
+
+</body>
+</html>
