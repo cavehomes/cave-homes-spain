@@ -3,612 +3,311 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cave Homes Spain | Authentic Cave Homes for Sale</title>
-<meta name="description" content="Discover authentic cave homes for sale in Spain. Find unique cave houses in Granada, Andalucía and beyond.">
+
+<title>Cave Homes Spain | Cave Houses for Sale</title>
+
+<meta name="description" content="Discover beautiful cave homes and cave houses for sale in Spain.">
+
 <style>
-:root{
-  --ink:#2f241e;
-  --muted:#75675d;
-  --paper:#f8f3ec;
-  --card:#fff;
-  --accent:#9a5b32;
-  --accent-dark:#70401f;
-  --sand:#ead8c2;
-  --line:#e3d4c3;
-  --dark:#33251d;
-  --max:1180px;
+* {
+  box-sizing: border-box;
 }
 
-*{box-sizing:border-box}
-
-html{scroll-behavior:smooth}
-
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
-  background:var(--paper);
-  color:var(--ink);
-  line-height:1.6;
+html {
+  scroll-behavior: smooth;
 }
 
-a{color:inherit}
-
-header{
-  position:sticky;
-  top:0;
-  z-index:100;
-  background:rgba(255,255,255,.96);
-  border-bottom:1px solid var(--line);
-  backdrop-filter:blur(10px);
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f6f1e8;
+  color: #2f241d;
 }
 
-.navbar{
-  max-width:var(--max);
-  margin:auto;
-  padding:16px 22px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
+header {
+  background: #38271e;
+  color: white;
+  padding: 16px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-.brand{
-  text-decoration:none;
-  font-size:24px;
-  font-weight:800;
-  letter-spacing:-.5px;
-  white-space:nowrap;}
-
-.brand span{color:var(--accent)}
-
-nav{
-  display:flex;
-  align-items:center;
-  gap:24px;
+.header-inner {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 }
 
-nav a{
-  text-decoration:none;
-  font-weight:700;
-  font-size:15px;
+.logo {
+  color: white;
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: bold;
 }
 
-nav a:hover{color:var(--accent)}
-
-..nav-sell{
-  padding:9px 13px;
-  border-radius:999px;
-  background:var(--accent);
-  color:#fff!important;
-  white-space:nowrap;
-  font-size:14px;
+nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.hero{
-  min-height:600px;
-  display:flex;
-  align-items:center;
+nav a {
+  color: white;
+  text-decoration: none;
+  padding: 9px 13px;
+  border-radius: 6px;
+}
+
+nav a:hover {
+  background: #614535;
+}
+
+.hero {
+  min-height: 520px;
+  padding: 80px 20px;
+  display: flex;
+  align-items: center;
   background:
-    linear-gradient(135deg,rgba(248,243,236,.98),rgba(234,216,194,.82));
+    linear-gradient(rgba(45,30,20,.62), rgba(45,30,20,.62)),
+    url("https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1800&q=80")
+    center/cover;
+  color: white;
 }
 
-.hero-inner{
-  width:100%;
-  max-width:var(--max);
-  margin:auto;
-  padding:80px 22px;
-  display:grid;
-  grid-template-columns:1.1fr .9fr;
-  gap:60px;
-  align-items:center;
+.hero-content {
+  max-width: 1100px;
+  width: 100%;
+  margin: auto;
 }
 
-.eyebrow{
-  color:var(--accent);
-  text-transform:uppercase;
-  letter-spacing:2px;
-  font-size:13px;
-  font-weight:800;
-  margin-bottom:16px;
+.hero h1 {
+  font-size: clamp(40px, 7vw, 72px);
+  margin: 0 0 15px;
+  max-width: 800px;
 }
 
-h1{
-  font-family:Georgia,serif;
-  font-size:clamp(42px,6vw,72px);
-  line-height:1.02;
-  letter-spacing:-2px;
-  margin:0 0 24px;
-  max-width:700px;
+.hero p {
+  font-size: 21px;
+  max-width: 700px;
+  line-height: 1.6;
 }
 
-.hero-copy{
-  font-size:19px;
-  color:var(--muted);
-  max-width:620px;
-  margin-bottom:32px;
+.search-box {
+  margin-top: 30px;
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: 1fr 180px 140px auto;
+  gap: 10px;
+  max-width: 1000px;
 }
 
-.search-box{
-  background:#fff;
-  padding:18px;
-  border:1px solid var(--line);
-  border-radius:18px;
-  box-shadow:0 15px 40px rgba(70,45,25,.10);
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #d5c8bb;
+  border-radius: 7px;
+  font-size: 15px;
 }
 
-.search-grid{
-  display:grid;
-  grid-template-columns:1.5fr 1fr 1fr auto;
-  gap:10px;
+button,
+.button {
+  border: 0;
+  background: #a85d32;
+  color: white;
+  padding: 13px 18px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 15px;
+  text-decoration: none;
+  display: inline-block;
 }
 
-.field{
-  display:flex;
-  flex-direction:column;
-  gap:5px;
+button:hover,
+.button:hover {
+  background: #874823;
 }
 
-.field label{
-  font-size:11px;
-  font-weight:800;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:.7px;
+section {
+  max-width: 1200px;
+  margin: auto;
+  padding: 70px 20px;
 }
 
-.field input,
-.field select,
-.contact-form input,
-.contact-form textarea{
-  width:100%;
-  border:1px solid var(--line);
-  background:#fff;
-  color:var(--ink);
-  border-radius:10px;
-  padding:13px 12px;
-  font:inherit;
-  outline:none;
+.section-title {
+  text-align: center;
+  margin-bottom: 35px;
 }
 
-.field input:focus,
-.field select:focus,
-.contact-form input:focus,
-.contact-form textarea:focus{
-  border-color:var(--accent);
+.section-title h2 {
+  font-size: 38px;
+  margin-bottom: 10px;
 }
 
-.btn{
-  border:0;
-  cursor:pointer;
-  border-radius:10px;
-  padding:13px 20px;
-  background:var(--accent);
-  color:#fff;
-  font:inherit;
-  font-weight:800;
-  align-self:end;
+.section-title p {
+  color: #75665c;
 }
 
-.btn:hover{background:var(--accent-dark)}
-
-.hero-note{
-  margin:12px 4px 0;
-  font-size:13px;
-  color:var(--muted);
+.properties {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
 }
 
-.hero-art{
-  min-height:380px;
-  border-radius:28px;
-  background:
-    radial-gradient(circle at 70% 25%,rgba(255,255,255,.8),transparent 25%),
-    linear-gradient(145deg,#cda77f,#987052);
-  position:relative;
-  overflow:hidden;
-  box-shadow:0 25px 60px rgba(62,40,24,.16);
+.property-card {
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0,0,0,.10);
+  transition: transform .2s;
 }
 
-.hero-art:before{
-  content:"";
-  position:absolute;
-  width:340px;
-  height:300px;
-  left:50%;
-  bottom:-80px;
-  transform:translateX(-50%);
-  border-radius:50% 50% 0 0;
-  background:#594234;
+.property-card:hover {
+  transform: translateY(-4px);
 }
 
-.hero-art:after{
-  content:"";
-  position:absolute;
-  width:130px;
-  height:170px;
-  left:50%;
-  bottom:0;
-  transform:translateX(-50%);
-  border-radius:70px 70px 0 0;
-  background:#211b17;
+.property-image {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  display: block;
 }
 
-.art-label{
-  position:absolute;
-  left:24px;
-  bottom:24px;
-  background:rgba(255,255,255,.9);
-  padding:12px 16px;
-  border-radius:12px;
-  font-weight:800;
+.property-content {
+  padding: 20px;
 }
 
-section{
-  padding:85px 22px;
+.property-content h3 {
+  margin-top: 0;
+  font-size: 22px;
 }
 
-.container{
-  max-width:var(--max);
-  margin:auto;
+.location {
+  color: #78685e;
 }
 
-.section-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:end;
-  gap:20px;
-  margin-bottom:32px;
+.price {
+  font-size: 25px;
+  font-weight: bold;
+  color: #a85d32;
+  margin: 14px 0;
 }
 
-.section-head h2{
-  font-family:Georgia,serif;
-  font-size:clamp(32px,4vw,48px);
-  line-height:1.1;
-  margin:0;
+.details {
+  display: flex;
+  gap: 15px;
+  color: #5d5048;
+  margin-bottom: 18px;
 }
 
-.section-head p{
-  max-width:500px;
-  margin:0;
-  color:var(--muted);
+.about {
+  background: #e8ddce;
+  max-width: none;
 }
 
-.properties{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:24px;
+.about-inner {
+  max-width: 1000px;
+  margin: auto;
+  text-align: center;
 }
 
-.property{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:18px;
-  overflow:hidden;
-  transition:transform .2s,box-shadow .2s;
+.about-inner p {
+  font-size: 18px;
+  line-height: 1.8;
 }
 
-.property:hover{
-  transform:translateY(-4px);
-  box-shadow:0 18px 40px rgba(55,35,20,.10);
+.sell-box {
+  background: #fff;
+  border-radius: 14px;
+  padding: 35px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.08);
+  max-width: 850px;
+  margin: auto;
 }
 
-.property-image{
-  height:230px;
-  position:relative;
-  display:flex;
-  align-items:end;
-  padding:16px;
-  background:linear-gradient(145deg,#d7b58f,#98705a);
-  overflow:hidden;
+.sell-box h3 {
+  font-size: 28px;
 }
 
-.property-image:before{
-  content:"";
-  position:absolute;
-  width:250px;
-  height:190px;
-  left:50%;
-  bottom:-55px;
-  transform:translateX(-50%);
-  border-radius:50% 50% 0 0;
-  background:#604837;
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
 }
 
-.property-image:after{
-  content:"";
-  position:absolute;
-  width:82px;
-  height:105px;
-  left:50%;
-  bottom:0;
-  transform:translateX(-50%);
-  border-radius:45px 45px 0 0;
-  background:#29201b;
+.form-full {
+  grid-column: 1 / -1;
 }
 
-.badge{
-  position:relative;
-  z-index:2;
-  background:#fff;
-  border-radius:999px;
-  padding:7px 11px;
-  font-size:12px;
-  font-weight:800;
+.status {
+  margin-top: 15px;
+  font-weight: bold;
 }
 
-.property-body{padding:20px}
-
-.property-body h3{
-  font-family:Georgia,serif;
-  font-size:24px;
-  line-height:1.2;
-  margin:0 0 7px;
+footer {
+  background: #38271e;
+  color: white;
+  text-align: center;
+  padding: 35px 20px;
 }
 
-.location{
-  color:var(--muted);
-  font-size:14px;
-  margin-bottom:14px;
+.loading,
+.no-properties {
+  text-align: center;
+  padding: 40px;
+  grid-column: 1 / -1;
 }
 
-.details{
-  display:flex;
-  gap:15px;
-  flex-wrap:wrap;
-  color:var(--muted);
-  font-size:13px;
-  padding-bottom:15px;
-  border-bottom:1px solid var(--line);
-}
-
-.price{
-  font-size:22px;
-  font-weight:850;
-  color:var(--accent-dark);
-  margin-top:15px;
-}
-
-.no-results{
-  display:none;
-  padding:35px;
-  text-align:center;
-  border:1px dashed var(--line);
-  border-radius:15px;
-  color:var(--muted);
-}
-
-.story{
-  background:#fff;
-}
-
-.story-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:70px;
-  align-items:center;
-}
-
-.story h2{
-  font-family:Georgia,serif;
-  font-size:clamp(34px,4vw,52px);
-  line-height:1.08;
-  margin:0 0 20px;
-}
-
-.story p{color:var(--muted)}
-
-.feature-list{
-  display:grid;
-  gap:15px;
-  margin-top:28px;
-}
-
-.feature{
-  padding:17px;
-  border:1px solid var(--line);
-  border-radius:13px;
-  background:var(--paper);
-}
-
-.feature strong{display:block;margin-bottom:3px}
-
-.story-art{
-  min-height:420px;
-  border-radius:24px;
-  background:
-    linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.25)),
-    linear-gradient(145deg,#b68b65,#664c3b);
-  position:relative;
-  overflow:hidden;
-}
-
-.story-art:before{
-  content:"";
-  position:absolute;
-  width:440px;
-  height:350px;
-  left:50%;
-  bottom:-120px;
-  transform:translateX(-50%);
-  border-radius:50% 50% 0 0;
-  background:#745541;
-}
-
-.story-art:after{
-  content:"";
-  position:absolute;
-  width:155px;
-  height:210px;
-  left:50%;
-  bottom:0;
-  transform:translateX(-50%);
-  border-radius:80px 80px 0 0;
-  background:#201916;
-}
-
-.sell{
-  background:var(--dark);
-  color:#fff;
-}
-
-.sell-inner{
-  display:grid;
-  grid-template-columns:1.3fr .7fr;
-  gap:50px;
-  align-items:center;
-}
-
-.sell h2{
-  font-family:Georgia,serif;
-  font-size:clamp(36px,5vw,58px);
-  line-height:1.05;
-  margin:0 0 18px;
-}
-
-.sell p{
-  color:#d8c8bc;
-  max-width:650px;
-}
-
-.sell-card{
-  background:#fff;
-  color:var(--ink);
-  border-radius:20px;
-  padding:28px;
-}
-
-.sell-card h3{
-  font-family:Georgia,serif;
-  font-size:25px;
-  margin:0 0 10px;
-}
-
-.sell-card a{
-  color:var(--accent-dark);
-  font-weight:800;
-  text-decoration:none;
-}
-
-.contact{
-  background:var(--paper);
-}
-
-.contact-grid{
-  display:grid;
-  grid-template-columns:.8fr 1.2fr;
-  gap:60px;
-}
-
-.contact h2{
-  font-family:Georgia,serif;
-  font-size:46px;
-  line-height:1.1;
-  margin:0 0 18px;
-}
-
-.contact-copy{color:var(--muted)}
-
-.contact-form{
-  display:grid;
-  gap:15px;
-  background:#fff;
-  padding:28px;
-  border:1px solid var(--line);
-  border-radius:18px;
-}
-
-.contact-form label{
-  font-size:13px;
-  font-weight:800;
-}
-  .contact-form > div{
-  display:grid;
-  gap:7px;
-}
-
-.contact-form input,
-.contact-form textarea{
-  width:100%;
-  padding:14px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  font:inherit;
-}
-
-.contact-form input{
-  min-height:50px;
-}
-
-.contact-form textarea{
-  min-height:150px;
-}
-
-.contact-form textarea{
-  min-height:150px;
-  resize:vertical;
-}
-
-.form-status{
-  display:none;
-  padding:12px;
-  border-radius:9px;
-  background:var(--sand);
-  font-size:14px;
-}
-
-footer{
-  background:#211914;
-  color:#cdbfb4;
-  padding:30px 22px;
-}
-
-.footer-inner{
-  max-width:var(--max);
-  margin:auto;
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-  flex-wrap:wrap;
-  font-size:14px;
-}
-
-.footer-inner a{
-  color:#fff;
-  text-decoration:none;
-}
-
-@media(max-width:850px){
-  .navbar{padding:13px 17px}
-  .brand{font-size:20px}
-  nav{gap:12px}
-  nav a:not(.nav-sell){display:none}
-  .hero-inner,
-  .story-grid,
-  .sell-inner,
-  .contact-grid{
-    grid-template-columns:1fr;
+@media (max-width: 800px) {
+  .search-box {
+    grid-template-columns: 1fr;
   }
-  .hero-inner{padding:65px 20px}
-  .hero-art{min-height:300px}
-  .search-grid{
-    grid-template-columns:1fr 1fr;
+
+  .properties {
+    grid-template-columns: 1fr;
   }
-  .search-grid .field:first-child{grid-column:1/-1}
-  .search-grid .btn{width:100%}
-  .properties{grid-template-columns:1fr}
-  section{padding:65px 20px}
-  .section-head{display:block}
-  .section-head p{margin-top:12px}
-  .story-art{min-height:300px}
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-full {
+    grid-column: auto;
+  }
+
+  nav {
+    justify-content: flex-end;
+  }
+
+  .header-inner {
+    align-items: flex-start;
+  }
 }
 
-@media(max-width:520px){
-  h1{font-size:43px;letter-spacing:-1.5px}
-  .hero-copy{font-size:17px}
-  .search-grid{grid-template-columns:1fr}
-  .search-grid .field:first-child{grid-column:auto}
-  .hero-art{min-height:250px}
-  .property-image{height:210px}
-  .contact h2{font-size:38px}
+@media (max-width: 550px) {
+  .header-inner {
+    flex-direction: column;
+  }
+
+  nav {
+    width: 100%;
+  }
+
+  nav a {
+    flex: 1;
+    text-align: center;
+  }
+
+  .hero {
+    min-height: 600px;
+  }
 }
 </style>
 </head>
@@ -616,331 +315,415 @@ footer{
 <body>
 
 <header>
-  <div class="navbar">
-    <a href="#top" class="brand"><svg viewBox="0 0 64 48" aria-hidden="true" style="width:32px;height:24px;vertical-align:middle;margin-right:7px"><path fill="#9a5b32" d="M4 36C9 18 20 8 33 8c11 0 20 6 27 16-10-5-18-6-25-3-9 3-14 9-17 15z"/><path fill="#f8f3ec" d="M19 36c3-11 9-17 16-17 7 0 12 5 14 12v5H19z"/><path fill="#2f241e" d="M25 36v-8c0-5 3-8 7-8s7 3 7 8v8H25z"/></svg>Cave Homes <span>Spain</span></a>
+  <div class="header-inner">
+    <a class="logo" href="#">Cave Homes Spain</a>
+
     <nav>
       <a href="#properties">Buy</a>
       <a href="#sell">Sell</a>
       <a href="#contact">Contact</a>
-      <a href="#sell" class="nav-sell">List your cave</a>
+      <a href="#sell">List Your Cave</a>
     </nav>
   </div>
 </header>
 
-<main id="top">
+<main>
 
 <section class="hero">
-  <div class="hero-inner">
-    <div>
-      <div class="eyebrow">Authentic homes • Andalucía • Spain</div>
-      <h1>Find your own cave home in Spain.</h1>
-      <p class="hero-copy">
-        Discover characterful cave houses, peaceful retreats and unique homes
-        carved into the landscape of Andalucía.
-      </p>
+  <div class="hero-content">
+    <h1>Discover Your Cave Home in Spain</h1>
 
-      <div class="search-box">
-        <div class="search-grid">
-          <div class="field">
-            <label for="location">Town or province</label>
-            <input id="location" type="text" placeholder="e.g. Galera or Granada">
-          </div>
+    <p>
+      Unique homes carved into the Spanish landscape.
+      Discover cave houses for sale across Andalucía and beyond.
+    </p>
 
-          <div class="field">
-            <label for="price">Maximum price</label>
-            <select id="price">
-              <option value="">Any price</option>
-              <option value="100000">€100,000</option>
-              <option value="150000">€150,000</option>
-              <option value="200000">€200,000</option>
-              <option value="300000">€300,000</option>
-            </select>
-          </div>
+    <div class="search-box">
+      <input id="searchLocation" type="text" placeholder="Town or province">
 
-          <div class="field">
-            <label for="beds">Bedrooms</label>
-            <select id="beds">
-              <option value="">Any</option>
-              <option value="1">1+</option>
-              <option value="2">2+</option>
-              <option value="3">3+</option>
-              <option value="4">4+</option>
-            </select>
-          </div>
+      <input id="searchPrice" type="number" placeholder="Max price (€)">
 
-          <button class="btn" type="button" onclick="searchHomes()">Search</button>
-        </div>
-        <p class="hero-note" id="searchMessage">
-          Browse our available cave homes below.
-        </p>
-      </div>
-    </div>
+      <input id="searchBedrooms" type="number" min="1" placeholder="Bedrooms">
 
-    <div class="hero-art">
-      <div class="art-label">Life carved into the landscape.</div>
+      <button onclick="searchProperties()">Search</button>
     </div>
   </div>
 </section>
 
 <section id="properties">
-  <div class="container">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow">For sale</div>
-        <h2>Featured cave homes</h2>
-      </div>
-      <p>
-        A selection of distinctive cave properties in and around Galera,
-        Granada. More homes can be added as they become available.
-      </p>
-    </div>
 
-    <div class="properties" id="propertyGrid">
-
-      <article class="property"
-        data-location="galera granada andalusia spain"
-        data-price="80000"
-        data-beds="2">
-        <div class="property-image">
-          <span class="badge">Featured</span>
-        </div>
-        <div class="property-body">
-          <h3>Andalusian Cave Home</h3>
-          <div class="location">Galera, Granada</div>
-          <div class="details">
-            <span>2 bedrooms</span>
-            <span>Traditional cave</span>
-            <span>Spain</span>
-          </div>
-          <div class="price">€80,000</div>
-        </div>
-      </article>
-
-      <article class="property"
-        data-location="galera granada andalusia spain"
-        data-price="135000"
-        data-beds="3">
-        <div class="property-image">
-          <span class="badge">Renovated</span>
-        </div>
-        <div class="property-body">
-          <h3>Renovated Cave Retreat</h3>
-          <div class="location">Galera, Granada</div>
-          <div class="details">
-            <span>3 bedrooms</span>
-            <span>Renovated</span>
-            <span>Spain</span>
-          </div>
-          <div class="price">€135,000</div>
-        </div>
-      </article>
-
-      <article class="property"
-        data-location="galera granada andalusia spain"
-        data-price="189000"
-        data-beds="4">
-        <div class="property-image">
-          <span class="badge">Premium</span>
-        </div>
-        <div class="property-body">
-          <h3>Luxury Cave House</h3>
-          <div class="location">Galera, Granada</div>
-          <div class="details">
-            <span>4 bedrooms</span>
-            <span>Luxury finish</span>
-            <span>Spain</span>
-          </div>
-          <div class="price">€189,000</div>
-        </div>
-      </article>
-
-    </div>
-
-    <div class="no-results" id="noResults">
-      <strong>No matching cave homes found.</strong><br>
-      Try a different town, price or bedroom selection.
-    </div>
+  <div class="section-title">
+    <h2>Cave Homes for Sale</h2>
+    <p>Browse available properties</p>
   </div>
+
+  <div id="propertyList" class="properties">
+    <div class="loading">Loading properties...</div>
+  </div>
+
 </section>
 
-<section class="story">
-  <div class="container story-grid">
-    <div>
-      <div class="eyebrow">Why cave homes?</div>
-      <h2>A different way to live in Spain.</h2>
-      <p>
-        Cave homes are part of the history and landscape of southern Spain.
-        Naturally insulated interiors, distinctive architecture and peaceful
-        surroundings make them unlike ordinary properties.
-      </p>
-      <p>
-        Whether you're looking for a permanent home, holiday retreat or
-        renovation project, we help you discover the possibilities.
-      </p>
+<section class="about">
 
-      <div class="feature-list">
-        <div class="feature">
-          <strong>Natural character</strong>
-          Original cave interiors with genuine Andalusian character.
-        </div>
-        <div class="feature">
-          <strong>Peaceful surroundings</strong>
-          Rural landscapes, mountain views and traditional villages.
-        </div>
-        <div class="feature">
-          <strong>Unique properties</strong>
-          No two cave homes are quite the same.
-        </div>
-      </div>
-    </div>
+  <div class="about-inner">
 
-    <div class="story-art"></div>
+    <h2>Life Inside a Spanish Cave Home</h2>
+
+    <p>
+      Cave homes are one of Spain's most unusual and fascinating forms
+      of traditional housing. Naturally insulated, full of character
+      and often surrounded by spectacular countryside, they offer a
+      different way of living.
+    </p>
+
+    <p>
+      Cave Homes Spain brings buyers and sellers together to discover
+      these unique properties.
+    </p>
+
   </div>
+
 </section>
 
-<section class="sell" id="sell">
-  <div class="container sell-inner">
-    <div>
-      <div class="eyebrow">Thinking of selling?</div>
-      <h2>Sell your cave home with Cave Homes Spain.</h2>
-      <p>
-        Have a cave house to sell? Tell us about your property and we'll be
-        happy to discuss how we can help present it to people looking for
-        something truly special in Spain.
-      </p>
-    </div>
+<section id="sell">
 
-    <div class="sell-card">
-      <h3>Let's talk about your property.</h3><p>
-  <strong>Listing options</strong><br>
-  Standard listing: <strong>€10/month until sold</strong><br>
-  Featured listing: <strong>€25/month</strong><br>
-  Featured listings receive extra prominence on the website.
-      </p>
-      <p>
-        Send us some details about your cave home, including its location,
-        asking price and a few photographs if available.
-      </p>
-      <a href="mailto:cuevatopanga@gmail.com">
-        cuevatopanga@gmail.com
-      </a>
-    </div>
+  <div class="section-title">
+    <h2>Sell Your Cave Home</h2>
+    <p>List your property with Cave Homes Spain.</p>
   </div>
-</section>
 
-<section class="contact" id="contact">
-  <div class="container contact-grid">
-    <div>
-      <div class="eyebrow">Get in touch</div>
-      <h2>Contact Cave Homes Spain.</h2>
-      <p class="contact-copy">
-        Looking for a cave home, interested in selling, or simply want to
-        know more about cave living in Spain? Send us a message.
-      </p>
-      <p class="contact-copy">
-        <strong>Email:</strong><br>
-        cuevatopanga@gmail.com
-      </p>
-    </div>
+  <div class="sell-box">
 
-    <form 
-      action="https://formsubmit.co/cuevatopanga@gmail.com"
-      enctype="text/plain"
-      onsubmit="showFormMessage(event)">
+    <h3>List Your Property</h3>
 
-      <div>
-        <label for="name">Your name</label>
-        <input id="name" name="Name" type="text" required>
+    <p>
+      Submit your property details below and we can review your listing.
+    </p>
+
+    <form id="propertyForm">
+
+      <div class="form-grid">
+
+        <div>
+          <label>Property name</label>
+          <input id="sellerTitle" required>
+        </div>
+
+        <div>
+          <label>Location</label>
+          <input id="sellerLocation" required>
+        </div>
+
+        <div>
+          <label>Price (€)</label>
+          <input id="sellerPrice" type="number" required>
+        </div>
+
+        <div>
+          <label>Bedrooms</label>
+          <input id="sellerBedrooms" type="number" min="1" required>
+        </div>
+
+        <div>
+          <label>Property type</label>
+          <select id="sellerType">
+            <option>Cave Home</option>
+            <option>Renovated Cave Home</option>
+            <option>Luxury Cave Home</option>
+            <option>Cave & Country House</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Photo URL</label>
+          <input id="sellerImage" type="url" placeholder="https://...">
+        </div>
+
+        <div class="form-full">
+          <label>Description</label>
+          <textarea id="sellerDescription" rows="5"></textarea>
+        </div>
+
+        <div class="form-full">
+          <button type="submit">Submit Property</button>
+        </div>
+
       </div>
 
-      <div>
-        <label for="email">Email address</label>
-        <input id="email" name="Email" type="email" required>
-      </div>
+      <div id="propertyStatus" class="status"></div>
 
-      <div>
-        <label for="message">How can we help?</label>
-        <textarea id="message" name="Message" required></textarea>
-      </div>
-
-      <button class="btn" type="submit">Send enquiry</button>
-
-      <div class="form-status" id="formStatus">
-        Thanks — your email application should now open with your enquiry.
-      </div>
     </form>
+
   </div>
+
+</section>
+
+<section id="contact">
+
+  <div class="section-title">
+    <h2>Contact Cave Homes Spain</h2>
+    <p>Have a question? Get in touch.</p>
+  </div>
+
+  <div class="sell-box">
+
+    <form action="https://formsubmit.co/cuevatopanga@gmail.com"
+          method="POST">
+
+      <input type="hidden" name="_subject"
+             value="Cave Homes Spain enquiry">
+
+      <input type="hidden" name="_captcha" value="false">
+
+      <div class="form-grid">
+
+        <div>
+          <label>Your name</label>
+          <input name="name" required>
+        </div>
+
+        <div>
+          <label>Your email</label>
+          <input name="email" type="email" required>
+        </div>
+
+        <div class="form-full">
+          <label>Message</label>
+          <textarea name="message" rows="6" required></textarea>
+        </div>
+
+        <div class="form-full">
+          <button type="submit">Send Message</button>
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+
 </section>
 
 </main>
 
 <footer>
-  <div class="footer-inner">
-    <div>© 2026 Cave Homes Spain</div>
-    <div>
-      <a href="#properties">Buy</a> ·
-      <a href="#sell">Sell</a> ·
-      <a href="#contact">Contact</a>
-    </div>
-  </div>
+  <p>© 2026 Cave Homes Spain</p>
+  <p>Unique homes. Extraordinary places.</p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-function searchHomes(){
-  const location = document.getElementById("location").value
-    .trim()
-    .toLowerCase();
+const SUPABASE_URL = "https://lesgzlhvrlxgtfuocadq.supabase.co";
 
-  const price = document.getElementById("price").value;
-  const beds = document.getElementById("beds").value;
+const SUPABASE_KEY =
+  "sb_publishable_pPS6fORJPGFcGBIUPcxOxQ_1g4vazyg";
 
-  const cards = document.querySelectorAll(".property");
-  const noResults = document.getElementById("noResults");
-  const message = document.getElementById("searchMessage");
+const supabaseClient =
+  window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  let visible = 0;
+let allProperties = [];
 
-  cards.forEach(card => {
-    const cardLocation = card.dataset.location;
-    const cardPrice = Number(card.dataset.price);
-    const cardBeds = Number(card.dataset.beds);
+async function loadProperties() {
 
-    const locationMatch =
-      !location || cardLocation.includes(location);
+  const propertyList =
+    document.getElementById("propertyList");
 
-    const priceMatch =
-      !price || cardPrice <= Number(price);
+  propertyList.innerHTML =
+    '<div class="loading">Loading properties...</div>';
 
-    const bedsMatch =
-      !beds || cardBeds >= Number(beds);
+  const { data, error } = await supabaseClient
+    .from("properties")
+    .select("*")
+    .eq("published", true)
+    .order("created_at", { ascending: false });
 
-    if(locationMatch && priceMatch && bedsMatch){
-      card.style.display = "";
-      visible++;
-    }else{
-      card.style.display = "none";
-    }
-  });
+  if (error) {
 
-  if(visible === 0){
-    noResults.style.display = "block";
-    message.textContent = "No homes match those criteria.";
-  }else{
-    noResults.style.display = "none";
-    message.textContent =
-      visible === 1
-        ? "Showing 1 cave home matching your search."
-        : "Showing " + visible + " cave homes matching your search.";
+    console.error(error);
+
+    propertyList.innerHTML =
+      '<div class="no-properties">Unable to load properties right now.</div>';
+
+    return;
   }
 
-  document.getElementById("properties").scrollIntoView({
-    behavior:"smooth"
-  });
+  allProperties = data || [];
+
+  displayProperties(allProperties);
 }
 
-function showFormMessage(event){
-  document.getElementById("formStatus").style.display = "block";
+function displayProperties(properties) {
+
+  const propertyList =
+    document.getElementById("propertyList");
+
+  if (!properties.length) {
+
+    propertyList.innerHTML =
+      '<div class="no-properties">No properties found.</div>';
+
+    return;
+  }
+
+  propertyList.innerHTML = properties.map(property => {
+
+    const image =
+      property.image_url ||
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80";
+
+    const price =
+      Number(property.price).toLocaleString("en-GB");
+
+    return `
+      <article class="property-card">
+
+        <img
+          class="property-image"
+          src="${escapeHtml(image)}"
+          alt="${escapeHtml(property.title)}"
+          onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80'"
+        >
+
+        <div class="property-content">
+
+          <h3>${escapeHtml(property.title)}</h3>
+
+          <div class="location">
+            📍 ${escapeHtml(property.location)}
+          </div>
+
+          <div class="price">
+            €${price}
+          </div>
+
+          <div class="details">
+            <span>🛏 ${property.bedrooms} bedrooms</span>
+            <span>🏠 ${escapeHtml(property.property_type)}</span>
+          </div>
+
+          <p>
+            ${escapeHtml(property.description || "Beautiful Spanish cave home.")}
+          </p>
+
+          <a class="button"
+             href="#contact">
+             Enquire
+          </a>
+
+        </div>
+
+      </article>
+    `;
+
+  }).join("");
 }
+
+function searchProperties() {
+
+  const location =
+    document.getElementById("searchLocation")
+      .value.toLowerCase()
+      .trim();
+
+  const maxPrice =
+    Number(document.getElementById("searchPrice").value) || Infinity;
+
+  const bedrooms =
+    Number(document.getElementById("searchBedrooms").value) || 0;
+
+  const filtered =
+    allProperties.filter(property => {
+
+      const matchesLocation =
+        !location ||
+        property.location.toLowerCase().includes(location);
+
+      const matchesPrice =
+        Number(property.price) <= maxPrice;
+
+      const matchesBedrooms =
+        Number(property.bedrooms) >= bedrooms;
+
+      return matchesLocation &&
+             matchesPrice &&
+             matchesBedrooms;
+    });
+
+  displayProperties(filtered);
+
+  document.getElementById("properties")
+    .scrollIntoView({ behavior: "smooth" });
+}
+
+document
+  .getElementById("propertyForm")
+  .addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const status =
+      document.getElementById("propertyStatus");
+
+    status.textContent = "Submitting property...";
+
+    const property = {
+      title:
+        document.getElementById("sellerTitle").value,
+
+      location:
+        document.getElementById("sellerLocation").value,
+
+      price:
+        Number(document.getElementById("sellerPrice").value),
+
+      bedrooms:
+        Number(document.getElementById("sellerBedrooms").value),
+
+      property_type:
+        document.getElementById("sellerType").value,
+
+      image_url:
+        document.getElementById("sellerImage").value,
+
+      description:
+        document.getElementById("sellerDescription").value,
+
+      published: false
+    };
+
+    const { error } =
+      await supabaseClient
+        .from("properties")
+        .insert([property]);
+
+    if (error) {
+
+      console.error(error);
+
+      status.textContent =
+        "There was a problem submitting the property.";
+
+      return;
+    }
+
+    status.textContent =
+      "Thank you. Your property has been submitted for review.";
+
+    document.getElementById("propertyForm").reset();
+  });
+
+function escapeHtml(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+loadProperties();
 </script>
 
 </body>
