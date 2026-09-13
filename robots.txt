@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /v10-preview.html
+Disallow: /v11-preview.html
+
+Sitemap: https://cave-homes-spain.vercel.app/sitemap.xml
