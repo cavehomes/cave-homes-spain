@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cave Homes Spain | Cave Houses for Sale</title>
 <meta name="description" content="Discover beautiful cave homes and cave houses for sale in Spain.">
+
 <style>
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -15,45 +16,184 @@ header{background:#38271e;color:#fff;position:sticky;top:0;z-index:20;box-shadow
 nav{display:flex;gap:6px;flex-wrap:wrap}
 nav a{color:#fff;text-decoration:none;padding:10px 13px;border-radius:7px}
 nav a:hover{background:#614535}
-.hero{min-height:590px;padding:90px 20px;display:flex;align-items:center;background:linear-gradient(rgba(45,30,20,.58),rgba(45,30,20,.66)),url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1800&q=85') center/cover;color:#fff}
+
+.hero{
+min-height:590px;
+padding:90px 20px;
+display:flex;
+align-items:center;
+background:linear-gradient(rgba(45,30,20,.58),rgba(45,30,20,.66)),
+url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1800&q=85') center/cover;
+color:#fff
+}
+
 .hero-content{max-width:1120px;width:100%;margin:auto}
 .eyebrow{text-transform:uppercase;letter-spacing:2px;font-size:13px;font-weight:700;opacity:.9}
 .hero h1{font-size:clamp(42px,7vw,76px);line-height:1.02;margin:12px 0 18px;max-width:820px}
 .hero p{font-size:20px;line-height:1.6;max-width:720px}
-.search-box{margin-top:28px;background:#fff;padding:14px;border-radius:14px;display:grid;grid-template-columns:1.3fr 1fr 1fr auto;gap:10px;max-width:1050px;box-shadow:0 12px 35px rgba(0,0,0,.18)}
-input,select,textarea{width:100%;padding:13px;border:1px solid #d8cbbd;border-radius:8px;font-size:15px;background:#fff;color:#2f241d}
-button,.button{border:0;background:#a85d32;color:#fff;padding:13px 18px;border-radius:8px;cursor:pointer;font-size:15px;text-decoration:none;display:inline-block;font-weight:700}
+
+.search-box{
+margin-top:28px;
+background:#fff;
+padding:14px;
+border-radius:14px;
+display:grid;
+grid-template-columns:1.3fr 1fr 1fr auto;
+gap:10px;
+max-width:1050px;
+box-shadow:0 12px 35px rgba(0,0,0,.18)
+}
+
+input,select,textarea{
+width:100%;
+padding:13px;
+border:1px solid #d8cbbd;
+border-radius:8px;
+font-size:15px;
+background:#fff;
+color:#2f241d
+}
+
+button,.button{
+border:0;
+background:#a85d32;
+color:#fff;
+padding:13px 18px;
+border-radius:8px;
+cursor:pointer;
+font-size:15px;
+text-decoration:none;
+display:inline-block;
+font-weight:700
+}
+
 button:hover,.button:hover{background:#874823}
+
 section{max-width:1200px;margin:auto;padding:70px 20px}
 .section-title{text-align:center;margin-bottom:35px}
 .section-title h2{font-size:38px;margin:0 0 10px}
 .section-title p{color:#75665c}
-.properties{display:grid;grid-template-columns:repeat(3,1fr);gap:25px}
-.property-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.1);display:flex;flex-direction:column}
-.property-image{width:100%;height:230px;object-fit:cover;display:block}
-.property-content{padding:20px;display:flex;flex-direction:column;flex:1}
+
+.properties{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px
+}
+
+.property-card{
+background:#fff;
+border-radius:14px;
+overflow:hidden;
+box-shadow:0 6px 20px rgba(0,0,0,.1);
+display:flex;
+flex-direction:column
+}
+
+.property-image{
+width:100%;
+height:230px;
+object-fit:cover;
+display:block
+}
+
+.property-content{
+padding:20px;
+display:flex;
+flex-direction:column;
+flex:1
+}
+
 .property-content h3{margin:0 0 8px;font-size:22px}
 .location{color:#78685e}
 .price{font-size:25px;font-weight:800;color:#a85d32;margin:14px 0}
-.details{display:flex;gap:12px;flex-wrap:wrap;color:#5d5048;margin-bottom:12px;font-size:14px}
-.property-content p{line-height:1.55;color:#51453d;flex:1}
+
+.details{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+color:#5d5048;
+margin-bottom:12px;
+font-size:14px
+}
+
+.property-content p{
+line-height:1.55;
+color:#51453d;
+flex:1
+}
+
 .about{background:#e8ddce;max-width:none}
 .about-inner{max-width:1000px;margin:auto;text-align:center}
 .about-inner p{font-size:18px;line-height:1.8}
-.sell-box{background:#fff;border-radius:14px;padding:35px;box-shadow:0 6px 20px rgba(0,0,0,.08);max-width:900px;margin:auto}
+
+.sell-box{
+background:#fff;
+border-radius:14px;
+padding:35px;
+box-shadow:0 6px 20px rgba(0,0,0,.08);
+max-width:900px;
+margin:auto
+}
+
 .sell-box h3{font-size:28px;margin-top:0}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+
+.form-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px
+}
+
 .form-full{grid-column:1/-1}
 label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
-.status{margin-top:15px;font-weight:700;line-height:1.5}
+
+.status{
+margin-top:15px;
+font-weight:700;
+line-height:1.5
+}
+
 .success{color:#236b3a}
 .error{color:#a52b2b}
-.loading,.no-properties{text-align:center;padding:40px;grid-column:1/-1}
-.info-note{background:#f4eadf;padding:14px;border-radius:9px;margin:15px 0;color:#59483d}
-.contact-copy{text-align:center;max-width:700px;margin:0 auto 25px;line-height:1.6}
-footer{background:#38271e;color:#fff;text-align:center;padding:35px 20px}
+
+.loading,.no-properties{
+text-align:center;
+padding:40px;
+grid-column:1/-1
+}
+
+.info-note{
+background:#f4eadf;
+padding:14px;
+border-radius:9px;
+margin:15px 0;
+color:#59483d
+}
+
+.contact-copy{
+text-align:center;
+max-width:700px;
+margin:0 auto 25px;
+line-height:1.6
+}
+
+footer{
+background:#38271e;
+color:#fff;
+text-align:center;
+padding:35px 20px
+}
+
 footer p{margin:6px}
-.empty-search{display:none;text-align:center;padding:30px;background:#fff;border-radius:12px;grid-column:1/-1}
+
+.empty-search{
+display:none;
+text-align:center;
+padding:30px;
+background:#fff;
+border-radius:12px;
+grid-column:1/-1
+}
+
 @media(max-width:800px){
 .search-box{grid-template-columns:1fr}
 .properties{grid-template-columns:1fr}
@@ -62,6 +202,7 @@ footer p{margin:6px}
 .header-inner{align-items:flex-start}
 nav{justify-content:flex-end}
 }
+
 @media(max-width:550px){
 .header-inner{flex-direction:column}
 .header-inner nav{width:100%}
@@ -78,375 +219,752 @@ nav a{flex:1;text-align:center}
 <header>
 <div class="header-inner">
 <a class="logo" href="#top">Cave Homes Spain</a>
+
 <nav>
 <a href="#properties">Buy</a>
 <a href="#sell">Sell</a>
 <a href="#contact">Contact</a>
 <a href="#sell">List Your Cave</a>
 </nav>
+
 </div>
 </header>
 
 <main id="top">
 
 <section class="hero">
+
 <div class="hero-content">
-<div class="eyebrow">Unique homes • Extraordinary places</div>
-<h1>Discover Your Cave Home in Spain</h1>
-<p>Explore characterful cave houses carved into the Spanish landscape, from Andalucía and beyond.</p>
+
+<div class="eyebrow">
+Unique homes • Extraordinary places
+</div>
+
+<h1>
+Discover Your Cave Home in Spain
+</h1>
+
+<p>
+Explore characterful cave houses carved into the Spanish landscape, from Andalucía and beyond.
+</p>
 
 <div class="search-box">
-<input id="searchLocation" type="text" placeholder="Town or province">
-<input id="searchPrice" type="number" min="0" placeholder="Max price (€)">
-<input id="searchBedrooms" type="number" min="1" placeholder="Bedrooms">
-<button type="button" onclick="searchProperties()">Search</button>
+
+<input
+id="searchLocation"
+type="text"
+placeholder="Town or province"
+>
+
+<input
+id="searchPrice"
+type="number"
+min="0"
+placeholder="Max price (€)"
+>
+
+<input
+id="searchBedrooms"
+type="number"
+min="1"
+placeholder="Bedrooms"
+>
+
+<button
+type="button"
+onclick="searchProperties()"
+>
+Search
+</button>
+
 </div>
 
 </div>
 </section>
 
+
 <section id="properties">
+
 <div class="section-title">
-<h2>Cave Homes for Sale</h2>
-<p>Browse the latest available properties.</p>
+
+<h2>
+Cave Homes for Sale
+</h2>
+
+<p>
+Browse the latest available properties.
+</p>
+
 </div>
 
 <div id="propertyList" class="properties">
-<div class="loading">Loading properties...</div>
+
+<div class="loading">
+Loading properties...
+</div>
+
 </div>
 
 <div id="emptySearch" class="empty-search">
 No properties match your search. Try changing the filters.
 </div>
+
 </section>
+
 
 <section class="about">
+
 <div class="about-inner">
-<h2>Life Inside a Spanish Cave Home</h2>
-<p>Cave homes are one of Spain's most unusual and fascinating forms of traditional housing. Naturally insulated, full of character and often surrounded by spectacular countryside, they offer a different way of living.</p>
-<p>Cave Homes Spain brings buyers and sellers together to discover these unique properties.</p>
+
+<h2>
+Life Inside a Spanish Cave Home
+</h2>
+
+<p>
+Cave homes are one of Spain's most unusual and fascinating forms of traditional housing. Naturally insulated, full of character and often surrounded by spectacular countryside, they offer a different way of living.
+</p>
+
+<p>
+Cave Homes Spain brings buyers and sellers together to discover these unique properties.
+</p>
+
 </div>
+
 </section>
 
+
 <section id="sell">
+
 <div class="section-title">
-<h2>Sell Your Cave Home</h2>
-<p>Submit your property and we'll review it before publication.</p>
+
+<h2>
+Sell Your Cave Home
+</h2>
+
+<p>
+Submit your property and we'll review it before publication.
+</p>
+
 </div>
+
 
 <div class="sell-box">
-<h3>List Your Property</h3>
-<p>Enter the details below. Your listing will be submitted as unpublished for review.</p>
+
+<h3>
+List Your Property
+</h3>
+
+<p>
+Enter the details below. Your listing will be submitted as unpublished for review.
+</p>
 
 <div class="info-note">
-Please use a direct image URL beginning with <strong>https://</strong>. Proper photo uploads can be added in the next stage.
+
+Please use a direct image URL beginning with
+<strong>https://</strong>.
+Proper photo uploads can be added in the next stage.
+
 </div>
+
 
 <form id="propertyForm">
 
 <div class="form-grid">
 
-<div>
-<label for="sellerTitle">Property name</label>
-<input id="sellerTitle" required>
-</div>
 
 <div>
-<label for="sellerLocation">Location</label>
-<input id="sellerLocation" required>
+
+<label for="sellerTitle">
+Property name
+</label>
+
+<input
+id="sellerTitle"
+required
+>
+
 </div>
 
-<div>
-<label for="sellerPrice">Price (€)</label>
-<input id="sellerPrice" type="number" min="0" required>
-</div>
 
 <div>
-<label for="sellerBedrooms">Bedrooms</label>
-<input id="sellerBedrooms" type="number" min="1" required>
+
+<label for="sellerLocation">
+Town
+</label>
+
+<input
+id="sellerLocation"
+required
+>
+
 </div>
 
+
 <div>
-<label for="sellerType">Property type</label>
+
+<label for="sellerPrice">
+Price (€)
+</label>
+
+<input
+id="sellerPrice"
+type="number"
+min="0"
+required
+>
+
+</div>
+
+
+<div>
+
+<label for="sellerBedrooms">
+Bedrooms
+</label>
+
+<input
+id="sellerBedrooms"
+type="number"
+min="1"
+required
+>
+
+</div>
+
+
+<div>
+
+<label for="sellerType">
+Property type
+</label>
+
 <select id="sellerType">
-<option>Cave Home</option>
-<option>Renovated Cave Home</option>
-<option>Luxury Cave Home</option>
-<option>Cave & Country House</option>
+
+<option>
+Cave Home
+</option>
+
+<option>
+Renovated Cave Home
+</option>
+
+<option>
+Luxury Cave Home
+</option>
+
+<option>
+Cave & Country House
+</option>
+
 </select>
+
 </div>
+
 
 <div>
-<label for="sellerImage">Photo URL</label>
-<input id="sellerImage" type="url" placeholder="https://...">
+
+<label for="sellerImage">
+Photo URL
+</label>
+
+<input
+id="sellerImage"
+type="url"
+placeholder="https://..."
+>
+
 </div>
+
 
 <div class="form-full">
-<label for="sellerDescription">Description</label>
-<textarea id="sellerDescription" rows="5"></textarea>
+
+<label for="sellerDescription">
+Description
+</label>
+
+<textarea
+id="sellerDescription"
+rows="5"
+></textarea>
+
 </div>
+
 
 <div class="form-full">
-<button type="submit">Submit Property</button>
-</div>
+
+<button type="submit">
+Submit Property
+</button>
 
 </div>
 
-<div id="propertyStatus" class="status" role="status"></div>
+</div>
+
+<div
+id="propertyStatus"
+class="status"
+role="status"
+></div>
 
 </form>
+
 </div>
+
 </section>
 
+
 <section id="contact">
+
 <div class="section-title">
-<h2>Contact Cave Homes Spain</h2>
-<p>Questions about a property or selling your cave home?</p>
+
+<h2>
+Contact Cave Homes Spain
+</h2>
+
+<p>
+Questions about a property or selling your cave home?
+</p>
+
 </div>
+
 
 <p class="contact-copy">
 Send us a message and we'll get back to you.
 </p>
 
+
 <div class="sell-box">
 
-<form action="https://formsubmit.co/cuevatopanga@gmail.com" method="POST">
+<form
+action="https://formsubmit.co/cuevatopanga@gmail.com"
+method="POST"
+>
 
-<input type="hidden" name="_subject" value="Cave Homes Spain enquiry">
-<input type="hidden" name="_captcha" value="false">
-<input type="hidden" name="_template" value="table">
+<input
+type="hidden"
+name="_subject"
+value="Cave Homes Spain enquiry"
+>
+
+<input
+type="hidden"
+name="_captcha"
+value="false"
+>
+
+<input
+type="hidden"
+name="_template"
+value="table"
+>
+
 
 <div class="form-grid">
 
-<div>
-<label for="contactName">Your name</label>
-<input id="contactName" name="name" required>
-</div>
 
 <div>
-<label for="contactEmail">Your email</label>
-<input id="contactEmail" name="email" type="email" required>
+
+<label for="contactName">
+Your name
+</label>
+
+<input
+id="contactName"
+name="name"
+required
+>
+
 </div>
+
+
+<div>
+
+<label for="contactEmail">
+Your email
+</label>
+
+<input
+id="contactEmail"
+name="email"
+type="email"
+required
+>
+
+</div>
+
 
 <div class="form-full">
-<label for="contactMessage">Message</label>
-<textarea id="contactMessage" name="message" rows="6" required></textarea>
+
+<label for="contactMessage">
+Message
+</label>
+
+<textarea
+id="contactMessage"
+name="message"
+rows="6"
+required
+></textarea>
+
 </div>
+
 
 <div class="form-full">
-<button type="submit">Send Message</button>
+
+<button type="submit">
+Send Message
+</button>
+
 </div>
 
 </div>
+
 </form>
 
 </div>
+
 </section>
 
 </main>
 
+
 <footer>
-<p>© 2026 Cave Homes Spain</p>
-<p>Unique homes. Extraordinary places.</p>
+
+<p>
+© 2026 Cave Homes Spain
+</p>
+
+<p>
+Unique homes. Extraordinary places.
+</p>
+
 </footer>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-const SUPABASE_URL='https://lesgzlhvrlxgtfuocadq.supabase.co';
+const SUPABASE_URL =
+'https://lesgzlhvrlxgtfuocadq.supabase.co';
 
-const SUPABASE_KEY='sb_publishable_pPS6fORJPGFcGBIUPcxOxQ_1g4vazyg';
+const SUPABASE_KEY =
+'sb_publishable_pPS6fORJPGFcGBIUPcxOxQ_1g4vazyg';
 
-const supabaseClient=window.supabase.createClient(
+const supabaseClient =
+window.supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
 
-let allProperties=[];
+let allProperties = [];
+
 
 function esc(value){
-return String(value??'')
+
+return String(value ?? '')
 .replace(/&/g,'&amp;')
 .replace(/</g,'&lt;')
 .replace(/>/g,'&gt;')
 .replace(/"/g,'&quot;')
-.replace(/'/g,'&#039;')
+.replace(/'/g,'&#039;');
+
 }
+
 
 async function loadProperties(){
 
-const list=document.getElementById('propertyList');
+const list =
+document.getElementById('propertyList');
 
-list.innerHTML='<div class="loading">Loading properties...</div>';
+list.innerHTML =
+'<div class="loading">Loading properties...</div>';
 
-const {data,error}=await supabaseClient
+
+const {data,error} =
+await supabaseClient
 .from('properties')
 .select('*')
 .eq('published',true)
 .order('created_at',{ascending:false});
 
+
 if(error){
 
 console.error(error);
 
-list.innerHTML='<div class="no-properties">Properties could not be loaded right now.</div>';
+list.innerHTML =
+'<div class="no-properties">Properties could not be loaded right now.</div>';
 
 return;
+
 }
 
-allProperties=data||[];
+
+allProperties =
+data || [];
 
 displayProperties(allProperties);
 
 }
 
+
 function displayProperties(properties){
 
-const list=document.getElementById('propertyList');
+const list =
+document.getElementById('propertyList');
 
-const empty=document.getElementById('emptySearch');
+const empty =
+document.getElementById('emptySearch');
+
 
 if(!properties.length){
 
-list.innerHTML='';
+list.innerHTML = '';
 
-empty.style.display='block';
+empty.style.display = 'block';
 
 return;
+
 }
 
-empty.style.display='none';
 
-list.innerHTML=properties.map(p=>{
+empty.style.display = 'none';
 
-const image=p.image_url||
+
+list.innerHTML =
+properties.map(p => {
+
+const image =
+p.main_image_url ||
 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=85';
 
-const price=Number(p.price||0).toLocaleString('en-GB');
+
+const price =
+Number(p.price || 0)
+.toLocaleString('en-GB');
+
 
 return `
+
 <article class="property-card">
 
 <img
 class="property-image"
 src="${esc(image)}"
-alt="${esc(p.title||'Cave home')}"
+alt="${esc(p.title || 'Cave home')}"
 onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=85'"
 >
 
 <div class="property-content">
 
-<h3>${esc(p.title)}</h3>
+<h3>
+${esc(p.title)}
+</h3>
 
-<div class="location">📍 ${esc(p.location)}</div>
+<div class="location">
+📍 ${esc(p.town)}
+${p.province ? ', ' + esc(p.province) : ''}
+</div>
 
-<div class="price">€${price}</div>
+<div class="price">
+€${price}
+</div>
 
 <div class="details">
-<span>🛏 ${esc(p.bedrooms)} bedrooms</span>
-<span>🏠 ${esc(p.property_type)}</span>
+
+<span>
+🛏 ${esc(p.bedrooms || '')} bedrooms
+</span>
+
+<span>
+🏠 ${esc(p.property_type || '')}
+</span>
+
 </div>
 
-<p>${esc(p.description||'Beautiful Spanish cave home.')}</p>
+<p>
+${esc(p.description || 'Beautiful Spanish cave home.')}
+</p>
 
-<a class="button" href="#contact">Enquire</a>
+<a
+class="button"
+href="#contact"
+>
+Enquire
+</a>
 
 </div>
+
 </article>
+
 `;
 
 }).join('');
 
 }
 
+
 function searchProperties(){
 
-const location=document
+const location =
+document
 .getElementById('searchLocation')
 .value
 .toLowerCase()
 .trim();
 
-const maxPrice=Number(
+
+const maxPrice =
+Number(
 document.getElementById('searchPrice').value
-)||Infinity;
+) || Infinity;
 
-const bedrooms=Number(
+
+const bedrooms =
+Number(
 document.getElementById('searchBedrooms').value
-)||0;
+) || 0;
 
-const filtered=allProperties.filter(p=>
 
-(!location||
-String(p.location||'')
+const filtered =
+allProperties.filter(p =>
+
+(
+!location ||
+
+String(p.town || '')
 .toLowerCase()
-.includes(location))
+.includes(location) ||
+
+String(p.province || '')
+.toLowerCase()
+.includes(location)
+)
 
 &&
 
-(Number(p.price)<=maxPrice)
+Number(p.price) <= maxPrice
 
 &&
 
-(Number(p.bedrooms)>=bedrooms)
+Number(p.bedrooms || 0) >= bedrooms
 
 );
 
+
 displayProperties(filtered);
 
-document.getElementById('properties')
-.scrollIntoView({behavior:'smooth'});
+
+document
+.getElementById('properties')
+.scrollIntoView({
+behavior:'smooth'
+});
 
 }
-const property={
-title:document.getElementById('sellerTitle').value.trim(),
-town:document.getElementById('sellerLocation').value.trim(),
-price:Number(document.getElementById('sellerPrice').value),
-bedrooms:Number(document.getElementById('sellerBedrooms').value),
-property_type:document.getElementById('sellerType').value,
-main_image_url:document.getElementById('sellerImage').value.trim(),
-description:document.getElementById('sellerDescription').value.trim(),
-published:false
-};
-document.getElementById('propertyForm')
-.addEventListener('submit',async e=>{
+
+
+document
+.getElementById('propertyForm')
+.addEventListener('submit',async e => {
 
 e.preventDefault();
 
-const status=document.getElementById('propertyStatus');
 
-status.className='status';
+const status =
+document.getElementById('propertyStatus');
 
-status.textContent='Submitting property...';
 
+status.className =
+'status';
+
+status.textContent =
+'Submitting property...';
+
+
+const property = {
+
+title:
+document
+.getElementById('sellerTitle')
+.value
+.trim(),
+
+town:
+document
+.getElementById('sellerLocation')
+.value
+.trim(),
+
+price:
+Number(
+document
+.getElementById('sellerPrice')
+.value
+),
+
+bedrooms:
+Number(
+document
+.getElementById('sellerBedrooms')
+.value
+),
+
+property_type:
+document
+.getElementById('sellerType')
+.value,
+
+main_image_url:
+document
+.getElementById('sellerImage')
+.value
+.trim(),
+
+description:
+document
+.getElementById('sellerDescription')
+.value
+.trim(),
+
+published:false
 
 };
 
-const {error}=await supabaseClient
+
+const {error} =
+await supabaseClient
 .from('properties')
 .insert([property]);
+
 
 if(error){
 
 console.error(error);
 
-status.className='status error';
+status.className =
+'status error';
 
-status.textContent=
-'There was a problem submitting the property. Please check that the database allows new property submissions.';
+status.textContent =
+'There was a problem submitting the property. Please try again.';
 
 return;
+
 }
 
-status.className='status success';
 
-status.textContent=
+status.className =
+'status success';
+
+status.textContent =
 'Thank you. Your property has been submitted for review.';
+
 
 e.target.reset();
 
 });
+
 
 loadProperties();
 
