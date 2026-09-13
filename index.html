@@ -399,7 +399,16 @@ document.getElementById('properties')
 .scrollIntoView({behavior:'smooth'});
 
 }
-
+const property={
+title:document.getElementById('sellerTitle').value.trim(),
+town:document.getElementById('sellerLocation').value.trim(),
+price:Number(document.getElementById('sellerPrice').value),
+bedrooms:Number(document.getElementById('sellerBedrooms').value),
+property_type:document.getElementById('sellerType').value,
+main_image_url:document.getElementById('sellerImage').value.trim(),
+description:document.getElementById('sellerDescription').value.trim(),
+published:false
+};
 document.getElementById('propertyForm')
 .addEventListener('submit',async e=>{
 
@@ -411,43 +420,6 @@ status.className='status';
 
 status.textContent='Submitting property...';
 
-const property={
-
-title:document
-.getElementById('sellerTitle')
-.value
-.trim(),
-
-location:document
-.getElementById('sellerLocation')
-.value
-.trim(),
-
-price:Number(
-document.getElementById('sellerPrice')
-.value
-),
-
-bedrooms:Number(
-document.getElementById('sellerBedrooms')
-.value
-),
-
-property_type:document
-.getElementById('sellerType')
-.value,
-
-image_url:document
-.getElementById('sellerImage')
-.value
-.trim(),
-
-description:document
-.getElementById('sellerDescription')
-.value
-.trim(),
-
-published:false
 
 };
 
