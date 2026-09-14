@@ -56,6 +56,8 @@
       sdk = OneSignal;
       await OneSignal.init({
         appId: APP_ID,
+        safari_web_id: 'web.onesignal.auto.11512f5d-61af-48e1-99c6-cc09fe5cc2c2',
+        notifyButton: { enable: true },
         serviceWorkerPath: 'push/onesignal/OneSignalSDKWorker.js',
         serviceWorkerParam: { scope: '/push/onesignal/' }
       });
