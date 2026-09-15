@@ -1,9 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://cave-homes-spain.vercel.app/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <loc>https://cavehomesspain.com/</loc>
+    <lastmod>2026-09-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://cavehomesspain.com/?home=27e8d074-0e2a-494e-8112-f1c409bd4af8</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cavehomesspain.com/?home=9b3add65-3f3b-497f-a2d7-f1cb8bf8af6b</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cavehomesspain.com/?home=f0ff45f5-512f-426e-8ac8-0937ec8479ef</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cavehomesspain.com/?home=24bc9279-61f8-447d-9915-c9b220f4d57a</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cavehomesspain.com/?home=a79aecba-e872-438b-a9c5-8e680c132c30</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cavehomesspain.com/?home=dd8ba16f-05f0-47a8-8122-03d39546caf8</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cavehomesspain.com/?home=e452d228-d3ed-4d33-9938-12553c0c1b04</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cavehomesspain.com/?home=a89c631d-c742-4db2-925e-a66b5e5cad63</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cavehomesspain.com/?home=5579e6d9-0eb1-4d43-9c4f-69a65bc58a7c</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cavehomesspain.com/?home=6622b551-d625-4a64-b4d9-ae0e6f47c543</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>
