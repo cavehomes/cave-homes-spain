@@ -1,1 +1,26 @@
-{"name":"Cave Homes Spain Admin","short_name":"Cave Homes Admin","start_url":"/admin.html","display":"standalone","background_color":"#faf6ef","theme_color":"#1f3b30","icons":[{"src":"/admin-icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
+{
+  "name": "Cave Homes Spain",
+  "short_name": "Cave Homes",
+  "description": "Discover cave homes for sale across Spain.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fffaf2",
+  "theme_color": "#29483a",
+  "icons": [
+    {
+      "src": "/cave-homes-spain-logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/cave-homes-spain-logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
