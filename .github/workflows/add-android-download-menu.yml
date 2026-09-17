@@ -1,0 +1,35 @@
+name: Add Android download to menu
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/add-android-download-menu.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-menu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add Android app to Advertise dropdown
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text()
+          needle = '<a href="#sell"><span class="advertise-icon">🔑</span><span><strong>List for free</strong><small>List until sold · paid upgrades available</small></span><b>→</b></a>'
+          item = '<a href="/downloads/Cave-Homes-Spain.apk" download><span class="advertise-icon">📱</span><span><strong>Download our Android App</strong><small>Install Cave Homes Spain on your Android phone</small></span><b>↓</b></a>'
+          if item not in s:
+              if needle not in s:
+                  raise SystemExit('Menu insertion point not found')
+              s = s.replace(needle, needle + item, 1)
+              p.write_text(s)
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Add Android app download to dropdown menu" || exit 0
+          git push
