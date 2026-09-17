@@ -22,6 +22,19 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
+      - name: Create Android launcher icon resources
+        run: |
+          mkdir -p app/src/main/res/mipmap-mdpi app/src/main/res/mipmap-hdpi app/src/main/res/mipmap-xhdpi app/src/main/res/mipmap-xxhdpi app/src/main/res/mipmap-xxxhdpi
+          cp app/src/main/res/drawable/app_icon.jpg app/src/main/res/mipmap-mdpi/ic_launcher.jpg
+          cp app/src/main/res/drawable/app_icon.jpg app/src/main/res/mipmap-hdpi/ic_launcher.jpg
+          cp app/src/main/res/drawable/app_icon.jpg app/src/main/res/mipmap-xhdpi/ic_launcher.jpg
+          cp app/src/main/res/drawable/app_icon.jpg app/src/main/res/mipmap-xxhdpi/ic_launcher.jpg
+          cp app/src/main/res/drawable/app_icon.jpg app/src/main/res/mipmap-xxxhdpi/ic_launcher.jpg
+          cp app/src/main/res/drawable/app_icon.jpg app/src/main/res/mipmap-mdpi/ic_launcher_round.jpg
+          cp app/src/main/res/drawable/app_icon.jpg app/src/main/res/mipmap-hdpi/ic_launcher_round.jpg
+          cp app/src/main/res/drawable/app_icon.jpg app/src/main/res/mipmap-xhdpi/ic_launcher_round.jpg
+          cp app/src/main/res/drawable/app_icon.jpg app/src/main/res/mipmap-xxhdpi/ic_launcher_round.jpg
+          cp app/src/main/res/drawable/app_icon.jpg app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.jpg
       - name: Build APK
         run: gradle assembleDebug
       - name: Rename APK
