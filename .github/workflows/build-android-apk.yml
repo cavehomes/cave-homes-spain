@@ -7,6 +7,9 @@ on:
       - 'android-app/**'
       - '.github/workflows/build-android-apk.yml'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,7 +40,17 @@ jobs:
           cp app/src/main/res/drawable/app_icon.jpg app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.jpg
       - name: Build APK
         run: gradle assembleDebug
-      - name: Rename APK
+      - name: Publish APK to website
+        working-directory: .
+        run: |
+          mkdir -p downloads
+          cp android-app/app/build/outputs/apk/debug/app-debug.apk downloads/Cave-Homes-Spain.apk
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add downloads/Cave-Homes-Spain.apk
+          git commit -m "Publish latest Cave Homes Spain Android APK" || exit 0
+          git push
+      - name: Rename APK for build artifact
         run: cp app/build/outputs/apk/debug/app-debug.apk ../Cave-Homes-Spain.apk
       - uses: actions/upload-artifact@v4
         with:
