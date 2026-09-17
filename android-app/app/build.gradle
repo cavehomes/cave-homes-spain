@@ -1,0 +1,14 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'com.cavehomesspain.app'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.cavehomesspain.app'
+        minSdk 24
+        targetSdk 35
+        versionCode 1
+        versionName '1.0.0'
+    }
+}
