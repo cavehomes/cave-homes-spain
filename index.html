@@ -117,7 +117,7 @@
       <a class="brand brand-logo-link" href="#top" aria-label="Cave Homes Spain home"><img class="brand-logo" src="/cave-homes-spain-logo.png" alt="Cave Homes Spain"><span class="version-badge logo-version">V14</span></a>
       <nav class="nav-links" id="navLinks" aria-label="Main navigation">
         <div class="mobile-menu-head"><div><span>Explore</span><strong>Cave Homes Spain</strong></div><button type="button" id="closeMobileMenu" aria-label="Close menu">×</button></div>
-        <a href="#buy"><span class="nav-symbol">⌂</span>Properties</a><a href="#sell"><span class="nav-symbol">＋</span>Sell</a><a href="#stay">Holiday Stays</a><a href="#maintenance">Services</a><a href="#contact">Contact</a>
+        <a href="#buy"><span class="nav-symbol">⌂</span>Properties</a><a href="#sell"><span class="nav-symbol">＋</span>Sell</a><a href="#stay">Holiday Stays</a><a href="#contact" data-service="Cave renovation">Looking for Cave Renovations?</a><a href="#contact">Contact</a>
         <div class="advertise-menu" id="advertiseMenu"><button class="advertise-trigger" id="advertiseTrigger" type="button" aria-expanded="false" aria-controls="advertiseOptions"><span>＋</span> Advertise <b>⌄</b></button><div class="advertise-options" id="advertiseOptions"><button type="button" id="menuAdvertiseBusiness"><span class="advertise-icon">🛠️</span><span><strong>Advertise a business</strong><small>Join the maintenance directory</small></span><b>→</b></button><button type="button" id="menuAdvertiseRental"><span class="advertise-icon">🏡</span><span><strong>Advertise a Holiday Stay</strong><small>Send your Holiday Stay for approval</small></span><b>→</b></button><a href="#sell"><span class="advertise-icon">🔑</span><span><strong>List for free</strong><small>List until sold · paid upgrades available</small></span><b>→</b></a><a href="/downloads/Cave-Homes-Spain.apk" download><span class="advertise-icon">📱</span><span><strong>Download our Android App</strong><small>Install Cave Homes Spain on your Android phone</small></span><b>↓</b></a></div></div>
       </nav>
       <div class="header-tools"><div class="language-wrap"><span class="language-flag" id="languageFlag" aria-hidden="true">🇬🇧</span><span class="language-chevron" aria-hidden="true">⌄</span><select class="language header-language" id="languageSelect" aria-label="Choose language" onchange="window.setSiteLanguage(this.value)"><option value="en" aria-label="English">English</option><option value="es" aria-label="Español">Español</option><option value="fr-BE" aria-label="Français">Français</option><option value="nl" aria-label="Nederlands">Nederlands</option><option value="de" aria-label="Deutsch">Deutsch</option></select></div><button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button></div>
@@ -262,31 +262,7 @@
       </div>
     </section>
 
-    <section class="maintenance" id="maintenance">
-      <div class="wrap">
-        <div class="section-head"><p class="eyebrow">Trusted local help</p><h2>Cave-home maintenance</h2><p>Find local people who can help care for, repair and prepare your property.</p></div>
-        <div class="maintenance-grid">
-          <a class="maintenance-link" href="#contact" data-service="Electrician"><span class="maintenance-icon" aria-hidden="true">⚡</span><strong>Electricians</strong><span>Ask for local help →</span></a>
-          <a class="maintenance-link" href="#contact" data-service="Tiler"><span class="maintenance-icon" aria-hidden="true">▦</span><strong>Tilers</strong><span>Ask for local help →</span></a>
-          <a class="maintenance-link" href="#contact" data-service="Plumber"><span class="maintenance-icon" aria-hidden="true">💧</span><strong>Plumbing</strong><span>Ask for local help →</span></a>
-          <a class="maintenance-link" href="#contact" data-service="Plasterer"><span class="maintenance-icon" aria-hidden="true">◫</span><strong>Plastering</strong><span>Ask for local help →</span></a>
-          <a class="maintenance-link" href="#contact" data-service="Builder"><span class="maintenance-icon" aria-hidden="true">🔨</span><strong>Building work</strong><span>Ask for local help →</span></a>
-          <a class="maintenance-link" href="#contact" data-service="Cleaner"><span class="maintenance-icon" aria-hidden="true">✦</span><strong>Cleaning</strong><span>Ask for local help →</span></a>
-          <a class="maintenance-link" href="#contact" data-service="Holiday rental cleaner"><span class="maintenance-icon" aria-hidden="true">🧹</span><strong>Holiday-rental cleaning</strong><span>Ask for local help →</span></a>
-          <a class="maintenance-link" href="#contact" data-service="Property maintenance"><span class="maintenance-icon" aria-hidden="true">🛠</span><strong>General maintenance</strong><span>Ask for local help →</span></a>
-        </div>
-        <div class="directory-results hidden" id="maintenanceDirectory"><div class="directory-heading"><p class="eyebrow">Local directory</p><h3>People who can help</h3></div><div class="provider-grid" id="providerGrid"></div></div>
-        <div class="trade-cta"><div><span>LOCAL TRADESPEOPLE</span><h3>Do you provide services around Baza?</h3><p>Apply to be included in the Cave Homes Spain maintenance directory.</p></div><button class="btn business-owner-link" type="button" id="openMaintenanceApplication">Add your service →</button></div>
-        <div class="maintenance-application hidden" id="maintenanceApplication">
-          <form id="publicMaintenanceForm">
-            <div class="maintenance-form-head"><div><p class="eyebrow">Local services</p><h3>Advertise your maintenance service</h3></div><button type="button" id="closeMaintenanceApplication" aria-label="Close form">×</button></div>
-            <div class="maintenance-form-grid"><label><span>Business or person’s name *</span><input name="business_name" required placeholder="e.g. Baza Property Services"></label><label><span>Service *</span><select name="service" required><option value="">Choose a service</option><option>Electrician</option><option>Plumber</option><option>Tiler</option><option>Plasterer</option><option>Builder</option><option>Cleaner</option><option>Holiday rental cleaning</option><option>General maintenance</option></select></label><label><span>Area covered *</span><input name="area" required placeholder="e.g. Baza and surrounding villages"></label><label><span>Telephone number *</span><input name="phone" type="tel" required autocomplete="tel" placeholder="+34 600 000 000"></label><label class="full"><span>Email address *</span><input name="email" type="email" required autocomplete="email" placeholder="name@example.com"></label></div>
-            <button class="btn" type="submit">Send for approval</button><div class="maintenance-submit-message" id="maintenanceSubmitMessage" role="status"></div>
-          </form>
-        </div>
-        <p class="maintenance-note">Service providers work independently. Please check qualifications, insurance, references and quotations before arranging any work.</p>
-      </div>
-    </section>
+    
 
     <section class="contact" id="contact">
       <div class="wrap contact-box">
