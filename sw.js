@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cave-homes-spain-v1';
+const CACHE_NAME = 'cave-homes-spain-v2';
 const APP_SHELL = ['/', '/index.html', '/manifest.webmanifest', '/cave-homes-spain-logo.png'];
 
 self.addEventListener('install', event => {
