@@ -1,5 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/property/:path*", "destination": "/index.html" }
-  ]
-}
