@@ -117,7 +117,7 @@
       <a class="brand brand-logo-link" href="#top" aria-label="Cave Homes Spain home"><img class="brand-logo" src="/cave-homes-spain-logo.png" alt="Cave Homes Spain"><span class="version-badge logo-version">V14</span></a>
       <nav class="nav-links" id="navLinks" aria-label="Main navigation">
         <div class="mobile-menu-head"><div><span>Explore</span><strong>Cave Homes Spain</strong></div><button type="button" id="closeMobileMenu" aria-label="Close menu">×</button></div>
-        <a href="#buy"><span class="nav-symbol">⌂</span>Properties</a><a href="#sell"><span class="nav-symbol">＋</span>Sell</a><a href="#stay">Holiday Stays</a><a href="#contact" data-service="Cave renovation">Looking for Cave Renovations?</a><a href="#contact">Contact</a>
+        <a href="#buy"><span class="nav-symbol">⌂</span>Properties</a><a href="#sell"><span class="nav-symbol">＋</span>Sell</a><a href="#stay">Holiday Stays</a><a href="#maintenance">Services</a><a href="#contact">Contact</a>
         <div class="advertise-menu" id="advertiseMenu"><button class="advertise-trigger" id="advertiseTrigger" type="button" aria-expanded="false" aria-controls="advertiseOptions"><span>＋</span> Advertise <b>⌄</b></button><div class="advertise-options" id="advertiseOptions"><button type="button" id="menuAdvertiseBusiness"><span class="advertise-icon">🛠️</span><span><strong>Advertise a business</strong><small>Join the maintenance directory</small></span><b>→</b></button><button type="button" id="menuAdvertiseRental"><span class="advertise-icon">🏡</span><span><strong>Advertise a Holiday Stay</strong><small>Send your Holiday Stay for approval</small></span><b>→</b></button><a href="#sell"><span class="advertise-icon">🔑</span><span><strong>List for free</strong><small>List until sold · paid upgrades available</small></span><b>→</b></a><a href="/downloads/Cave-Homes-Spain.apk" download><span class="advertise-icon">📱</span><span><strong>Download our Android App</strong><small>Install Cave Homes Spain on your Android phone</small></span><b>↓</b></a></div></div>
       </nav>
       <div class="header-tools"><div class="language-wrap"><span class="language-flag" id="languageFlag" aria-hidden="true">🇬🇧</span><span class="language-chevron" aria-hidden="true">⌄</span><select class="language header-language" id="languageSelect" aria-label="Choose language" onchange="window.setSiteLanguage(this.value)"><option value="en" aria-label="English">English</option><option value="es" aria-label="Español">Español</option><option value="fr-BE" aria-label="Français">Français</option><option value="nl" aria-label="Nederlands">Nederlands</option><option value="de" aria-label="Deutsch">Deutsch</option></select></div><button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button></div>
@@ -264,6 +264,19 @@
 
     
 
+    <section class="maintenance" id="maintenance" style="display:none">
+      <div class="wrap">
+        <div class="directory-results hidden" id="maintenanceDirectory"><div class="directory-heading"><p class="eyebrow">Local directory</p><h3>People who can help</h3></div><div class="provider-grid" id="providerGrid"></div></div>
+        <button type="button" id="openMaintenanceApplication">Advertise a renovation business</button>
+        <div class="maintenance-application hidden" id="maintenanceApplication">
+          <form id="publicMaintenanceForm">
+            <button type="button" id="closeMaintenanceApplication" aria-label="Close form">×</button>
+            <input name="business_name"><select name="service"><option>Cave renovation</option></select><input name="area"><input name="phone"><input name="email">
+            <button type="submit">Send</button><div id="maintenanceSubmitMessage"></div>
+          </form>
+        </div>
+      </div>
+    </section>
     <section class="contact" id="contact">
       <div class="wrap contact-box">
         <div class="contact-copy"><p class="eyebrow" style="color:#ffe0ce">Let's talk</p><h2>Have a question?</h2><p>Ask about a property, cave living, or advertising your home. We'll get back to you as soon as possible.</p><div class="contact-details"><a href="mailto:cavehomesspain@gmail.com">✉ &nbsp;cavehomesspain@gmail.com</a><span>⌖ &nbsp;Andalucía, Spain</span></div></div>
