@@ -1,7 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
-Disallow: /v10-preview.html
-Disallow: /v11-preview.html
 
 Sitemap: https://cavehomesspain.com/sitemap.xml
