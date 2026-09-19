@@ -151,7 +151,7 @@
 
     <section class="property-types" aria-label="Browse by property type">
       <div class="wrap">
-        <div class="type-intro"><div><p class="eyebrow">Browse your way</p><h2>What are you looking for?</h2></div><a href="#map">Explore the area map →</a></div>
+        <div class="type-intro"><div><p class="eyebrow">Browse your way</p><h2>What are you looking for?</h2></div><a href="/map.html">Explore the area map →</a></div>
         <div class="type-grid">
           <button type="button" data-property-type="Cave Home"><span>⌂</span><strong>Cave homes</strong><small>Traditional underground living</small></button>
           <button type="button" data-property-type="House"><span>▱</span><strong>Houses</strong><small>Village and country homes</small></button>
@@ -194,7 +194,7 @@
         <div><div class="personal-head"><p class="eyebrow">Pick up where you left off</p><h2>Recently viewed</h2></div><div class="mini-grid" id="recentHomes"><p class="personal-empty">Properties you open will appear here.</p></div></div>
       </div>
     </section>
-    <section class="area-map" id="map"><div class="wrap map-grid"><div class="map-copy"><p class="eyebrow">Properties on the map</p><h2>Explore homes around Baza and Albox.</h2><p>Each orange marker represents a published property. Tap a marker to see its name, price and full listing.</p><div class="map-key"><span><i></i> Property for sale</span><strong id="mapPropertyCount">Loading properties…</strong></div><a class="btn" href="#buy">Browse all properties</a></div><div class="map-frame property-map" id="propertyMap" role="application" aria-label="Interactive map of properties for sale around Baza"></div></div></section>
+    
     
 
 
@@ -384,9 +384,9 @@
     function openLinkedHome(){const key=new URL(location.href).searchParams.get('home');if(!key){if(modal.classList.contains('open'))closeProperty(false);return}const home=publicHomes.find(item=>propertyKey(item)===key||item.title===key);if(home)openProperty(home,false)}
     addEventListener('popstate',openLinkedHome);
     document.getElementById('modalEnquire').onclick=()=>{if(!activeHome)return;closeProperty();document.getElementById('propertyInterest').value=activeHome.title;document.getElementById('contactSubject').value='Enquiry about '+activeHome.title;document.getElementById('contactMessage').value='Hello, I would like more information about '+activeHome.title+'.';document.getElementById('contact').scrollIntoView({behavior:'smooth'})};
-    async function loadPublishedProperties(){try{const {data,error}=await publicDb.from('properties').select('*').eq('published',true).order('created_at',{ascending:false});if(error)throw error;publicHomes=(data||[]).map(home=>home.title==='Casa Cueva 1 — Benamaurel'?{...home,featured:true}:home);renderPublicHomes();renderPersonalHomes();renderPropertyMap();openLinkedHome()}catch(error){console.warn('Published properties could not load',error);document.getElementById('mapPropertyCount').textContent='Published properties could not be loaded'}}renderPropertyMap();loadPublishedProperties();addEventListener('hashchange',()=>{if(location.hash==='#map')setTimeout(()=>{propertyMap?.invalidateSize();renderPropertyMap()},120)});document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadPublishedProperties()});
+    async function loadPublishedProperties(){try{const {data,error}=await publicDb.from('properties').select('*').eq('published',true).order('created_at',{ascending:false});if(error)throw error;publicHomes=(data||[]).map(home=>home.title==='Casa Cueva 1 — Benamaurel'?{...home,featured:true}:home);renderPublicHomes();renderPersonalHomes();renderPropertyMap();openLinkedHome()}catch(error){console.warn('Published properties could not load',error);document.getElementById('mapPropertyCount').textContent='Published properties could not be loaded'}}renderPropertyMap();loadPublishedProperties();addEventListener('hashchange',()=>{false});document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadPublishedProperties()});
   </script>
-  <nav class="mobile-dock" aria-label="Mobile quick navigation"><a href="#buy"><span>⌂</span>Buy</a><a href="#map"><span>◎</span>Map</a><a class="dock-main" href="/list-your-property.html"><span>＋</span>Sell</a><a href="#saved"><span>♡</span>Saved</a><a href="#" aria-label="Home"><span>🏠</span>Home</a></nav>
+  <nav class="mobile-dock" aria-label="Mobile quick navigation"><a href="#buy"><span>⌂</span>Buy</a><a href="/map.html"><span>◎</span>Map</a><a class="dock-main" href="/list-your-property.html"><span>＋</span>Sell</a><a href="#saved"><span>♡</span>Saved</a><a href="#" aria-label="Home"><span>🏠</span>Home</a></nav>
 
 </body>
 </html>
