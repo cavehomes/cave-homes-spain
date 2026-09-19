@@ -475,5 +475,12 @@
     async function loadPublishedProperties(){try{const {data,error}=await publicDb.from('properties').select('*').eq('published',true).order('created_at',{ascending:false});if(error)throw error;publicHomes=(data||[]).map(home=>home.title==='Casa Cueva 1 — Benamaurel'?{...home,featured:true}:home);renderPublicHomes();renderPersonalHomes();renderPropertyMap();openLinkedHome()}catch(error){console.warn('Published properties could not load',error);document.getElementById('mapPropertyCount').textContent='Published properties could not be loaded'}}renderPropertyMap();loadPublishedProperties();addEventListener('hashchange',()=>{if(location.hash==='#map')setTimeout(()=>{propertyMap?.invalidateSize();renderPropertyMap()},120)});document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadPublishedProperties()});
   </script>
   <nav class="mobile-dock" aria-label="Mobile quick navigation"><a href="#buy"><span>⌂</span>Buy</a><a href="#map"><span>◎</span>Map</a><a class="dock-main" href="#sell"><span>＋</span>Sell</a><a href="#saved"><span>♡</span>Saved</a></nav>
+
+  <a class="back-home-top" href="#" aria-label="Back to top" title="Back to top">⌂</a>
+  <style>
+    .back-home-top{position:fixed;right:18px;bottom:18px;z-index:1200;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;color:#2f5d46;border:1px solid rgba(47,93,70,.22);box-shadow:0 4px 14px rgba(0,0,0,.16);font-size:27px;text-decoration:none;line-height:1}
+    .back-home-top:hover,.back-home-top:focus{background:#f4f8f5;transform:translateY(-1px)}
+    @media(max-width:760px){.back-home-top{bottom:78px;right:14px;width:46px;height:46px}}
+  </style>
 </body>
 </html>
