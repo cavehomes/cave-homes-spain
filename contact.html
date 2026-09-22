@@ -44,6 +44,13 @@
       const viewingField=document.getElementById('viewingDate').closest('.field');
       if(viewingField)viewingField.style.display='none';
       document.querySelector('.card').scrollIntoView({behavior:'smooth',block:'start'});
+    }else if(service==='estate-agent'){
+      document.getElementById('formType').value='Estate agent partnership enquiry';
+      document.getElementById('contactSubject').value='Estate agent partnership enquiry';
+      document.getElementById('contactMessage').value='Hello, I would like to discuss advertising our agency properties with Cave Homes Spain.\n\nAgency name: \nAreas covered: \nApproximate number of properties: ';
+      const viewingField=document.getElementById('viewingDate').closest('.field');
+      if(viewingField)viewingField.style.display='none';
+      document.querySelector('.card').scrollIntoView({behavior:'smooth',block:'start'});
     }else if(property){
       document.getElementById('propertyInterest').value=property;
       document.getElementById('formType').value='Property enquiry';
