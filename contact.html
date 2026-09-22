@@ -13,7 +13,7 @@
 <body>
   <header><div class="wrap"><a class="brand" href="/"><img src="/cave-homes-spain-logo.png" alt="">Cave Homes Spain</a></div></header>
   <main class="wrap">
-    <section class="hero"><div class="eyebrow">LET'S TALK</div><h1>Have a question?</h1><p>Ask about a property, arranging a viewing, cave living, advertising your home, rentals or anything else about Cave Homes Spain.</p></section>
+    <section class="hero"><div class="eyebrow">LET'S TALK</div><h1>Have a question?</h1><p>Ask about a property, arranging a viewing, cave living, advertising your home, property management or anything else about Cave Homes Spain.</p></section>
     <section class="card">
       <p>Your message will be sent directly to the private Cave Homes Spain Owners app.</p>
       <form id="contactForm">
@@ -34,8 +34,17 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const db=window.supabase.createClient('https://lesgzlhvrlxgtfuocadq.supabase.co','sb_publishable_pPS6fORJPGFcGBIUPcxOxQ_1g4vazyg');
-    const property=new URLSearchParams(location.search).get('property');
-    if(property){
+    const params=new URLSearchParams(location.search);
+    const service=params.get('service');
+    const property=params.get('property');
+    if(service==='property-management'){
+      document.getElementById('formType').value='Property management enquiry';
+      document.getElementById('contactSubject').value='Property management enquiry';
+      document.getElementById('contactMessage').value='Hello, I would like to ask about property management support for my property.\n\nProperty location: \nServices needed: ';
+      const viewingField=document.getElementById('viewingDate').closest('.field');
+      if(viewingField)viewingField.style.display='none';
+      document.querySelector('.card').scrollIntoView({behavior:'smooth',block:'start'});
+    }else if(property){
       document.getElementById('propertyInterest').value=property;
       document.getElementById('formType').value='Property enquiry';
       document.getElementById('contactSubject').value='Enquiry about '+property;
