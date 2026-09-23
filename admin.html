@@ -191,37 +191,6 @@
     window.publishHome=async id=>{const home=homes.find(item=>String(item.id)===String(id));if(!home)return alert('This property could not be found.');if(home.energy_status==='waiting')return alert('This property is waiting for energy rating confirmation and must remain a draft.');if(home.energy_status!=='exempt'&&!/^[A-G]$/.test(String(home.energy_rating||'').toUpperCase()))return alert('Add a confirmed A–G energy rating or select Exempt property before publishing.');if(!confirm('Publish this home on the public website now?'))return;const {error}=await db.from('properties').update({published:true,status:'for_sale'}).eq('id',id);if(error)return alert('Could not publish: '+error.message);alert('Published successfully. The home is now live and marked For sale.');loadDrafts();updateDashboardCounts()};
     const showPhotoPreviewV6=showPhotoPreview;showPhotoPreview=function(urls,isNew=false){showPhotoPreviewV6(urls,isNew);document.querySelectorAll('#photoStrip .photo-thumb').forEach((thumb,index)=>thumb.insertAdjacentHTML('beforeend',`<button class="photo-main ${index===0?'current':''}" type="button" onclick="makeMainPhoto(${index},${isNew})">${index===0?'Main photo':'Make main'}</button>`))};
     window.makeMainPhoto=async(index,isNew)=>{if(index===0)return;if(isNew){const files=[...$('photo').files],chosen=files.splice(index,1)[0];files.unshift(chosen);const transfer=new DataTransfer();files.forEach(file=>transfer.items.add(file));$('photo').files=transfer.files;refreshSelectedPhotoPreview();return}let images=[];try{images=JSON.parse($('existingImages').value||'[]')}catch{}const chosen=images.splice(index,1)[0];if(!chosen)return;images.unshift(chosen);const id=$('editId').value,{error}=await db.from('properties').update({image_urls:images,main_image_url:images[0]}).eq('id',id);if(error)return alert('Could not change the main photo: '+error.message);$('existingImages').value=JSON.stringify(images);$('existingImage').value=images[0];$('preview').src=images[0];showPhotoPreview(images);alert('Main photo updated.')};
-    let partnerHomesCache=null;
-    async function loadPartnerHomes(){
-      if(partnerHomesCache)return partnerHomesCache;
-      try{
-        const response=await fetch('/partner-properties.json?v=20260923');
-        if(!response.ok)throw new Error('Partner catalogue unavailable');
-        partnerHomesCache=(await response.json()).map(home=>({...home,partner_listing:true}));
-      }catch(error){
-        console.warn('Partner catalogue could not be loaded',error);
-        partnerHomesCache=[];
-      }
-      return partnerHomesCache;
-    }
-    function renderPartnerHome(home){
-      return `<article class="home partner-home" data-type="${esc(home.property_type||'Cave Home')}"><img src="${esc(home.main_image_url)}" alt=""><div class="home-body"><div class="home-head"><div><span class="status for-sale">FOR SALE</span><span class="status property-type">${esc(home.property_type||'Cave Home')}</span><span class="status featured">PARTNER LISTING</span><h3>${esc(home.title)}</h3></div><span class="photo-badge">📷 ${photoTotal(home)}</span></div><div class="meta">${esc(home.town)}, ${esc(home.province||'')} · €${Number(home.price).toLocaleString()} · ${esc(home.bedrooms)} beds</div><div class="meta">Spanish Inland Properties · Ref: ${esc(home.source_ref||'')}</div><div class="actions"><a class="btn green" style="grid-column:1/-1;text-align:center;text-decoration:none" href="/?home=${encodeURIComponent(home.id)}" target="_blank">View live property ↗</a></div><div class="public-link">Partner listings are updated from the partner catalogue and are view-only here.</div></div></article>`;
-    }
-    const loadLiveHomesPartner=loadLiveHomes;
-    loadLiveHomes=async function(){
-      await loadLiveHomesPartner();
-      const ownHomes=[...homes],partnerHomes=await loadPartnerHomes();
-      homes=[...ownHomes,...partnerHomes];
-      if(partnerHomes.length)$('liveList').insertAdjacentHTML('beforeend',partnerHomes.map(renderPartnerHome).join(''));
-      filterLive();
-    };
-    const updateDashboardCountsPartner=updateDashboardCounts;
-    updateDashboardCounts=async function(){
-      await updateDashboardCountsPartner();
-      const partnerHomes=await loadPartnerHomes(),total=Number($('totalCount').textContent)||0,live=Number($('liveStat').textContent)||0;
-      $('totalCount').textContent=total+partnerHomes.length;
-      $('liveStat').textContent=live+partnerHomes.length;
-    };
     setupOwnersV7();
     if('serviceWorker'in navigator)navigator.serviceWorker.register('/service-worker.js');
   </script>
