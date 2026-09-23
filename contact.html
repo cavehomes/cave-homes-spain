@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Contact Cave Homes Spain | Property Enquiries</title>
   <meta name="description" content="Contact Cave Homes Spain about properties for sale, cave homes, viewings, listings, rentals or general questions.">
+  <script src="/analytics-events.js" defer></script>
   <style>
     :root{--green:#183d32;--clay:#b76443;--cream:#f7f2e9;--ink:#24352f;--muted:#6d7772;--line:#ded8cd}
     *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Arial,sans-serif;line-height:1.55}.wrap{width:min(820px,calc(100% - 28px));margin:auto}header{background:#fff;border-bottom:1px solid var(--line);padding:14px 0}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--green);font:700 20px Georgia,serif}.brand img{width:68px}.hero{padding:48px 0 20px}.hero h1{font:700 clamp(38px,7vw,60px) Georgia,serif;color:var(--green);margin:5px 0 12px}.eyebrow{font-size:13px;font-weight:800;letter-spacing:.12em;color:var(--clay)}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:25px;margin:18px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:grid;gap:6px}.full{grid-column:1/-1}label{font-weight:700}input,textarea{width:100%;padding:13px;border:1px solid var(--line);border-radius:10px;font:inherit}.btn{border:0;border-radius:999px;background:var(--clay);color:#fff;padding:14px 22px;font-weight:800;cursor:pointer}.btn:disabled{opacity:.65;cursor:wait}.status{display:none;margin-top:14px;padding:12px 14px;border-radius:10px;background:#e8f3eb;color:#235235;font-weight:700}.status.error{background:#fbe9e5;color:#8b3528}@media(max-width:620px){.grid{grid-template-columns:1fr}.full{grid-column:auto}}
@@ -66,6 +67,8 @@
       try{
         const {error}=await db.from('enquiries').insert({name:String(data.get('name')||''),email:String(data.get('email')||''),phone:String(data.get('phone')||''),subject:String(data.get('subject')||data.get('form_type')||'Website enquiry'),message,property_title:String(data.get('property')||''),source:'buyer',status:'new'});
         if(error)throw error;
+        const formType=String(data.get('form_type')||'General website enquiry');
+        window.chsTrack?.(formType==='Property enquiry'?'property_enquiry_submitted':formType==='Estate agent partnership enquiry'?'estate_agent_enquiry_submitted':'contact_form_submitted',{form_type:formType,property_title:String(data.get('property')||'')});
         form.reset();
         status.textContent='Thank you—your message has been sent to Cave Homes Spain.';
         status.style.display='block';
