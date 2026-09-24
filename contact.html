@@ -12,7 +12,7 @@
   </style>
 </head>
 <body>
-  <header><div class="wrap"><a class="brand" href="/"><img src="/cave-homes-spain-logo.png" alt="">Cave Homes Spain</a></div></header>
+  <header><div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:16px"><a class="brand" href="/"><img src="/cave-homes-spain-logo.png" alt="">Cave Homes Spain</a><select id="contactLanguage" aria-label="Language" style="width:auto;padding:9px 28px 9px 10px;border:1px solid var(--line);border-radius:999px;background:#fff"><option value="en">🇬🇧 EN</option><option value="es">🇪🇸 ES</option><option value="fr-BE">🇫🇷 FR</option><option value="de">🇩🇪 DE</option><option value="nl">🇳🇱 NL</option></select></div></header>
   <main class="wrap">
     <section class="hero"><div class="eyebrow">LET'S TALK</div><h1>Have a question?</h1><p>Ask about a property, arranging a viewing, cave living, advertising your home, property management or anything else about Cave Homes Spain.</p></section>
     <section class="card">
@@ -20,6 +20,7 @@
       <form id="contactForm">
         <input type="hidden" name="form_type" id="formType" value="General website enquiry">
         <input type="hidden" name="property" id="propertyInterest" value="">
+        <input type="hidden" name="property_id" id="propertyId" value="">
         <div class="grid">
           <div class="field"><label for="contactName">Your name *</label><input id="contactName" name="name" required autocomplete="name"></div>
           <div class="field"><label for="contactEmail">Email *</label><input id="contactEmail" name="email" type="email" required autocomplete="email"></div>
@@ -38,6 +39,26 @@
     const params=new URLSearchParams(location.search);
     const service=params.get('service');
     const property=params.get('property');
+    const propertyId=params.get('property_id')||'';
+    const supportedLanguages=['en','es','fr-BE','de','nl'];
+    const requestedLanguage=params.get('lang')||localStorage.getItem('caveHomesLanguageManual')||String(navigator.language||'en');
+    const initialLanguage=supportedLanguages.includes(requestedLanguage)?requestedLanguage:requestedLanguage.startsWith('es')?'es':requestedLanguage.startsWith('fr')?'fr-BE':requestedLanguage.startsWith('de')?'de':requestedLanguage.startsWith('nl')?'nl':'en';
+    const contactCopy={
+      en:{eyebrow:"LET'S TALK",title:'Have a question?',intro:'Ask about a property, arranging a viewing, cave living, advertising your home, property management or anything else about Cave Homes Spain.',delivery:'Your message will be sent directly to the private Cave Homes Spain Owners app.',name:'Your name *',email:'Email *',phone:'Phone',subject:'Subject',date:'Preferred viewing date',message:'Message *',send:'Send message',sending:'Sending…',success:'Thank you—your message has been sent to Cave Homes Spain.',error:'Sorry, your message could not be sent. Please try again or email info@cavehomesspain.com.',propertySubject:'Enquiry about ',propertyMessage:'Hello, I would like more information about '},
+      es:{eyebrow:'HABLEMOS',title:'¿Tienes alguna pregunta?',intro:'Pregunta por una propiedad, una visita, la vida en una casa cueva, anunciar tu vivienda, la gestión de propiedades o cualquier otro asunto.',delivery:'Tu mensaje se enviará directamente a la aplicación privada de propietarios de Cave Homes Spain.',name:'Tu nombre *',email:'Correo electrónico *',phone:'Teléfono',subject:'Asunto',date:'Fecha preferida para la visita',message:'Mensaje *',send:'Enviar mensaje',sending:'Enviando…',success:'Gracias. Tu mensaje se ha enviado a Cave Homes Spain.',error:'No se ha podido enviar el mensaje. Inténtalo de nuevo o escribe a info@cavehomesspain.com.',propertySubject:'Consulta sobre ',propertyMessage:'Hola, me gustaría recibir más información sobre '},
+      'fr-BE':{eyebrow:'CONTACTEZ-NOUS',title:'Une question ?',intro:'Posez une question sur un bien, une visite, la vie troglodyte, la publication de votre logement ou la gestion immobilière.',delivery:"Votre message sera envoyé directement à l’application privée des propriétaires de Cave Homes Spain.",name:'Votre nom *',email:'E-mail *',phone:'Téléphone',subject:'Sujet',date:'Date de visite souhaitée',message:'Message *',send:'Envoyer',sending:'Envoi…',success:'Merci. Votre message a été envoyé à Cave Homes Spain.',error:"Le message n’a pas pu être envoyé. Réessayez ou écrivez à info@cavehomesspain.com.",propertySubject:'Demande concernant ',propertyMessage:"Bonjour, je souhaite recevoir plus d’informations sur "},
+      de:{eyebrow:'KONTAKT',title:'Haben Sie eine Frage?',intro:'Fragen Sie nach einer Immobilie, einer Besichtigung, dem Leben im Höhlenhaus, einer Anzeige oder der Immobilienbetreuung.',delivery:'Ihre Nachricht wird direkt an die private Eigentümer-App von Cave Homes Spain gesendet.',name:'Ihr Name *',email:'E-Mail *',phone:'Telefon',subject:'Betreff',date:'Gewünschter Besichtigungstermin',message:'Nachricht *',send:'Nachricht senden',sending:'Wird gesendet…',success:'Vielen Dank. Ihre Nachricht wurde an Cave Homes Spain gesendet.',error:'Die Nachricht konnte nicht gesendet werden. Versuchen Sie es erneut oder schreiben Sie an info@cavehomesspain.com.',propertySubject:'Anfrage zu ',propertyMessage:'Hallo, ich möchte weitere Informationen zu '},
+      nl:{eyebrow:'NEEM CONTACT OP',title:'Heeft u een vraag?',intro:'Vraag naar een woning, bezichtiging, wonen in een grotwoning, uw advertentie of vastgoedbeheer.',delivery:'Uw bericht wordt rechtstreeks naar de privé-eigenaarsapp van Cave Homes Spain gestuurd.',name:'Uw naam *',email:'E-mail *',phone:'Telefoon',subject:'Onderwerp',date:'Gewenste bezichtigingsdatum',message:'Bericht *',send:'Bericht versturen',sending:'Versturen…',success:'Bedankt. Uw bericht is naar Cave Homes Spain verzonden.',error:'Het bericht kon niet worden verzonden. Probeer opnieuw of mail info@cavehomesspain.com.',propertySubject:'Vraag over ',propertyMessage:'Hallo, ik ontvang graag meer informatie over '}
+    };
+    let activeLanguage=initialLanguage;
+    function applyContactLanguage(lang){
+      activeLanguage=supportedLanguages.includes(lang)?lang:'en';const copy=contactCopy[activeLanguage];document.documentElement.lang=activeLanguage;document.getElementById('contactLanguage').value=activeLanguage;
+      document.querySelector('.eyebrow').textContent=copy.eyebrow;document.querySelector('.hero h1').textContent=copy.title;document.querySelector('.hero p').textContent=copy.intro;document.querySelector('.card>p').textContent=copy.delivery;
+      const labels=document.querySelectorAll('#contactForm label');[copy.name,copy.email,copy.phone,copy.subject,copy.date,copy.message].forEach((text,index)=>{if(labels[index])labels[index].childNodes[0].nodeValue=text});document.querySelector('#contactForm button[type="submit"]').textContent=copy.send;
+      if(property){document.getElementById('contactSubject').value=copy.propertySubject+property;document.getElementById('contactMessage').value=copy.propertyMessage+property+'.'}
+    }
+    document.getElementById('contactLanguage').addEventListener('change',event=>{localStorage.setItem('caveHomesLanguageManual',event.target.value);applyContactLanguage(event.target.value)});
+    document.getElementById('propertyId').value=propertyId;
     if(service==='property-management'){
       document.getElementById('formType').value='Property management enquiry';
       document.getElementById('contactSubject').value='Property management enquiry';
@@ -55,28 +76,28 @@
     }else if(property){
       document.getElementById('propertyInterest').value=property;
       document.getElementById('formType').value='Property enquiry';
-      document.getElementById('contactSubject').value='Enquiry about '+property;
-      document.getElementById('contactMessage').value='Hello, I would like more information about '+property+'.';
       document.querySelector('.card').scrollIntoView({behavior:'smooth',block:'start'});
     }
+    applyContactLanguage(initialLanguage);
     document.getElementById('contactForm').addEventListener('submit',async event=>{
       event.preventDefault();
       const form=event.currentTarget,button=form.querySelector('button[type="submit"]'),status=document.getElementById('formStatus'),data=new FormData(form),viewingDate=String(data.get('preferred_viewing_date')||'');
-      button.disabled=true;button.textContent='Sending…';status.style.display='none';status.classList.remove('error');
+      const copy=contactCopy[activeLanguage];button.disabled=true;button.textContent=copy.sending;status.style.display='none';status.classList.remove('error');
       const message=String(data.get('message')||'')+(viewingDate?'\n\nPreferred viewing date: '+viewingDate:'');
       try{
         const {error}=await db.from('enquiries').insert({name:String(data.get('name')||''),email:String(data.get('email')||''),phone:String(data.get('phone')||''),subject:String(data.get('subject')||data.get('form_type')||'Website enquiry'),message,property_title:String(data.get('property')||''),source:'buyer',status:'new'});
         if(error)throw error;
         const formType=String(data.get('form_type')||'General website enquiry');
-        window.chsTrack?.(formType==='Property enquiry'?'property_enquiry_submitted':formType==='Estate agent partnership enquiry'?'estate_agent_enquiry_submitted':'contact_form_submitted',{form_type:formType,property_title:String(data.get('property')||'')});
+        const tracking={form_type:formType,property_id:String(data.get('property_id')||''),property_title:String(data.get('property')||''),language:activeLanguage};
+        window.chsTrack?.(formType==='Property enquiry'?'property_enquiry_submitted':formType==='Estate agent partnership enquiry'?'estate_agent_enquiry_submitted':'contact_form_submitted',tracking);window.chsTrackLead?.(tracking);
         form.reset();
-        status.textContent='Thank you—your message has been sent to Cave Homes Spain.';
+        status.textContent=copy.success;
         status.style.display='block';
       }catch(error){
         console.error('Enquiry could not be saved',error);
-        status.textContent='Sorry, your message could not be sent. Please try again.';
+        window.chsTrack?.('enquiry_submit_error',{form_type:String(data.get('form_type')||''),language:activeLanguage});status.textContent=copy.error;
         status.classList.add('error');status.style.display='block';
-      }finally{button.disabled=false;button.textContent='Send message'}
+      }finally{button.disabled=false;button.textContent=copy.send}
     });
   </script>
 </body>
