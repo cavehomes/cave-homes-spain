@@ -32,6 +32,7 @@
 /* Lightweight live weather for village guides. Loaded only on recognised guide pages. */
 (function(){
   const places={
+    'news-and-advice.html':['Baza',37.4907,-2.7726],
     'baza.html':['Baza',37.4907,-2.7726],'benamaurel.html':['Benamaurel',37.6086,-2.7027],
     'caniles.html':['Caniles',37.4367,-2.7248],'castillejar.html':['Castilléjar',37.7167,-2.6333],
     'castril.html':['Castril',37.7958,-2.7804],'cortes-de-baza.html':['Cortes de Baza',37.6556,-2.7717],
