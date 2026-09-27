@@ -34,12 +34,6 @@ main section{padding:60px 0}
 .check-list li:before{content:'✓';margin-right:9px;color:var(--clay);font-weight:900}
 .report-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
 .status{padding:4px 8px;border-radius:999px;background:#e4f1e8;color:#275c37;font-size:.75rem;font-weight:900}
-.pricing{background:var(--sand)}
-.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.price-card{padding:26px;border:1px solid var(--line);border-radius:19px;background:#fff}
-.price-card h3{margin:0 0 5px;font-size:1.25rem}
-.price{margin:0;color:var(--clay);font:800 2rem/1.2 Georgia,serif}
-.price-note{margin:22px 0 0;color:var(--muted)}
 .response-box{padding:32px;border-left:6px solid var(--clay);border-radius:18px;background:#fff;box-shadow:0 8px 26px rgba(31,48,40,.06)}
 .response-box h2{margin:0 0 14px;font-size:clamp(2rem,5vw,3.1rem)}
 .response-box p{color:var(--muted)}
@@ -53,7 +47,7 @@ textarea{min-height:110px}
 .form-message{display:none;grid-column:1/-1;padding:11px;border-radius:10px;background:#e8f3eb;color:#235235}
 .legal{padding:20px;border-left:5px solid var(--clay);background:#fff;color:var(--muted)}
 footer{padding:34px 0}
-@media(max-width:760px){.grid,.check-grid,.report,.price-grid,form{grid-template-columns:1fr}
+@media(max-width:760px){.grid,.check-grid,.report,form{grid-template-columns:1fr}
 .full{grid-column:auto}
 .hero{padding:55px 0}
 }
@@ -160,24 +154,6 @@ footer{padding:34px 0}
 <span>Included</span>
 </div>
 </div>
-</div>
-</section>
-<section class="pricing">
-<div class="wrap">
-<div class="section-head">
-<p class="eyebrow">Introductory prices</p>
-<h2>Simple, transparent pricing.</h2>
-<p>Every property check includes a photographic condition report.</p>
-</div>
-<div class="price-grid">
-<article class="price-card"><h3>One-off property check</h3><p class="price">€35</p></article>
-<article class="price-card"><h3>Monthly plan</h3><p class="price">€30 per month</p></article>
-<article class="price-card"><h3>Fortnightly plan</h3><p class="price">€55 per month</p></article>
-<article class="price-card"><h3>Weekly plan</h3><p class="price">€95 per month</p></article>
-<article class="price-card"><h3>Daily checks</h3><p class="price">From €20 per visit</p><p>For short absences.</p></article>
-<article class="price-card"><h3>Keyholding</h3><p class="price">€50 per year</p></article>
-</div>
-<p class="price-note">Prices apply within the local service area. Longer journeys, urgent visits and additional work may cost extra. Availability must be confirmed.</p>
 </div>
 </section>
 <section>
