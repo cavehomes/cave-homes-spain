@@ -2613,18 +2613,74 @@
         </section>
         <section class="hidden" id="communityView">
           <div class="community-admin-grid">
+            <form class="community-admin-section" id="ownerCommunityPostForm">
+              <h2>Add a community post</h2>
+              <p>
+                Your post will be published immediately as Cave Homes Spain.
+              </p>
+              <div class="grid">
+                <div class="field">
+                  <label for="ownerCommunityCategory">Category</label
+                  ><select id="ownerCommunityCategory" required>
+                    <option>Buying</option>
+                    <option>Cave Living</option>
+                    <option>Renovation</option>
+                    <option>Villages</option>
+                    <option>Local Services</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="ownerCommunityImage">Photograph</label
+                  ><input
+                    id="ownerCommunityImage"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                  />
+                </div>
+                <div class="field full">
+                  <label for="ownerCommunityTitle">Title</label
+                  ><input
+                    id="ownerCommunityTitle"
+                    required
+                    minlength="3"
+                    maxlength="120"
+                  />
+                </div>
+                <div class="field full">
+                  <label for="ownerCommunityContent">Post</label
+                  ><textarea
+                    id="ownerCommunityContent"
+                    required
+                    minlength="10"
+                    maxlength="4000"
+                    rows="5"
+                  ></textarea>
+                </div>
+              </div>
+              <button class="primary" type="submit">
+                Publish community post
+              </button>
+              <div class="notice" id="ownerCommunityPostNotice"></div>
+            </form>
             <div class="community-admin-section">
               <h2>Community members</h2>
-              <p>Approve people before they can post or comment.</p>
+              <p>Approve, block or restore community access.</p>
               <div id="communityMemberList">
                 <div class="empty">Loading membership requests…</div>
               </div>
             </div>
             <div class="community-admin-section">
-              <h2>Posts awaiting approval</h2>
-              <p>Only approved posts appear in the public community.</p>
+              <h2>Community posts</h2>
+              <p>Publish, reject or permanently delete posts.</p>
               <div id="communityPostList">
                 <div class="empty">Loading posts…</div>
+              </div>
+            </div>
+            <div class="community-admin-section">
+              <h2>Recent comments</h2>
+              <p>Remove comments that are unsuitable or unhelpful.</p>
+              <div id="communityCommentList">
+                <div class="empty">Loading comments…</div>
               </div>
             </div>
             <div class="community-admin-section">
@@ -3029,47 +3085,66 @@
       async function loadCommunityModeration() {
         const memberList = $("communityMemberList"),
           postList = $("communityPostList"),
+          commentList = $("communityCommentList"),
           reportList = $("communityReportList");
         memberList.innerHTML =
           '<div class="empty">Loading membership requests…</div>';
         postList.innerHTML = '<div class="empty">Loading posts…</div>';
+        commentList.innerHTML = '<div class="empty">Loading comments…</div>';
         reportList.innerHTML = '<div class="empty">Loading reports…</div>';
-        const [membersResult, postsResult, reportsResult] = await Promise.all([
-          db
-            .from("community_profiles")
-            .select("*")
-            .eq("status", "pending")
-            .order("created_at"),
-          db
-            .from("community_posts")
-            .select("*")
-            .eq("status", "pending")
-            .order("created_at"),
-          db
-            .from("community_reports")
-            .select("*")
-            .eq("status", "new")
-            .order("created_at"),
-        ]);
+        const [membersResult, postsResult, commentsResult, reportsResult] =
+          await Promise.all([
+            db
+              .from("community_profiles")
+              .select("*")
+              .order("created_at", { ascending: false }),
+            db
+              .from("community_posts")
+              .select("*")
+              .order("created_at", { ascending: false })
+              .limit(50),
+            db
+              .from("community_comments")
+              .select("*")
+              .order("created_at", { ascending: false })
+              .limit(50),
+            db
+              .from("community_reports")
+              .select("*")
+              .eq("status", "new")
+              .order("created_at"),
+          ]);
         const members = membersResult.data || [],
           posts = postsResult.data || [],
+          comments = commentsResult.data || [],
           reports = reportsResult.data || [];
+        const memberNames = Object.fromEntries(
+          members.map((member) => [member.id, member.display_name]),
+        );
         memberList.innerHTML = members.length
           ? members
               .map(
                 (member) =>
-                  `<article class="community-review-card"><h3>${communityEscape(member.display_name)}</h3><small>${communityEscape(member.town || "No town supplied")} · Requested ${new Date(member.created_at).toLocaleDateString("en-GB")}</small><div class="community-review-actions"><button class="btn green" type="button" onclick="moderateCommunity('community_profiles','${member.id}','approved')">Approve member</button><button class="btn danger" type="button" onclick="moderateCommunity('community_profiles','${member.id}','blocked')">Block</button></div></article>`,
+                  `<article class="community-review-card"><h3>${communityEscape(member.display_name)}</h3><small>${communityEscape(member.town || "No town supplied")} · ${communityEscape(member.status)}</small><div class="community-review-actions">${member.status !== "approved" ? `<button class="btn green" type="button" onclick="moderateCommunity('community_profiles','${member.id}','approved')">Approve</button>` : ""}${member.status !== "blocked" ? `<button class="btn danger" type="button" onclick="moderateCommunity('community_profiles','${member.id}','blocked')">Block</button>` : ""}</div></article>`,
               )
               .join("")
-          : '<div class="empty">No membership requests waiting.</div>';
+          : '<div class="empty">No community members yet.</div>';
         postList.innerHTML = posts.length
           ? posts
               .map(
                 (post) =>
-                  `<article class="community-review-card"><small>${communityEscape(post.category)} · ${new Date(post.created_at).toLocaleDateString("en-GB")}</small><h3>${communityEscape(post.title)}</h3><p>${communityEscape(post.content)}</p>${post.image_path ? `<img src="${communityImageUrl(post.image_path)}" alt="Community post photograph">` : ""}<div class="community-review-actions"><button class="btn green" type="button" onclick="moderateCommunity('community_posts','${post.id}','approved')">Publish post</button><button class="btn danger" type="button" onclick="moderateCommunity('community_posts','${post.id}','rejected')">Reject</button></div></article>`,
+                  `<article class="community-review-card"><small>${communityEscape(post.category)} · ${communityEscape(post.status)} · ${communityEscape(memberNames[post.author_id] || "Member")}</small><h3>${communityEscape(post.title)}</h3><p>${communityEscape(post.content)}</p>${post.image_path ? `<img src="${communityImageUrl(post.image_path)}" alt="Community post photograph">` : ""}<div class="community-review-actions">${post.status !== "approved" ? `<button class="btn green" type="button" onclick="moderateCommunity('community_posts','${post.id}','approved')">Publish</button>` : ""}${post.status !== "rejected" ? `<button class="btn outline" type="button" onclick="moderateCommunity('community_posts','${post.id}','rejected')">Reject</button>` : ""}<button class="btn danger" type="button" onclick="deleteCommunityPost('${post.id}','${post.image_path || ""}')">Delete permanently</button></div></article>`,
               )
               .join("")
-          : '<div class="empty">No posts waiting for approval.</div>';
+          : '<div class="empty">No community posts yet.</div>';
+        commentList.innerHTML = comments.length
+          ? comments
+              .map(
+                (comment) =>
+                  `<article class="community-review-card"><p>${communityEscape(comment.content)}</p><small>${communityEscape(memberNames[comment.author_id] || "Member")} · ${communityEscape(comment.status)} · ${new Date(comment.created_at).toLocaleString("en-GB")}</small><div class="community-review-actions"><button class="btn danger" type="button" onclick="deleteCommunityComment('${comment.id}')">Delete comment</button></div></article>`,
+              )
+              .join("")
+          : '<div class="empty">No community comments yet.</div>';
         reportList.innerHTML = reports.length
           ? reports
               .map(
@@ -3083,6 +3158,120 @@
         const { error } = await db.from(table).update({ status }).eq("id", id);
         if (error)
           return alert("Could not update the community item: " + error.message);
+        loadCommunityModeration();
+      };
+      async function ensureOwnerCommunityProfile() {
+        const {
+          data: { session },
+        } = await db.auth.getSession();
+        if (!session) throw new Error("Please sign in again.");
+        const { data: existing } = await db
+          .from("community_profiles")
+          .select("id,status")
+          .eq("id", session.user.id)
+          .maybeSingle();
+        if (!existing) {
+          const { error } = await db.from("community_profiles").insert({
+            id: session.user.id,
+            display_name: "Cave Homes Spain",
+            town: "Inland Granada",
+            status: "pending",
+          });
+          if (error) throw error;
+        }
+        const { error } = await db
+          .from("community_profiles")
+          .update({
+            display_name: "Cave Homes Spain",
+            town: "Inland Granada",
+            status: "approved",
+          })
+          .eq("id", session.user.id);
+        if (error) throw error;
+        return session.user.id;
+      }
+      $("ownerCommunityPostForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const form = event.currentTarget,
+          button = event.submitter,
+          file = $("ownerCommunityImage").files[0];
+        button.disabled = true;
+        button.textContent = "Publishing…";
+        try {
+          const ownerId = await ensureOwnerCommunityProfile();
+          let imagePath = null;
+          if (file) {
+            if (file.size > 5242880)
+              throw new Error("Please choose an image smaller than 5 MB.");
+            imagePath = `${ownerId}/${crypto.randomUUID()}-${file.name.replace(/[^a-z0-9.]/gi, "-")}`;
+            const { error } = await db.storage
+              .from("community-images")
+              .upload(imagePath, file, {
+                contentType: file.type,
+                upsert: false,
+              });
+            if (error) throw error;
+          }
+          const { error } = await db.from("community_posts").insert({
+            author_id: ownerId,
+            category: $("ownerCommunityCategory").value,
+            title: $("ownerCommunityTitle").value.trim(),
+            content: $("ownerCommunityContent").value.trim(),
+            image_path: imagePath,
+            status: "approved",
+          });
+          if (error) throw error;
+          form.reset();
+          showNotice(
+            "ownerCommunityPostNotice",
+            "Community post published successfully.",
+          );
+          loadCommunityModeration();
+        } catch (error) {
+          showNotice(
+            "ownerCommunityPostNotice",
+            error.message || "The post could not be published.",
+            true,
+          );
+        } finally {
+          button.disabled = false;
+          button.textContent = "Publish community post";
+        }
+      });
+      window.deleteCommunityPost = async (id, imagePath) => {
+        if (
+          !confirm(
+            "Permanently delete this community post and all its comments?",
+          )
+        )
+          return;
+        const { error } = await db
+          .from("community_posts")
+          .delete()
+          .eq("id", id);
+        if (error) return alert("Could not delete the post: " + error.message);
+        if (imagePath)
+          await db.storage.from("community-images").remove([imagePath]);
+        await db
+          .from("community_reports")
+          .update({ status: "actioned" })
+          .eq("target_type", "post")
+          .eq("target_id", id);
+        loadCommunityModeration();
+      };
+      window.deleteCommunityComment = async (id) => {
+        if (!confirm("Permanently delete this community comment?")) return;
+        const { error } = await db
+          .from("community_comments")
+          .delete()
+          .eq("id", id);
+        if (error)
+          return alert("Could not delete the comment: " + error.message);
+        await db
+          .from("community_reports")
+          .update({ status: "actioned" })
+          .eq("target_type", "comment")
+          .eq("target_id", id);
         loadCommunityModeration();
       };
       window.resolveCommunityReport = async (

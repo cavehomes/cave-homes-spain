@@ -1,4 +1,4 @@
-const CACHE = "cave-homes-v15-community-moderation",
+const CACHE = "cave-homes-v15-owner-community-controls",
   FILES = [
     "/",
     "/index.html",
