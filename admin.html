@@ -5810,7 +5810,7 @@
             "afterbegin",
             '<button class="tab active" data-view="home">Home</button>',
           );
-          const home = `<section id="homeView"><div class="stats dashboard-actions"><button class="stat stat-button action-stat" type="button" onclick="switchView(\'add\')"><strong>＋</strong><span>Add property</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'care\')"><strong>✓</strong><span>Property Care</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyer\')"><strong>🤝</strong><span>Buyer Assistance</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'inquiries\')"><strong>✉</strong><span>Enquiries</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'rentals\')"><strong>⌂</strong><span>Holiday rentals</span></button><a class="stat stat-button action-stat" href="/rent.html" target="_blank"><strong>↗</strong><span>Homes to Rent</span></a></div></section>`;
+          const home = `<section id="homeView"><div class="stats dashboard-actions"><button class="stat stat-button action-stat" type="button" onclick="switchView(\'add\')"><strong>＋</strong><span>Add property</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'care\')"><strong>✓</strong><span>Property Care</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyer\')"><strong>🤝</strong><span>Buyer Assistance</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'inquiries\')"><strong>✉</strong><span>Enquiries</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'community\')"><strong>◉</strong><span>Community</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'rentals\')"><strong>⌂</strong><span>Holiday rentals</span></button><a class="stat stat-button action-stat" href="/rent.html" target="_blank"><strong>↗</strong><span>Homes to Rent</span></a></div></section>`;
           document
             .querySelector("#addView")
             .insertAdjacentHTML("beforebegin", home);
@@ -5824,6 +5824,7 @@
             "inquiriesView",
             "businessesView",
             "rentalsView",
+            "communityView",
           ].forEach((id) => {
             const section = $(id);
             if (section && !section.querySelector(".section-home"))
