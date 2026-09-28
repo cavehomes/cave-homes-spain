@@ -27,6 +27,13 @@ main section{padding:60px 0}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .card{padding:25px;border:1px solid var(--line);border-radius:19px;background:#fff;box-shadow:0 8px 26px rgba(31,48,40,.06)}
 .card h3{margin:10px 0 7px;font-size:1.4rem}
+.visit-proof{padding:34px;border-radius:22px;background:#fff;border:1px solid var(--line);box-shadow:0 8px 26px rgba(31,48,40,.06)}
+.visit-proof>p{max-width:780px;color:var(--muted)}
+.visit-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
+.visit-step{padding:18px;border-radius:15px;background:var(--sand)}
+.visit-step b{display:grid;width:34px;height:34px;place-items:center;margin-bottom:10px;border-radius:50%;background:var(--forest);color:#fff}
+.visit-step strong{display:block;margin-bottom:5px}
+.visit-step span{color:var(--muted);font-size:.92rem}
 .checks{background:var(--sand)}
 .check-grid,.report{display:grid;grid-template-columns:1fr 1fr;gap:25px}
 .check-list,.report-preview{padding:27px;border-radius:20px;background:#fff}
@@ -47,7 +54,7 @@ textarea{min-height:110px}
 .form-message{display:none;grid-column:1/-1;padding:11px;border-radius:10px;background:#e8f3eb;color:#235235}
 .legal{padding:20px;border-left:5px solid var(--clay);background:#fff;color:var(--muted)}
 footer{padding:34px 0}
-@media(max-width:760px){.grid,.check-grid,.report,form{grid-template-columns:1fr}
+@media(max-width:760px){.grid,.check-grid,.report,form,.visit-flow{grid-template-columns:1fr}
 .full{grid-column:auto}
 .hero{padding:55px 0}
 }
@@ -63,8 +70,8 @@ footer{padding:34px 0}
 <section class="hero">
 <div class="wrap">
 <p class="eyebrow">Property Watch &amp; Care</p>
-<h1>Reassurance when you cannot be there.</h1>
-<p>Scheduled checks for cave homes, rural properties, second homes and holiday rentals around Baza and inland Granada—with a photographic report after every visit.</p>
+<h1>Who checks your property when you are away?</h1>
+<p>Scheduled checks for cave homes, rural properties, second homes and holiday rentals around Baza and inland Granada—with a dated photographic report after every visit.</p>
 <a class="btn" href="#enquire">Ask about property checks →</a>
 </div>
 </section>
@@ -91,6 +98,19 @@ footer{padding:34px 0}
 <h3>Keyholding</h3>
 <p>Agreed access for inspections, owner arrivals and authorised tradespeople.</p>
 </article>
+</div>
+</section>
+<section>
+<div class="wrap visit-proof">
+<p class="eyebrow">A real visit, clearly recorded</p>
+<h2>See what was checked—not just that somebody attended.</h2>
+<p>Property Watch is especially useful for owners who live abroad, spend long periods away or manage a holiday rental. Each visit follows the checklist agreed with you and creates a clear record of the property’s condition.</p>
+<div class="visit-flow">
+<div class="visit-step"><b>1</b><strong>Arrival recorded</strong><span>The visit is logged with its date and time.</span></div>
+<div class="visit-step"><b>2</b><strong>Property checked</strong><span>Doors, windows, exterior, interior and agreed items are inspected.</span></div>
+<div class="visit-step"><b>3</b><strong>Photographs taken</strong><span>Current photographs show the condition of the home and surroundings.</span></div>
+<div class="visit-step"><b>4</b><strong>Report sent</strong><span>You receive the findings and are contacted promptly if action is needed.</span></div>
+</div>
 </div>
 </section>
 <section class="checks">
