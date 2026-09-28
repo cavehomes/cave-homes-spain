@@ -4613,156 +4613,52 @@
           backdrop-filter: blur(3px);
         }
       }
-      /* Version 15 visual refresh */
-      body[data-version="15"] {
-        background: #f7f3eb;
-      }
-      body[data-version="15"] .v11-topline {
-        background: linear-gradient(90deg, #173f33, #245a47);
-        border: 0;
-        color: #fff;
-      }
-      body[data-version="15"] header {
-        background: rgba(255, 255, 255, 0.96);
-        box-shadow: 0 8px 28px rgba(22, 55, 44, 0.12);
-        backdrop-filter: blur(14px);
-      }
-      body[data-version="15"] .hero {
-        min-height: 580px;
-        padding: clamp(44px, 7vw, 92px) 0 36px;
-        background:
-          linear-gradient(
-            90deg,
-            rgba(18, 55, 43, 0.96) 0%,
-            rgba(18, 55, 43, 0.88) 43%,
-            rgba(18, 55, 43, 0.28) 100%
-          ),
-          url("/hero-cave-mobile-v12.png") center 42% / cover no-repeat;
-      }
-      body[data-version="15"] .hero-copy {
-        width: min(660px, calc(100% - 28px));
-        margin: 0 auto 0 max(14px, calc((100vw - 1180px) / 2));
-        padding: 38px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 30px;
-        background: rgba(12, 43, 33, 0.78);
-        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
-        backdrop-filter: blur(9px);
-      }
-      body[data-version="15"] .hero .eyebrow {
-        color: #ffd1b9;
-      }
-      body[data-version="15"] .hero h1 {
-        max-width: 620px;
-        margin: 9px 0 16px;
-        color: #fff;
-        font-size: clamp(3rem, 6vw, 5.6rem);
-        line-height: 0.96;
-        letter-spacing: -0.045em;
-      }
-      body[data-version="15"] .hero-copy > p:not(.eyebrow) {
-        max-width: 570px;
-        padding: 0;
-        background: transparent;
-        color: #eef5f1;
-        font-size: 1.12rem;
-      }
-      body[data-version="15"] .hero-actions .btn {
-        border-color: rgba(255, 255, 255, 0.7);
-      }
-      body[data-version="15"] .hero-actions .btn:first-child {
-        background: #c65a35;
-        box-shadow: 0 10px 24px rgba(198, 90, 53, 0.32);
-      }
-      body[data-version="15"] .hero-actions .btn.outline {
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
-      }
-      body[data-version="15"] .trust-row {
-        width: min(1180px, calc(100% - 28px));
-        margin: 28px auto 0;
-        padding: 18px 22px;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 22px;
-        background: rgba(255, 255, 255, 0.94);
-        box-shadow: 0 15px 42px rgba(0, 0, 0, 0.16);
-      }
-      body[data-version="15"] .hero-search {
-        position: relative;
-        z-index: 4;
-        margin-top: -22px;
-      }
-      body[data-version="15"] .hero-search .wrap {
-        border-radius: 22px;
-        background: #fff;
-        box-shadow: 0 16px 46px rgba(24, 61, 50, 0.14);
-      }
-      body[data-version="15"] .v14-paths {
-        padding-top: 72px;
-        background: linear-gradient(180deg, #f7f3eb, #fff);
-      }
-      body[data-version="15"] .v14-path-grid > a,
-      body[data-version="15"] .v14-path-grid > button {
-        border: 0;
-        border-radius: 24px;
-        background: #fff;
-        box-shadow: 0 14px 40px rgba(22, 55, 44, 0.1);
-      }
-      body[data-version="15"] .v14-path-grid > :nth-child(2),
-      body[data-version="15"] .v14-path-grid > :nth-child(3) {
-        background: #173f33;
-        color: #fff;
-      }
-      body[data-version="15"] .v14-path-grid > :nth-child(2) small,
-      body[data-version="15"] .v14-path-grid > :nth-child(3) small {
-        color: #d7e5de;
-      }
-      body[data-version="15"] .property-finder {
+      /* Property search request addition */
+      .property-finder {
         padding: 18px 0 72px;
-        background: #fff;
+        background: var(--cream);
       }
-      body[data-version="15"] .property-finder-card {
+      .property-finder-card {
         display: grid;
         grid-template-columns: 1.25fr 0.75fr;
-        gap: 36px;
+        gap: 30px;
         align-items: center;
-        padding: clamp(28px, 5vw, 54px);
-        overflow: hidden;
-        border-radius: 30px;
-        background: linear-gradient(135deg, #c65a35, #9f4025);
-        color: #fff;
-        box-shadow: 0 22px 60px rgba(137, 57, 31, 0.24);
+        padding: clamp(26px, 4vw, 44px);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: #fff;
+        box-shadow: var(--shadow);
       }
-      body[data-version="15"] .property-finder-card .eyebrow {
-        color: #ffe0cf;
+      .property-finder-card .eyebrow {
+        color: var(--clay);
       }
-      body[data-version="15"] .property-finder-card h2 {
+      .property-finder-card h2 {
         max-width: 700px;
         margin: 7px 0 13px;
-        color: #fff;
-        font-size: clamp(2rem, 4vw, 3.5rem);
-        line-height: 1.02;
+        color: var(--green);
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(1.9rem, 4vw, 3rem);
+        line-height: 1.08;
       }
-      body[data-version="15"] .property-finder-card p {
+      .property-finder-card p {
         max-width: 720px;
         margin: 0;
-        color: #fff4ee;
-        font-size: 1.04rem;
+        color: var(--muted);
       }
-      body[data-version="15"] .property-finder-points {
+      .property-finder-points {
         display: grid;
         gap: 10px;
         margin: 22px 0 0;
         padding: 0;
         list-style: none;
       }
-      body[data-version="15"] .property-finder-points li {
+      .property-finder-points li {
         display: flex;
         gap: 10px;
         align-items: center;
         font-weight: 800;
       }
-      body[data-version="15"] .property-finder-points li::before {
+      .property-finder-points li::before {
         content: "✓";
         display: grid;
         width: 25px;
@@ -4770,91 +4666,38 @@
         flex: 0 0 25px;
         place-items: center;
         border-radius: 50%;
-        background: #fff;
-        color: #9f4025;
+        background: #f4e6df;
+        color: var(--clay);
       }
-      body[data-version="15"] .property-finder-action {
+      .property-finder-action {
         padding: 26px;
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        border-radius: 24px;
-        background: rgba(82, 26, 12, 0.24);
+        border-radius: 16px;
+        background: var(--green);
+        color: #fff;
         text-align: center;
       }
-      body[data-version="15"] .property-finder-action strong,
-      body[data-version="15"] .property-finder-action span {
+      .property-finder-action strong,
+      .property-finder-action span {
         display: block;
       }
-      body[data-version="15"] .property-finder-action strong {
+      .property-finder-action strong {
         font-size: 1.18rem;
       }
-      body[data-version="15"] .property-finder-action span {
+      .property-finder-action span {
         margin: 7px 0 18px;
-        color: #ffe0cf;
+        color: #d7e5de;
       }
-      body[data-version="15"] .property-finder-action .btn {
-        background: #fff;
-        color: #173f33;
-      }
-      body[data-version="15"] .cards {
-        gap: 24px;
-      }
-      body[data-version="15"] .cards .card {
-        overflow: hidden;
-        border: 0;
-        border-radius: 26px;
-        background: #fff;
-        box-shadow: 0 14px 42px rgba(22, 55, 44, 0.12);
-        transition:
-          transform 0.2s ease,
-          box-shadow 0.2s ease;
-      }
-      body[data-version="15"] .cards .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 22px 54px rgba(22, 55, 44, 0.18);
-      }
-      body[data-version="15"] .card-media {
-        min-height: 250px;
-      }
-      body[data-version="15"] .card-body {
-        padding: 22px;
+      .property-finder-action .btn {
+        background: var(--clay);
+        color: #fff;
       }
       @media (max-width: 700px) {
-        body[data-version="15"] .hero {
-          min-height: auto;
-          padding: 34px 0 58px;
-          background-position: 62% center;
-        }
-        body[data-version="15"] .hero-copy {
-          width: calc(100% - 28px);
-          margin: 0 auto;
-          padding: 26px 22px;
-          border-radius: 24px;
-        }
-        body[data-version="15"] .hero h1 {
-          font-size: clamp(2.6rem, 12vw, 4.2rem);
-        }
-        body[data-version="15"] .trust-row {
-          display: grid;
-          gap: 10px;
-          margin-top: 18px;
-          padding: 14px;
-        }
-        body[data-version="15"] .hero-search {
-          margin-top: -30px;
-        }
-        body[data-version="15"] .v14-paths {
-          padding-top: 58px;
-        }
-        body[data-version="15"] .property-finder {
+        .property-finder {
           padding: 8px 0 52px;
         }
-        body[data-version="15"] .property-finder-card {
+        .property-finder-card {
           grid-template-columns: 1fr;
           gap: 24px;
-          border-radius: 24px;
-        }
-        body[data-version="15"] .cards .card:hover {
-          transform: none;
         }
       }
     </style>
@@ -5151,8 +4994,8 @@
     <main id="main">
       <section class="hero" id="top">
         <div class="wrap hero-copy">
-          <p class="eyebrow">Cave Homes Spain · Version 15</p>
-          <h1>Cave homes. Rural property. Local support.</h1>
+          <p class="eyebrow">Cave Homes Spain · Homes and local care</p>
+          <h1>Find your place in inland Granada.</h1>
           <p>
             Explore cave homes and rural properties, advertise your own, or
             arrange Property Watch visits while you are away.
@@ -5171,7 +5014,7 @@
             <span class="trust-icon">⌂</span>
             <div>
               <strong>Specialist listings</strong
-              ><span>Distinctive homes across inland Andalucía</span>
+              ><span>Specialist property listings across Andalucía</span>
             </div>
           </div>
           <div class="trust-item">
