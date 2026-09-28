@@ -4613,93 +4613,6 @@
           backdrop-filter: blur(3px);
         }
       }
-      /* Property search request addition */
-      .property-finder {
-        padding: 18px 0 72px;
-        background: var(--cream);
-      }
-      .property-finder-card {
-        display: grid;
-        grid-template-columns: 1.25fr 0.75fr;
-        gap: 30px;
-        align-items: center;
-        padding: clamp(26px, 4vw, 44px);
-        border: 1px solid var(--line);
-        border-radius: 20px;
-        background: #fff;
-        box-shadow: var(--shadow);
-      }
-      .property-finder-card .eyebrow {
-        color: var(--clay);
-      }
-      .property-finder-card h2 {
-        max-width: 700px;
-        margin: 7px 0 13px;
-        color: var(--green);
-        font-family: "Playfair Display", Georgia, serif;
-        font-size: clamp(1.9rem, 4vw, 3rem);
-        line-height: 1.08;
-      }
-      .property-finder-card p {
-        max-width: 720px;
-        margin: 0;
-        color: var(--muted);
-      }
-      .property-finder-points {
-        display: grid;
-        gap: 10px;
-        margin: 22px 0 0;
-        padding: 0;
-        list-style: none;
-      }
-      .property-finder-points li {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        font-weight: 800;
-      }
-      .property-finder-points li::before {
-        content: "✓";
-        display: grid;
-        width: 25px;
-        height: 25px;
-        flex: 0 0 25px;
-        place-items: center;
-        border-radius: 50%;
-        background: #f4e6df;
-        color: var(--clay);
-      }
-      .property-finder-action {
-        padding: 26px;
-        border-radius: 16px;
-        background: var(--green);
-        color: #fff;
-        text-align: center;
-      }
-      .property-finder-action strong,
-      .property-finder-action span {
-        display: block;
-      }
-      .property-finder-action strong {
-        font-size: 1.18rem;
-      }
-      .property-finder-action span {
-        margin: 7px 0 18px;
-        color: #d7e5de;
-      }
-      .property-finder-action .btn {
-        background: var(--clay);
-        color: #fff;
-      }
-      @media (max-width: 700px) {
-        .property-finder {
-          padding: 8px 0 52px;
-        }
-        .property-finder-card {
-          grid-template-columns: 1fr;
-          gap: 24px;
-        }
-      }
     </style>
 
     <style id="energy-compliance-styles">
@@ -5245,36 +5158,6 @@
         </div>
       </section>
 
-      <section class="property-finder" aria-labelledby="propertyFinderTitle">
-        <div class="wrap">
-          <div class="property-finder-card">
-            <div>
-              <p class="eyebrow">Personal property search</p>
-              <h2 id="propertyFinderTitle">
-                Can’t see what you’re looking for?
-              </h2>
-              <p>
-                Tell us the area, budget and type of property you would like.
-                Using our local knowledge and contacts, we can help search for
-                suitable opportunities that match your requirements.
-              </p>
-              <ul class="property-finder-points">
-                <li>Your preferred towns or villages</li>
-                <li>Your budget and essential requirements</li>
-                <li>Cave homes, houses, fincas, apartments or land</li>
-              </ul>
-            </div>
-            <div class="property-finder-action">
-              <strong>Tell us what you would like</strong>
-              <span>We’ll use your brief to guide the search.</span>
-              <a class="btn" href="/contact.html?subject=Property%20search"
-                >Start your property search →</a
-              >
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section class="property-types" aria-label="Browse by property type">
         <div class="wrap">
           <div class="type-intro">
@@ -5372,14 +5255,17 @@
           </div>
           <div class="request-home">
             <div>
-              <span>Still searching?</span>
+              <span>Personal property search</span>
               <h3>Don’t see what you’re looking for?</h3>
               <p>
-                Tell us what kind of cave home you want and which area you
-                prefer. We’ll help you with your search.
+                Tell us the area, budget and type of property you would like.
+                With our local knowledge and contacts, we can help search for
+                suitable opportunities.
               </p>
             </div>
-            <a class="btn" href="/contact.html">Ask us →</a>
+            <a class="btn" href="/contact.html?subject=Property%20search"
+              >Tell us what you’re looking for →</a
+            >
           </div>
         </div>
       </section>
@@ -7037,78 +6923,29 @@
         (el) => (el.dataset.originalPlaceholder = el.placeholder),
       );
       Object.assign(translations.es, {
-        "Cave Homes Spain · Version 15": "Cave Homes Spain · Versión 15",
-        "Cave homes. Rural property. Local support.":
-          "Casas cueva. Propiedad rural. Apoyo local.",
         "Personal property search": "Búsqueda personalizada de propiedad",
-        "Can’t see what you’re looking for?":
-          "¿No encuentra lo que está buscando?",
-        "Tell us the area, budget and type of property you would like. Using our local knowledge and contacts, we can help search for suitable opportunities that match your requirements.":
-          "Díganos la zona, el presupuesto y el tipo de propiedad que desea. Con nuestro conocimiento y contactos locales, podemos ayudarle a buscar oportunidades adecuadas a sus necesidades.",
-        "Your preferred towns or villages": "Sus pueblos o zonas preferidas",
-        "Your budget and essential requirements":
-          "Su presupuesto y requisitos esenciales",
-        "Cave homes, houses, fincas, apartments or land":
-          "Casas cueva, viviendas, fincas, apartamentos o terrenos",
-        "Tell us what you would like": "Díganos qué está buscando",
-        "We’ll use your brief to guide the search.":
-          "Usaremos sus requisitos para orientar la búsqueda.",
-        "Start your property search →": "Iniciar su búsqueda →",
+        "Tell us the area, budget and type of property you would like. With our local knowledge and contacts, we can help search for suitable opportunities.":
+          "Díganos la zona, el presupuesto y el tipo de propiedad que desea. Con nuestro conocimiento y contactos locales, podemos ayudarle a buscar oportunidades adecuadas.",
+        "Tell us what you’re looking for →": "Díganos qué busca →",
       });
       Object.assign(translations.nl, {
-        "Cave Homes Spain · Version 15": "Cave Homes Spain · Versie 15",
-        "Cave homes. Rural property. Local support.":
-          "Grotwoningen. Landelijk vastgoed. Lokale hulp.",
         "Personal property search": "Persoonlijke woningzoektocht",
-        "Can’t see what you’re looking for?": "Ziet u niet wat u zoekt?",
-        "Tell us the area, budget and type of property you would like. Using our local knowledge and contacts, we can help search for suitable opportunities that match your requirements.":
+        "Tell us the area, budget and type of property you would like. With our local knowledge and contacts, we can help search for suitable opportunities.":
           "Vertel ons uw regio, budget en gewenste type woning. Met onze lokale kennis en contacten helpen we zoeken naar passende mogelijkheden.",
-        "Your preferred towns or villages": "Uw favoriete steden of dorpen",
-        "Your budget and essential requirements":
-          "Uw budget en belangrijkste wensen",
-        "Cave homes, houses, fincas, apartments or land":
-          "Grotwoningen, huizen, finca’s, appartementen of grond",
-        "Tell us what you would like": "Vertel ons wat u zoekt",
-        "We’ll use your brief to guide the search.":
-          "Uw wensen vormen de basis van onze zoektocht.",
-        "Start your property search →": "Start uw zoektocht →",
+        "Tell us what you’re looking for →": "Vertel ons wat u zoekt →",
       });
       Object.assign(translations["fr-BE"], {
-        "Cave Homes Spain · Version 15": "Cave Homes Spain · Version 15",
-        "Cave homes. Rural property. Local support.":
-          "Maisons troglodytes. Biens ruraux. Aide locale.",
         "Personal property search": "Recherche immobilière personnalisée",
-        "Can’t see what you’re looking for?":
-          "Vous ne trouvez pas ce que vous cherchez ?",
-        "Tell us the area, budget and type of property you would like. Using our local knowledge and contacts, we can help search for suitable opportunities that match your requirements.":
+        "Tell us the area, budget and type of property you would like. With our local knowledge and contacts, we can help search for suitable opportunities.":
           "Indiquez-nous la région, le budget et le type de bien souhaité. Grâce à notre connaissance locale et à nos contacts, nous pouvons rechercher des opportunités adaptées.",
-        "Your preferred towns or villages": "Vos villes ou villages préférés",
-        "Your budget and essential requirements":
-          "Votre budget et vos critères essentiels",
-        "Cave homes, houses, fincas, apartments or land":
-          "Maisons troglodytes, maisons, fincas, appartements ou terrains",
-        "Tell us what you would like": "Dites-nous ce que vous recherchez",
-        "We’ll use your brief to guide the search.":
-          "Vos critères guideront notre recherche.",
-        "Start your property search →": "Commencer la recherche →",
+        "Tell us what you’re looking for →":
+          "Dites-nous ce que vous cherchez →",
       });
       Object.assign(translations.de, {
-        "Cave Homes Spain · Version 15": "Cave Homes Spain · Version 15",
-        "Cave homes. Rural property. Local support.":
-          "Höhlenhäuser. Ländliche Immobilien. Lokale Hilfe.",
         "Personal property search": "Persönliche Immobiliensuche",
-        "Can’t see what you’re looking for?": "Nicht das Richtige gefunden?",
-        "Tell us the area, budget and type of property you would like. Using our local knowledge and contacts, we can help search for suitable opportunities that match your requirements.":
+        "Tell us the area, budget and type of property you would like. With our local knowledge and contacts, we can help search for suitable opportunities.":
           "Nennen Sie uns Region, Budget und gewünschte Immobilienart. Mit unserer Ortskenntnis und unseren Kontakten helfen wir bei der Suche nach passenden Möglichkeiten.",
-        "Your preferred towns or villages": "Ihre bevorzugten Orte oder Dörfer",
-        "Your budget and essential requirements":
-          "Ihr Budget und Ihre wichtigsten Anforderungen",
-        "Cave homes, houses, fincas, apartments or land":
-          "Höhlenhäuser, Häuser, Fincas, Wohnungen oder Grundstücke",
-        "Tell us what you would like": "Sagen Sie uns, was Sie suchen",
-        "We’ll use your brief to guide the search.":
-          "Ihre Angaben bilden die Grundlage unserer Suche.",
-        "Start your property search →": "Immobiliensuche starten →",
+        "Tell us what you’re looking for →": "Sagen Sie uns, was Sie suchen →",
       });
       const setLanguage = (window.setSiteLanguage = function (
         lang,
