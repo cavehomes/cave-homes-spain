@@ -87,6 +87,30 @@
         color: var(--muted);
         font-size: 18px;
       }
+      .buyer-care {
+        margin: 12px 0 22px;
+        padding: 22px 24px;
+        border-left: 5px solid var(--clay);
+        border-radius: 0 16px 16px 0;
+        background: #fff;
+        box-shadow: 0 8px 26px rgba(24, 61, 50, 0.08);
+      }
+      .buyer-care h2 {
+        margin: 0 0 10px;
+        color: var(--green);
+        font:
+          700 26px Georgia,
+          serif;
+      }
+      .buyer-care p {
+        margin: 8px 0 0;
+        color: var(--muted);
+      }
+      .buyer-care .professional-note {
+        color: var(--ink);
+        font-size: 14px;
+        font-weight: 700;
+      }
       .card {
         margin: 18px 0 48px;
         padding: 26px;
@@ -206,6 +230,23 @@
           Tell us the area, budget and type of property you would like. Using
           our local knowledge and contacts, we can help search for suitable
           opportunities that match your requirements.
+        </p>
+      </section>
+      <section class="buyer-care" aria-labelledby="buyerCareTitle">
+        <h2 id="buyerCareTitle">A more careful way to search</h2>
+        <p id="buyerCareText">
+          From our experience of the local property market, descriptions and
+          photographs do not always tell the complete story. Important details
+          about condition, access, utilities, ownership or required work may
+          only become clear after further enquiries. We aim to offer
+          straightforward, honest assistance by using our local knowledge and
+          trusted contacts to ask sensible questions and identify potential
+          concerns.
+        </p>
+        <p class="professional-note" id="professionalNote">
+          Cave Homes Spain does not replace an independent lawyer, surveyor or
+          qualified property professional. Buyers should always complete the
+          appropriate legal and technical checks before purchasing.
         </p>
       </section>
       <section class="card">
@@ -351,6 +392,11 @@
             "Your request could not be sent. Please try again or email info@cavehomesspain.com.",
           privacy:
             "We will only use these details to respond to your property search.",
+          careTitle: "A more careful way to search",
+          careText:
+            "From our experience of the local property market, descriptions and photographs do not always tell the complete story. Important details about condition, access, utilities, ownership or required work may only become clear after further enquiries. We aim to offer straightforward, honest assistance by using our local knowledge and trusted contacts to ask sensible questions and identify potential concerns.",
+          professionalNote:
+            "Cave Homes Spain does not replace an independent lawyer, surveyor or qualified property professional. Buyers should always complete the appropriate legal and technical checks before purchasing.",
         },
         es: {
           eyebrow: "Búsqueda personalizada de propiedades",
@@ -377,6 +423,11 @@
             "No se pudo enviar la solicitud. Inténtelo de nuevo o escriba a info@cavehomesspain.com.",
           privacy:
             "Solo utilizaremos estos datos para responder a su búsqueda.",
+          careTitle: "Una forma más cuidadosa de buscar",
+          careText:
+            "Según nuestra experiencia en el mercado inmobiliario local, las descripciones y fotografías no siempre cuentan toda la historia. Algunos detalles importantes sobre el estado, el acceso, los suministros, la titularidad o las obras necesarias pueden conocerse únicamente tras realizar más consultas. Nuestro objetivo es ofrecer una ayuda clara y honesta, utilizando nuestro conocimiento local y contactos de confianza para formular preguntas sensatas e identificar posibles problemas.",
+          professionalNote:
+            "Cave Homes Spain no sustituye a un abogado, arquitecto técnico u otro profesional inmobiliario independiente. Los compradores siempre deben realizar las comprobaciones legales y técnicas correspondientes antes de comprar.",
         },
         "fr-BE": {
           eyebrow: "Recherche immobilière personnalisée",
@@ -403,6 +454,11 @@
             "Votre demande n’a pas pu être envoyée. Réessayez ou écrivez à info@cavehomesspain.com.",
           privacy:
             "Nous utiliserons ces informations uniquement pour répondre à votre recherche.",
+          careTitle: "Une recherche plus attentive",
+          careText:
+            "D’après notre expérience du marché immobilier local, les descriptions et les photographies ne racontent pas toujours toute l’histoire. Des détails importants concernant l’état, l’accès, les raccordements, la propriété ou les travaux nécessaires peuvent n’apparaître qu’après des vérifications complémentaires. Nous proposons une aide claire et honnête en utilisant notre connaissance locale et nos contacts de confiance pour poser les bonnes questions et repérer d’éventuels problèmes.",
+          professionalNote:
+            "Cave Homes Spain ne remplace pas un avocat, un expert ou un professionnel immobilier indépendant. Les acheteurs doivent toujours effectuer les vérifications juridiques et techniques appropriées avant tout achat.",
         },
         de: {
           eyebrow: "Persönliche Immobiliensuche",
@@ -429,6 +485,11 @@
           error:
             "Ihre Anfrage konnte nicht gesendet werden. Versuchen Sie es erneut oder schreiben Sie an info@cavehomesspain.com.",
           privacy: "Wir verwenden diese Angaben nur für Ihre Immobiliensuche.",
+          careTitle: "Eine sorgfältigere Immobiliensuche",
+          careText:
+            "Nach unserer Erfahrung auf dem lokalen Immobilienmarkt erzählen Beschreibungen und Fotos nicht immer die ganze Geschichte. Wichtige Angaben zu Zustand, Zufahrt, Versorgungsanschlüssen, Eigentum oder notwendigen Arbeiten werden manchmal erst durch weitere Nachfragen deutlich. Wir möchten offen und ehrlich helfen und nutzen unsere Ortskenntnis und vertrauenswürdigen Kontakte, um sinnvolle Fragen zu stellen und mögliche Bedenken frühzeitig zu erkennen.",
+          professionalNote:
+            "Cave Homes Spain ersetzt keinen unabhängigen Anwalt, Gutachter oder qualifizierten Immobilienfachmann. Käufer sollten vor einem Kauf stets die erforderlichen rechtlichen und technischen Prüfungen durchführen lassen.",
         },
         nl: {
           eyebrow: "Persoonlijke woningzoektocht",
@@ -455,6 +516,11 @@
           error:
             "Uw aanvraag kon niet worden verzonden. Probeer opnieuw of mail info@cavehomesspain.com.",
           privacy: "We gebruiken deze gegevens alleen voor uw woningzoektocht.",
+          careTitle: "Een zorgvuldiger manier van zoeken",
+          careText:
+            "Uit onze ervaring met de lokale woningmarkt blijkt dat beschrijvingen en foto’s niet altijd het volledige verhaal vertellen. Belangrijke informatie over de staat, bereikbaarheid, nutsvoorzieningen, eigendom of noodzakelijke werkzaamheden wordt soms pas duidelijk na aanvullende vragen. Wij willen duidelijke en eerlijke hulp bieden en gebruiken onze lokale kennis en vertrouwde contacten om verstandige vragen te stellen en mogelijke aandachtspunten te signaleren.",
+          professionalNote:
+            "Cave Homes Spain vervangt geen onafhankelijke advocaat, bouwkundige of gekwalificeerde vastgoedprofessional. Kopers moeten vóór aankoop altijd de juiste juridische en technische controles laten uitvoeren.",
         },
       };
       const ids = {
@@ -474,6 +540,9 @@
         requirements: "requirementsLabel",
         notes: "notesLabel",
         privacy: "privacy",
+        careTitle: "buyerCareTitle",
+        careText: "buyerCareText",
+        professionalNote: "professionalNote",
       };
       const supported = ["en", "es", "fr-BE", "de", "nl"];
       const requested =
