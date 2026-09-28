@@ -273,6 +273,14 @@
         border: 1px dashed var(--line);
         border-radius: 15px;
       }
+      .staff-tools {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .staff-tools .btn {
+        padding: 0 14px;
+      }
       @media (min-width: 700px) {
         .checks {
           grid-template-columns: 1fr 1fr;
@@ -332,6 +340,17 @@
             <button class="btn">Save password</button>
             <div class="notice" id="passwordNotice"></div>
           </form>
+        </section>
+        <section class="card">
+          <div class="staff-tools">
+            <button class="btn secondary" id="refreshJobs" type="button">
+              Refresh jobs
+            </button>
+            <button class="btn secondary" id="enableJobAlerts" type="button">
+              Enable job alerts
+            </button>
+          </div>
+          <div class="notice" id="jobAlertNotice"></div>
         </section>
         <section class="card">
           <h2>Assigned jobs</h2>
@@ -518,7 +537,8 @@
       };
       let assignments = [],
         reports = [],
-        jobs = [];
+        jobs = [],
+        knownJobIds = new Set();
       async function loadData() {
         const propertyQuery =
             currentStaff?.role === "admin"
@@ -557,11 +577,58 @@
               }))
             : a || [];
         reports = r || [];
-        jobs = j || [];
+        const nextJobs = j || [],
+          newJobs = nextJobs.filter(
+            (job) => job.status === "assigned" && !knownJobIds.has(job.id),
+          );
+        jobs = nextJobs;
+        if (
+          knownJobIds.size &&
+          newJobs.length &&
+          "Notification" in window &&
+          Notification.permission === "granted"
+        ) {
+          new Notification("New Property Care job", {
+            body: `${newJobs[0].title} — ${newJobs[0].care_properties?.name || "Property"}`,
+            icon: "/app/app-icon-192.png",
+          });
+        }
+        knownJobIds = new Set(jobs.map((job) => job.id));
         renderJobs();
         renderProperties();
         renderReports();
       }
+      $("refreshJobs").onclick = async () => {
+        const button = $("refreshJobs");
+        button.disabled = true;
+        button.textContent = "Refreshing…";
+        await loadData();
+        button.disabled = false;
+        button.textContent = "Refresh jobs";
+        notice("jobAlertNotice", "Jobs refreshed.");
+      };
+      $("enableJobAlerts").onclick = async () => {
+        if (!("Notification" in window))
+          return notice(
+            "jobAlertNotice",
+            "Notifications are not supported on this device.",
+            true,
+          );
+        const permission = await Notification.requestPermission();
+        notice(
+          "jobAlertNotice",
+          permission === "granted"
+            ? "Job alerts are enabled while the staff app is open."
+            : "Notification permission was not enabled.",
+          permission !== "granted",
+        );
+      };
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden && currentStaff) loadData();
+      });
+      setInterval(() => {
+        if (!document.hidden && currentStaff) loadData();
+      }, 60000);
       function renderJobs() {
         const openJobs = jobs.filter((job) => job.status !== "completed");
         if (!openJobs.length) {
@@ -727,6 +794,8 @@
           b.textContent = "Submit visit report";
         }
       };
+      if ("serviceWorker" in navigator)
+        navigator.serviceWorker.register("/service-worker.js");
     </script>
   </body>
 </html>
