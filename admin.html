@@ -2650,6 +2650,67 @@
                 >
               </p>
             </div>
+            <div class="care-card">
+              <h3>Create and send job</h3>
+              <p>
+                Choose the employee, property and visit time. The job will
+                appear in that employee’s app immediately.
+              </p>
+              <form id="careJobForm">
+                <div class="grid">
+                  <div class="field">
+                    <label for="careJobWorker">Employee *</label>
+                    <select id="careJobWorker" required>
+                      <option value="">Select an employee</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="careJobProperty">Property *</label>
+                    <select id="careJobProperty" required>
+                      <option value="">Select an employee first</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="careJobDate">Visit date and time *</label>
+                    <input id="careJobDate" type="datetime-local" required />
+                  </div>
+                  <div class="field">
+                    <label for="careJobPriority">Priority</label>
+                    <select id="careJobPriority">
+                      <option value="normal">Normal</option>
+                      <option value="urgent">Urgent</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="careJobTitle">Job title *</label>
+                  <input
+                    id="careJobTitle"
+                    required
+                    placeholder="e.g. Weekly security inspection"
+                  />
+                </div>
+                <div class="field">
+                  <label for="careJobInstructions">Instructions</label>
+                  <textarea
+                    id="careJobInstructions"
+                    rows="4"
+                    placeholder="Add access details and anything the employee must check."
+                  ></textarea>
+                </div>
+                <button class="btn green" type="submit">
+                  Create and send job
+                </button>
+                <div class="notice" id="careJobNotice"></div>
+              </form>
+              <div
+                id="careJobList"
+                class="care-properties"
+                style="margin-top: 18px"
+              >
+                <div class="care-empty">No jobs sent yet.</div>
+              </div>
+            </div>
             <div class="care-grid">
               <form class="care-card" id="careClientForm">
                 <h3>Add a client</h3>
@@ -4759,6 +4820,9 @@
         return local.toISOString().slice(0, 16);
       }
       $("careVisitDate").value = careDateValue();
+      $("careJobDate").value = careDateValue(
+        new Date(Date.now() + 24 * 60 * 60 * 1000),
+      );
       async function loadCareData() {
         $("careVisitList").innerHTML =
           '<div class="care-empty">Loading Property Care reports…</div>';
@@ -4820,6 +4884,7 @@
         renderCareProperties();
         renderCareVisits();
         await loadCareAccess();
+        await loadCareJobs();
       }
       function renderCareProperties() {
         if (!careProperties.length) {
@@ -4881,7 +4946,8 @@
         }
       };
       let careStaff = [],
-        careAssignments = [];
+        careAssignments = [],
+        careJobs = [];
       async function loadCareAccess() {
         const [staffResult, assignmentResult] = await Promise.all([
           db
@@ -4910,6 +4976,14 @@
                 `<option value="${esc(worker.user_id)}">${esc(worker.full_name)}</option>`,
             )
             .join("");
+        $("careJobWorker").innerHTML =
+          '<option value="">Select an employee</option>' +
+          active
+            .map(
+              (worker) =>
+                `<option value="${esc(worker.user_id)}">${esc(worker.full_name)}</option>`,
+            )
+            .join("");
         $("careAssignClient").innerHTML =
           '<option value="">Select a client</option>' +
           careClients
@@ -4923,8 +4997,110 @@
         $("carePropertyOptions").innerHTML = careProperties
           .map((property) => `<option value="${esc(property.name)}"></option>`)
           .join("");
+        populateCareJobProperties();
         renderCareStaff();
       }
+      function populateCareJobProperties() {
+        const workerId = $("careJobWorker").value,
+          propertyIds = new Set(
+            careAssignments
+              .filter((item) => item.active && item.staff_user_id === workerId)
+              .map((item) => item.property_id),
+          ),
+          available = careProperties.filter((property) =>
+            propertyIds.has(property.id),
+          );
+        $("careJobProperty").innerHTML = workerId
+          ? '<option value="">Select a property</option>' +
+            available
+              .map(
+                (property) =>
+                  `<option value="${esc(property.id)}">${esc(property.name)}</option>`,
+              )
+              .join("")
+          : '<option value="">Select an employee first</option>';
+      }
+      $("careJobWorker").addEventListener("change", populateCareJobProperties);
+      async function loadCareJobs() {
+        const { data, error } = await db
+          .from("care_jobs")
+          .select("*, care_properties(name,address)")
+          .order("scheduled_for", { ascending: false });
+        if (error) {
+          $("careJobList").innerHTML =
+            '<div class="care-empty">Jobs could not be loaded.</div>';
+          return;
+        }
+        careJobs = data || [];
+        renderCareJobs();
+      }
+      function renderCareJobs() {
+        if (!careJobs.length) {
+          $("careJobList").innerHTML =
+            '<div class="care-empty">No jobs sent yet.</div>';
+          return;
+        }
+        $("careJobList").innerHTML = careJobs
+          .map((job) => {
+            const worker = careStaff.find(
+                (item) => item.user_id === job.staff_user_id,
+              ),
+              status = job.status.replace("_", " "),
+              active = !["completed", "cancelled"].includes(job.status);
+            return `<article class="care-property"><div><strong>${job.priority === "urgent" ? "URGENT · " : ""}${esc(job.title)}</strong><span>${esc(job.care_properties?.name || "Property")} · ${esc(worker?.full_name || "Employee")}</span><span>${new Date(job.scheduled_for).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })} · ${esc(status)}</span>${job.instructions ? `<span>${esc(job.instructions)}</span>` : ""}</div>${active ? `<button class="care-delete" type="button" onclick="cancelCareJob('${job.id}')">Cancel job</button>` : ""}</article>`;
+          })
+          .join("");
+      }
+      $("careJobForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const button = event.submitter;
+        button.disabled = true;
+        button.textContent = "Sending job…";
+        try {
+          const {
+              data: { user },
+            } = await db.auth.getUser(),
+            row = {
+              property_id: $("careJobProperty").value,
+              staff_user_id: $("careJobWorker").value,
+              created_by: user.id,
+              title: $("careJobTitle").value.trim(),
+              instructions: $("careJobInstructions").value.trim() || null,
+              scheduled_for: new Date($("careJobDate").value).toISOString(),
+              priority: $("careJobPriority").value,
+            },
+            { error } = await db.from("care_jobs").insert(row);
+          if (error) throw error;
+          event.target.reset();
+          $("careJobDate").value = careDateValue(
+            new Date(Date.now() + 24 * 60 * 60 * 1000),
+          );
+          populateCareJobProperties();
+          showNotice(
+            "careJobNotice",
+            "Job sent. It is now visible in the employee’s app.",
+          );
+          await loadCareJobs();
+        } catch (error) {
+          showNotice(
+            "careJobNotice",
+            error.message || "The job could not be sent.",
+            true,
+          );
+        } finally {
+          button.disabled = false;
+          button.textContent = "Create and send job";
+        }
+      });
+      window.cancelCareJob = async (id) => {
+        if (!confirm("Cancel this job?")) return;
+        const { error } = await db
+          .from("care_jobs")
+          .update({ status: "cancelled", updated_at: new Date().toISOString() })
+          .eq("id", id);
+        if (error) return alert(error.message);
+        await loadCareJobs();
+      };
       function renderCareStaff() {
         if (!careStaff.length) {
           $("careStaffList").innerHTML =

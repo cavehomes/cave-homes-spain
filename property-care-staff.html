@@ -1,35 +1,732 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>CHS Property Care</title><meta name="theme-color" content="#183d32"><meta name="robots" content="noindex,nofollow">
-<link rel="manifest" href="/property-care-manifest.webmanifest"><link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<style>
-:root{--green:#183d32;--green2:#285b49;--clay:#ad5535;--cream:#fffaf2;--ink:#1d3028;--muted:#68736d;--line:#ddd5c9;--white:#fff;--red:#a62e20}*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.5 Arial,sans-serif}button,input,select,textarea{font:inherit}.hidden{display:none!important}.wrap{width:min(760px,calc(100% - 28px));margin:auto}.top{position:sticky;top:0;z-index:10;padding:15px 0;background:var(--green);color:#fff;box-shadow:0 5px 18px #0002}.top-row{display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{display:flex;align-items:center;gap:11px}.mark{display:grid;width:43px;height:43px;place-items:center;border-radius:13px;background:#fff;color:var(--green);font:800 18px Georgia,serif}.brand strong,.brand small{display:block}.brand small{color:#efc8b3;font-size:11px;letter-spacing:.12em}.signout{border:0;background:none;color:#fff;font-weight:800}.hero{padding:30px 0 18px}.hero h1{margin:0;font:800 clamp(28px,7vw,43px)/1.05 Georgia,serif}.hero p{margin:8px 0;color:var(--muted)}.card{margin:14px 0;padding:20px;border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:0 8px 24px #183d3210}.card h2,.card h3{margin:0 0 7px;font-family:Georgia,serif}.field{margin:13px 0}.field label{display:block;margin-bottom:6px;font-weight:800}.field input,.field select,.field textarea{width:100%;min-height:49px;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff}.field textarea{min-height:88px}.btn{display:flex;width:100%;min-height:51px;align-items:center;justify-content:center;border:0;border-radius:999px;background:var(--clay);color:#fff;font-weight:850}.btn.secondary{margin-top:10px;background:#eef3f0;color:var(--green);border:1px solid #c9d7d0}.btn:disabled{opacity:.55}.notice{display:none;margin-top:12px;padding:11px;border-radius:10px;background:#e7f2eb;color:#23533c;font-weight:700}.notice.error{display:block;background:#fbe8e4;color:#8c3023}.property{display:grid;gap:10px;padding:16px;border:1px solid var(--line);border-radius:16px;background:#fff}.property+.property{margin-top:10px}.property h3{margin:0}.property p{margin:0;color:var(--muted)}.property button{justify-self:start;width:auto;padding:0 18px}.checks{display:grid;gap:11px}.check{padding:14px;border:1px solid var(--line);border-radius:14px;background:#f8f6f1}.check label{display:block;margin-bottom:6px;font-weight:850}.check select,.check textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:#fff}.check textarea{min-height:68px;margin-top:8px;resize:vertical}.report{padding:15px;border-left:5px solid var(--green2);border-radius:12px;background:#f7f4ee}.report+.report{margin-top:10px}.report strong,.report span{display:block}.report span{color:var(--muted);font-size:13px}.login{min-height:100vh;display:grid;place-items:center;padding:28px}.login-card{width:min(430px,100%);padding:27px;border-radius:24px;background:#fff;box-shadow:0 18px 55px #183d3222}.login-card h1{font:800 34px Georgia,serif;margin:15px 0 6px}.login-card>p{color:var(--muted)}.empty{padding:24px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:15px}@media(min-width:700px){.checks{grid-template-columns:1fr 1fr}}
-</style></head><body>
-<section class="login" id="loginView"><form class="login-card" id="loginForm"><div class="mark">CHS</div><h1>Property Care</h1><p>Private staff access for assigned property inspections.</p><div class="field"><label>Email</label><input id="email" type="email" required autocomplete="username"></div><div class="field"><label>Password</label><input id="password" type="password" required autocomplete="current-password"></div><button class="btn" type="submit">Sign in</button><button class="btn secondary" id="resetPassword" type="button">Create or reset password</button><div class="notice" id="loginNotice"></div></form></section>
-<div class="hidden" id="appView"><header class="top"><div class="wrap top-row"><div class="brand"><div class="mark">CHS</div><span><strong>Property Care</strong><small>STAFF APP</small></span></div><button class="signout" id="signOut">Sign out</button></div></header><main class="wrap">
-<section class="hero"><h1>Assigned properties</h1><p id="welcome">Choose a property to complete a visit report.</p></section>
-<section class="card hidden" id="passwordCard"><h2>Set your password</h2><p>Choose a password for future sign-ins.</p><form id="passwordForm"><div class="field"><label>New password</label><input id="newPassword" type="password" minlength="8" required></div><button class="btn">Save password</button><div class="notice" id="passwordNotice"></div></form></section>
-<section id="properties"><div class="empty">Loading assignments…</div></section>
-<section class="card hidden" id="visitCard"><h2 id="visitTitle">New visit</h2><p id="visitAddress"></p><form id="visitForm"><input type="hidden" id="propertyId"><div class="field"><label>Visit date and time</label><input id="visitDate" type="datetime-local" required></div><div class="checks" id="checks"></div><div class="field"><label>Overall visit summary</label><textarea id="summary" placeholder="General observations"></textarea></div><div class="field"><label>Urgent concerns</label><textarea id="urgent" placeholder="Leave blank if there are none"></textarea></div><div class="field"><label>Photographs</label><input id="photos" type="file" accept="image/*" multiple></div><button class="btn" id="saveVisit">Submit visit report</button><div class="notice" id="visitNotice"></div></form></section>
-<section class="card"><h2>My submitted reports</h2><div id="reports"><div class="empty">No reports submitted yet.</div></div></section>
-</main></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-const db=supabase.createClient('https://lesgzlhvrlxgtfuocadq.supabase.co','sb_publishable_pPS6fORJPGFcGBIUPcxOxQ_1g4vazyg'),$=id=>document.getElementById(id);
-const checklist={forced_entry:'Signs of forced entry or tampering',locks_gates:'Locks, gates and security',doors_windows:'Doors and windows',alarm_cctv:'Alarm or CCTV (if fitted)',water_leaks:'Water and leaks',damp_ventilation:'Damp and ventilation',electricity:'Electricity',utilities_meters:'Utilities and meter readings',cave_drainage:'Cave roof, land above and drainage',exterior_access:'Exterior and access',garden_outside:'Garden and outside areas',pests_animals:'Pests or animal activity',post_deliveries:'Post, parcels and deliveries',general_condition:'General condition'};
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),notice=(id,text,error=false)=>{const el=$(id);el.textContent=text;el.className='notice'+(error?' error':'');el.style.display='block'};
-$('checks').innerHTML=Object.entries(checklist).map(([key,label])=>`<div class="check"><label>${label}</label><select data-check="${key}"><option value="satisfactory">Satisfactory</option><option value="attention">Needs attention</option><option value="urgent">Urgent</option><option value="not_applicable">Not applicable</option></select><textarea data-note="${key}" placeholder="Add more information (optional)"></textarea></div>`).join('');
-function localDate(){const d=new Date(Date.now()-new Date().getTimezoneOffset()*60000);return d.toISOString().slice(0,16)}$('visitDate').value=localDate();
-db.auth.getSession().then(({data})=>session(data.session));db.auth.onAuthStateChange((_,s)=>session(s));
-let currentStaff=null;async function session(s){$('loginView').classList.toggle('hidden',!!s);$('appView').classList.toggle('hidden',!s);if(s){const {data:staff}=await db.from('care_staff').select('*').eq('user_id',s.user.id).single();if(!staff?.active||!['admin','worker'].includes(staff.role)){await db.auth.signOut();return alert('This account does not have active Property Care access.')}currentStaff=staff;$('welcome').textContent=staff.role==='admin'?`Administrator view — you can inspect every Property Care property.`:`Welcome ${staff.full_name}. Choose a property to complete a visit report.`;$('passwordCard').classList.toggle('hidden',!(staff.role==='worker'&&s.user.user_metadata?.must_change_password));await loadData()}}
-$('loginForm').onsubmit=async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;const {error}=await db.auth.signInWithPassword({email:$('email').value,password:$('password').value});if(error)notice('loginNotice','Sign-in failed. Check your email and password.',true);b.disabled=false};
-$('resetPassword').onclick=async()=>{const email=$('email').value.trim();if(!email)return notice('loginNotice','Enter your email address first.',true);const b=$('resetPassword');b.disabled=true;const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:'https://cavehomesspain.com/property-care-staff.html'});b.disabled=false;if(error)return notice('loginNotice',error.message,true);notice('loginNotice','Password setup email sent. Open it, tap the link, then choose your password here.');};
-$('signOut').onclick=()=>db.auth.signOut();
-$('passwordForm').onsubmit=async e=>{e.preventDefault();const {error}=await db.auth.updateUser({password:$('newPassword').value,data:{must_change_password:false}});if(error)return notice('passwordNotice',error.message,true);notice('passwordNotice','Your new password has been saved.');setTimeout(()=>$('passwordCard').classList.add('hidden'),900)};
-let assignments=[],reports=[];
-async function loadData(){const propertyQuery=currentStaff?.role==='admin'?db.from('care_properties').select('id,name,address,access_notes,care_clients(name)').order('name'):db.from('care_assignments').select('property_id,care_properties(id,name,address,access_notes,care_clients(name))').eq('active',true),reportQuery=db.from('care_visits').select('id,property_id,visit_date,status,care_properties(name)').order('visit_date',{ascending:false});const [{data:a,error:ae},{data:r,error:re}]=await Promise.all([propertyQuery,reportQuery]);if(ae||re)return alert((ae||re).message);assignments=currentStaff?.role==='admin'?(a||[]).map(property=>({property_id:property.id,care_properties:property})):(a||[]);reports=r||[];renderProperties();renderReports()}
-function renderProperties(){if(!assignments.length){$('properties').innerHTML='<div class="empty">No properties have been assigned to you yet.</div>';return}$('properties').innerHTML=assignments.map(a=>{const p=a.care_properties||{};return `<article class="property"><div><h3>${esc(p.name)}</h3><p>${esc(p.address)} · Client: ${esc(p.care_clients?.name||'')}</p>${p.access_notes?`<p><strong>Access:</strong> ${esc(p.access_notes)}</p>`:''}</div><button class="btn" onclick="startVisit('${p.id}')">Start inspection</button></article>`}).join('')}
-window.startVisit=id=>{const p=assignments.find(a=>a.property_id===id)?.care_properties;if(!p)return;$('propertyId').value=id;$('visitTitle').textContent=`Visit: ${p.name}`;$('visitAddress').textContent=p.address||'';$('visitDate').value=localDate();$('visitCard').classList.remove('hidden');$('visitCard').scrollIntoView({behavior:'smooth'})};
-function renderReports(){if(!reports.length){$('reports').innerHTML='<div class="empty">No reports submitted yet.</div>';return}$('reports').innerHTML=reports.map(r=>`<article class="report"><strong>${esc(r.care_properties?.name||'Property')}</strong><span>${new Date(r.visit_date).toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short'})} · Submitted</span></article>`).join('')}
-async function optimise(file){const img=await createImageBitmap(file),scale=Math.min(1,1600/img.width),canvas=document.createElement('canvas');canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);return new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',.82))}
-$('visitForm').onsubmit=async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;b.textContent='Submitting…';try{const {data:{user}}=await db.auth.getUser(),check={};document.querySelectorAll('[data-check]').forEach(s=>{const key=s.dataset.check;check[key]={status:s.value,notes:document.querySelector(`[data-note="${key}"]`).value.trim()}});const {data:v,error}=await db.from('care_visits').insert({user_id:user.id,property_id:$('propertyId').value,visit_date:new Date($('visitDate').value).toISOString(),status:'complete',checklist:check,summary:$('summary').value.trim()||null,urgent_notes:$('urgent').value.trim()||null}).select().single();if(error)throw error;for(const file of [...$('photos').files]){const blob=await optimise(file),path=`${user.id}/${v.id}/${crypto.randomUUID()}.jpg`,up=await db.storage.from('property-care').upload(path,blob,{contentType:'image/jpeg'});if(up.error)throw up.error;const row=await db.from('care_visit_photos').insert({user_id:user.id,visit_id:v.id,storage_path:path});if(row.error)throw row.error}notice('visitNotice','Report submitted successfully.');e.target.reset();$('visitDate').value=localDate();document.querySelectorAll('[data-check]').forEach(s=>s.value='satisfactory');document.querySelectorAll('[data-note]').forEach(n=>n.value='');await loadData()}catch(error){notice('visitNotice',error.message||'The report could not be submitted.',true)}finally{b.disabled=false;b.textContent='Submit visit report'}};
-</script></body></html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>CHS Property Care</title>
+    <meta name="theme-color" content="#183d32" />
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="manifest" href="/property-care-manifest.webmanifest" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <style>
+      :root {
+        --green: #183d32;
+        --green2: #285b49;
+        --clay: #ad5535;
+        --cream: #fffaf2;
+        --ink: #1d3028;
+        --muted: #68736d;
+        --line: #ddd5c9;
+        --white: #fff;
+        --red: #a62e20;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--cream);
+        color: var(--ink);
+        font:
+          16px/1.5 Arial,
+          sans-serif;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .wrap {
+        width: min(760px, calc(100% - 28px));
+        margin: auto;
+      }
+      .top {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        padding: 15px 0;
+        background: var(--green);
+        color: #fff;
+        box-shadow: 0 5px 18px #0002;
+      }
+      .top-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+      }
+      .mark {
+        display: grid;
+        width: 43px;
+        height: 43px;
+        place-items: center;
+        border-radius: 13px;
+        background: #fff;
+        color: var(--green);
+        font:
+          800 18px Georgia,
+          serif;
+      }
+      .brand strong,
+      .brand small {
+        display: block;
+      }
+      .brand small {
+        color: #efc8b3;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+      }
+      .signout {
+        border: 0;
+        background: none;
+        color: #fff;
+        font-weight: 800;
+      }
+      .hero {
+        padding: 30px 0 18px;
+      }
+      .hero h1 {
+        margin: 0;
+        font:
+          800 clamp(28px, 7vw, 43px) / 1.05 Georgia,
+          serif;
+      }
+      .hero p {
+        margin: 8px 0;
+        color: var(--muted);
+      }
+      .card {
+        margin: 14px 0;
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: #fff;
+        box-shadow: 0 8px 24px #183d3210;
+      }
+      .card h2,
+      .card h3 {
+        margin: 0 0 7px;
+        font-family: Georgia, serif;
+      }
+      .field {
+        margin: 13px 0;
+      }
+      .field label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 800;
+      }
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        min-height: 49px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: #fff;
+      }
+      .field textarea {
+        min-height: 88px;
+      }
+      .btn {
+        display: flex;
+        width: 100%;
+        min-height: 51px;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 999px;
+        background: var(--clay);
+        color: #fff;
+        font-weight: 850;
+      }
+      .btn.secondary {
+        margin-top: 10px;
+        background: #eef3f0;
+        color: var(--green);
+        border: 1px solid #c9d7d0;
+      }
+      .btn:disabled {
+        opacity: 0.55;
+      }
+      .notice {
+        display: none;
+        margin-top: 12px;
+        padding: 11px;
+        border-radius: 10px;
+        background: #e7f2eb;
+        color: #23533c;
+        font-weight: 700;
+      }
+      .notice.error {
+        display: block;
+        background: #fbe8e4;
+        color: #8c3023;
+      }
+      .property {
+        display: grid;
+        gap: 10px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: #fff;
+      }
+      .property + .property {
+        margin-top: 10px;
+      }
+      .property h3 {
+        margin: 0;
+      }
+      .property p {
+        margin: 0;
+        color: var(--muted);
+      }
+      .property button {
+        justify-self: start;
+        width: auto;
+        padding: 0 18px;
+      }
+      .checks {
+        display: grid;
+        gap: 11px;
+      }
+      .check {
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #f8f6f1;
+      }
+      .check label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 850;
+      }
+      .check select,
+      .check textarea {
+        width: 100%;
+        padding: 11px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+      }
+      .check textarea {
+        min-height: 68px;
+        margin-top: 8px;
+        resize: vertical;
+      }
+      .report {
+        padding: 15px;
+        border-left: 5px solid var(--green2);
+        border-radius: 12px;
+        background: #f7f4ee;
+      }
+      .report + .report {
+        margin-top: 10px;
+      }
+      .report strong,
+      .report span {
+        display: block;
+      }
+      .report span {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .login {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 28px;
+      }
+      .login-card {
+        width: min(430px, 100%);
+        padding: 27px;
+        border-radius: 24px;
+        background: #fff;
+        box-shadow: 0 18px 55px #183d3222;
+      }
+      .login-card h1 {
+        font:
+          800 34px Georgia,
+          serif;
+        margin: 15px 0 6px;
+      }
+      .login-card > p {
+        color: var(--muted);
+      }
+      .empty {
+        padding: 24px;
+        text-align: center;
+        color: var(--muted);
+        border: 1px dashed var(--line);
+        border-radius: 15px;
+      }
+      @media (min-width: 700px) {
+        .checks {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="login" id="loginView">
+      <form class="login-card" id="loginForm">
+        <div class="mark">CHS</div>
+        <h1>Property Care</h1>
+        <p>Private staff access for assigned property inspections.</p>
+        <div class="field">
+          <label>Email</label
+          ><input id="email" type="email" required autocomplete="username" />
+        </div>
+        <div class="field">
+          <label>Password</label
+          ><input
+            id="password"
+            type="password"
+            required
+            autocomplete="current-password"
+          />
+        </div>
+        <button class="btn" type="submit">Sign in</button
+        ><button class="btn secondary" id="resetPassword" type="button">
+          Create or reset password
+        </button>
+        <div class="notice" id="loginNotice"></div>
+      </form>
+    </section>
+    <div class="hidden" id="appView">
+      <header class="top">
+        <div class="wrap top-row">
+          <div class="brand">
+            <div class="mark">CHS</div>
+            <span><strong>Property Care</strong><small>STAFF APP</small></span>
+          </div>
+          <button class="signout" id="signOut">Sign out</button>
+        </div>
+      </header>
+      <main class="wrap">
+        <section class="hero">
+          <h1>My Property Care jobs</h1>
+          <p id="welcome">Open an assigned job to complete its visit report.</p>
+        </section>
+        <section class="card hidden" id="passwordCard">
+          <h2>Set your password</h2>
+          <p>Choose a password for future sign-ins.</p>
+          <form id="passwordForm">
+            <div class="field">
+              <label>New password</label
+              ><input id="newPassword" type="password" minlength="8" required />
+            </div>
+            <button class="btn">Save password</button>
+            <div class="notice" id="passwordNotice"></div>
+          </form>
+        </section>
+        <section class="card">
+          <h2>Assigned jobs</h2>
+          <div id="jobs"><div class="empty">Loading jobs…</div></div>
+        </section>
+        <section class="card">
+          <h2>Assigned properties</h2>
+          <p>
+            Use these for an inspection that was not sent as a scheduled job.
+          </p>
+          <section id="properties">
+            <div class="empty">Loading assignments…</div>
+          </section>
+        </section>
+        <section class="card hidden" id="visitCard">
+          <h2 id="visitTitle">New visit</h2>
+          <p id="visitAddress"></p>
+          <p id="jobInstructions"></p>
+          <form id="visitForm">
+            <input type="hidden" id="propertyId" />
+            <input type="hidden" id="jobId" />
+            <div class="field">
+              <label>Visit date and time</label
+              ><input id="visitDate" type="datetime-local" required />
+            </div>
+            <div class="checks" id="checks"></div>
+            <div class="field">
+              <label>Overall visit summary</label
+              ><textarea
+                id="summary"
+                placeholder="General observations"
+              ></textarea>
+            </div>
+            <div class="field">
+              <label>Urgent concerns</label
+              ><textarea
+                id="urgent"
+                placeholder="Leave blank if there are none"
+              ></textarea>
+            </div>
+            <div class="field">
+              <label>Photographs</label
+              ><input id="photos" type="file" accept="image/*" multiple />
+            </div>
+            <button class="btn" id="saveVisit">Submit visit report</button>
+            <div class="notice" id="visitNotice"></div>
+          </form>
+        </section>
+        <section class="card">
+          <h2>My submitted reports</h2>
+          <div id="reports">
+            <div class="empty">No reports submitted yet.</div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const db = supabase.createClient(
+          "https://lesgzlhvrlxgtfuocadq.supabase.co",
+          "sb_publishable_pPS6fORJPGFcGBIUPcxOxQ_1g4vazyg",
+        ),
+        $ = (id) => document.getElementById(id);
+      const checklist = {
+        forced_entry: "Signs of forced entry or tampering",
+        locks_gates: "Locks, gates and security",
+        doors_windows: "Doors and windows",
+        alarm_cctv: "Alarm or CCTV (if fitted)",
+        water_leaks: "Water and leaks",
+        damp_ventilation: "Damp and ventilation",
+        electricity: "Electricity",
+        utilities_meters: "Utilities and meter readings",
+        cave_drainage: "Cave roof, land above and drainage",
+        exterior_access: "Exterior and access",
+        garden_outside: "Garden and outside areas",
+        pests_animals: "Pests or animal activity",
+        post_deliveries: "Post, parcels and deliveries",
+        general_condition: "General condition",
+      };
+      const esc = (v) =>
+          String(v ?? "").replace(
+            /[&<>"']/g,
+            (c) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              })[c],
+          ),
+        notice = (id, text, error = false) => {
+          const el = $(id);
+          el.textContent = text;
+          el.className = "notice" + (error ? " error" : "");
+          el.style.display = "block";
+        };
+      $("checks").innerHTML = Object.entries(checklist)
+        .map(
+          ([key, label]) =>
+            `<div class="check"><label>${label}</label><select data-check="${key}"><option value="satisfactory">Satisfactory</option><option value="attention">Needs attention</option><option value="urgent">Urgent</option><option value="not_applicable">Not applicable</option></select><textarea data-note="${key}" placeholder="Add more information (optional)"></textarea></div>`,
+        )
+        .join("");
+      function localDate() {
+        const d = new Date(Date.now() - new Date().getTimezoneOffset() * 60000);
+        return d.toISOString().slice(0, 16);
+      }
+      $("visitDate").value = localDate();
+      db.auth.getSession().then(({ data }) => session(data.session));
+      db.auth.onAuthStateChange((_, s) => session(s));
+      let currentStaff = null;
+      async function session(s) {
+        $("loginView").classList.toggle("hidden", !!s);
+        $("appView").classList.toggle("hidden", !s);
+        if (s) {
+          const { data: staff } = await db
+            .from("care_staff")
+            .select("*")
+            .eq("user_id", s.user.id)
+            .single();
+          if (!staff?.active || !["admin", "worker"].includes(staff.role)) {
+            await db.auth.signOut();
+            return alert(
+              "This account does not have active Property Care access.",
+            );
+          }
+          currentStaff = staff;
+          $("welcome").textContent =
+            staff.role === "admin"
+              ? `Administrator view — you can inspect every Property Care property.`
+              : `Welcome ${staff.full_name}. Choose a property to complete a visit report.`;
+          $("passwordCard").classList.toggle(
+            "hidden",
+            !(
+              staff.role === "worker" &&
+              s.user.user_metadata?.must_change_password
+            ),
+          );
+          await loadData();
+        }
+      }
+      $("loginForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const b = e.submitter;
+        b.disabled = true;
+        const { error } = await db.auth.signInWithPassword({
+          email: $("email").value,
+          password: $("password").value,
+        });
+        if (error)
+          notice(
+            "loginNotice",
+            "Sign-in failed. Check your email and password.",
+            true,
+          );
+        b.disabled = false;
+      };
+      $("resetPassword").onclick = async () => {
+        const email = $("email").value.trim();
+        if (!email)
+          return notice("loginNotice", "Enter your email address first.", true);
+        const b = $("resetPassword");
+        b.disabled = true;
+        const { error } = await db.auth.resetPasswordForEmail(email, {
+          redirectTo: "https://cavehomesspain.com/property-care-staff.html",
+        });
+        b.disabled = false;
+        if (error) return notice("loginNotice", error.message, true);
+        notice(
+          "loginNotice",
+          "Password setup email sent. Open it, tap the link, then choose your password here.",
+        );
+      };
+      $("signOut").onclick = () => db.auth.signOut();
+      $("passwordForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const { error } = await db.auth.updateUser({
+          password: $("newPassword").value,
+          data: { must_change_password: false },
+        });
+        if (error) return notice("passwordNotice", error.message, true);
+        notice("passwordNotice", "Your new password has been saved.");
+        setTimeout(() => $("passwordCard").classList.add("hidden"), 900);
+      };
+      let assignments = [],
+        reports = [],
+        jobs = [];
+      async function loadData() {
+        const propertyQuery =
+            currentStaff?.role === "admin"
+              ? db
+                  .from("care_properties")
+                  .select("id,name,address,access_notes,care_clients(name)")
+                  .order("name")
+              : db
+                  .from("care_assignments")
+                  .select(
+                    "property_id,care_properties(id,name,address,access_notes,care_clients(name))",
+                  )
+                  .eq("active", true),
+          reportQuery = db
+            .from("care_visits")
+            .select("id,property_id,visit_date,status,care_properties(name)")
+            .order("visit_date", { ascending: false }),
+          jobQuery = db
+            .from("care_jobs")
+            .select(
+              "*,care_properties(name,address,access_notes,care_clients(name))",
+            )
+            .neq("status", "cancelled")
+            .order("scheduled_for", { ascending: true });
+        const [
+          { data: a, error: ae },
+          { data: r, error: re },
+          { data: j, error: je },
+        ] = await Promise.all([propertyQuery, reportQuery, jobQuery]);
+        if (ae || re || je) return alert((ae || re || je).message);
+        assignments =
+          currentStaff?.role === "admin"
+            ? (a || []).map((property) => ({
+                property_id: property.id,
+                care_properties: property,
+              }))
+            : a || [];
+        reports = r || [];
+        jobs = j || [];
+        renderJobs();
+        renderProperties();
+        renderReports();
+      }
+      function renderJobs() {
+        const openJobs = jobs.filter((job) => job.status !== "completed");
+        if (!openJobs.length) {
+          $("jobs").innerHTML =
+            '<div class="empty">You have no open jobs.</div>';
+          return;
+        }
+        $("jobs").innerHTML = openJobs
+          .map((job) => {
+            const property = job.care_properties || {};
+            return `<article class="property"><div><h3>${job.priority === "urgent" ? "URGENT · " : ""}${esc(job.title)}</h3><p><strong>${new Date(job.scheduled_for).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })}</strong></p><p>${esc(property.name || "Property")} · ${esc(property.address || "")}</p>${job.instructions ? `<p><strong>Instructions:</strong> ${esc(job.instructions)}</p>` : ""}</div><button class="btn" onclick="startJob('${job.id}')">${job.status === "in_progress" ? "Continue job" : "Start job"}</button></article>`;
+          })
+          .join("");
+      }
+      function renderProperties() {
+        if (!assignments.length) {
+          $("properties").innerHTML =
+            '<div class="empty">No properties have been assigned to you yet.</div>';
+          return;
+        }
+        $("properties").innerHTML = assignments
+          .map((a) => {
+            const p = a.care_properties || {};
+            return `<article class="property"><div><h3>${esc(p.name)}</h3><p>${esc(p.address)} · Client: ${esc(p.care_clients?.name || "")}</p>${p.access_notes ? `<p><strong>Access:</strong> ${esc(p.access_notes)}</p>` : ""}</div><button class="btn" onclick="startVisit('${p.id}')">Start inspection</button></article>`;
+          })
+          .join("");
+      }
+      window.startVisit = (id, job = null) => {
+        const p = assignments.find(
+          (a) => a.property_id === id,
+        )?.care_properties;
+        if (!p) return;
+        $("propertyId").value = id;
+        $("jobId").value = job?.id || "";
+        $("visitTitle").textContent = job ? job.title : `Visit: ${p.name}`;
+        $("visitAddress").textContent = p.address || "";
+        $("jobInstructions").textContent = job?.instructions
+          ? `Instructions: ${job.instructions}`
+          : "";
+        $("visitDate").value = localDate();
+        $("visitCard").classList.remove("hidden");
+        $("visitCard").scrollIntoView({ behavior: "smooth" });
+      };
+      window.startJob = async (id) => {
+        const job = jobs.find((item) => item.id === id);
+        if (!job) return;
+        if (job.status === "assigned") {
+          const { error } = await db
+            .from("care_jobs")
+            .update({
+              status: "in_progress",
+              started_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", id);
+          if (error) return alert(error.message);
+          job.status = "in_progress";
+          renderJobs();
+        }
+        startVisit(job.property_id, job);
+      };
+      function renderReports() {
+        if (!reports.length) {
+          $("reports").innerHTML =
+            '<div class="empty">No reports submitted yet.</div>';
+          return;
+        }
+        $("reports").innerHTML = reports
+          .map(
+            (r) =>
+              `<article class="report"><strong>${esc(r.care_properties?.name || "Property")}</strong><span>${new Date(r.visit_date).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })} · Submitted</span></article>`,
+          )
+          .join("");
+      }
+      async function optimise(file) {
+        const img = await createImageBitmap(file),
+          scale = Math.min(1, 1600 / img.width),
+          canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas
+          .getContext("2d")
+          .drawImage(img, 0, 0, canvas.width, canvas.height);
+        return new Promise((resolve) =>
+          canvas.toBlob(resolve, "image/jpeg", 0.82),
+        );
+      }
+      $("visitForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const b = e.submitter;
+        b.disabled = true;
+        b.textContent = "Submitting…";
+        try {
+          const {
+              data: { user },
+            } = await db.auth.getUser(),
+            check = {};
+          document.querySelectorAll("[data-check]").forEach((s) => {
+            const key = s.dataset.check;
+            check[key] = {
+              status: s.value,
+              notes: document
+                .querySelector(`[data-note="${key}"]`)
+                .value.trim(),
+            };
+          });
+          const { data: v, error } = await db
+            .from("care_visits")
+            .insert({
+              user_id: user.id,
+              property_id: $("propertyId").value,
+              job_id: $("jobId").value || null,
+              visit_date: new Date($("visitDate").value).toISOString(),
+              status: "complete",
+              checklist: check,
+              summary: $("summary").value.trim() || null,
+              urgent_notes: $("urgent").value.trim() || null,
+            })
+            .select()
+            .single();
+          if (error) throw error;
+          for (const file of [...$("photos").files]) {
+            const blob = await optimise(file),
+              path = `${user.id}/${v.id}/${crypto.randomUUID()}.jpg`,
+              up = await db.storage
+                .from("property-care")
+                .upload(path, blob, { contentType: "image/jpeg" });
+            if (up.error) throw up.error;
+            const row = await db
+              .from("care_visit_photos")
+              .insert({ user_id: user.id, visit_id: v.id, storage_path: path });
+            if (row.error) throw row.error;
+          }
+          if ($("jobId").value) {
+            const completed = await db
+              .from("care_jobs")
+              .update({
+                status: "completed",
+                completed_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              })
+              .eq("id", $("jobId").value);
+            if (completed.error) throw completed.error;
+          }
+          notice("visitNotice", "Report submitted successfully.");
+          e.target.reset();
+          $("visitDate").value = localDate();
+          document
+            .querySelectorAll("[data-check]")
+            .forEach((s) => (s.value = "satisfactory"));
+          document
+            .querySelectorAll("[data-note]")
+            .forEach((n) => (n.value = ""));
+          await loadData();
+        } catch (error) {
+          notice(
+            "visitNotice",
+            error.message || "The report could not be submitted.",
+            true,
+          );
+        } finally {
+          b.disabled = false;
+          b.textContent = "Submit visit report";
+        }
+      };
+    </script>
+  </body>
+</html>
