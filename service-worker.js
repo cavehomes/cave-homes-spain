@@ -1,4 +1,4 @@
-const CACHE = "cave-homes-v15",
+const CACHE = "cave-homes-v15-visual-refresh",
   FILES = [
     "/",
     "/index.html",
