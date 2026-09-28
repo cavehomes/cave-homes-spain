@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Personal Property Search | Cave Homes Spain</title>
+    <meta
+      name="description"
+      content="Tell Cave Homes Spain what you are looking for. We use local knowledge and contacts to help search for suitable cave homes and rural property."
+    />
+    <script src="/site-tools.js" defer></script>
+    <style>
+      :root {
+        --green: #183d32;
+        --clay: #b76443;
+        --cream: #f7f2e9;
+        --ink: #24352f;
+        --muted: #6d7772;
+        --line: #ded8cd;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--cream);
+        color: var(--ink);
+        font-family: Arial, sans-serif;
+        line-height: 1.55;
+      }
+      .wrap {
+        width: min(900px, calc(100% - 28px));
+        margin: auto;
+      }
+      header {
+        padding: 14px 0;
+        border-bottom: 1px solid var(--line);
+        background: #fff;
+      }
+      .head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+      .brand img {
+        width: min(290px, 62vw);
+        height: auto;
+      }
+      select,
+      input,
+      textarea {
+        font: inherit;
+      }
+      .language {
+        width: auto;
+        padding: 9px 28px 9px 10px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #fff;
+      }
+      .hero {
+        padding: 46px 0 18px;
+      }
+      .eyebrow {
+        color: var(--clay);
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      h1 {
+        margin: 6px 0 14px;
+        color: var(--green);
+        font:
+          700 clamp(38px, 7vw, 60px) / 1.05 Georgia,
+          serif;
+      }
+      .hero p {
+        max-width: 760px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 18px;
+      }
+      .card {
+        margin: 18px 0 48px;
+        padding: 26px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: #fff;
+      }
+      .card h2 {
+        margin: 0 0 6px;
+        color: var(--green);
+        font:
+          700 28px Georgia,
+          serif;
+      }
+      .card-intro {
+        margin: 0 0 22px;
+        color: var(--muted);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .field {
+        display: grid;
+        gap: 6px;
+      }
+      .full {
+        grid-column: 1 / -1;
+      }
+      label {
+        font-weight: 700;
+      }
+      input,
+      textarea,
+      .field select {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+        color: var(--ink);
+      }
+      textarea {
+        resize: vertical;
+      }
+      .btn {
+        border: 0;
+        border-radius: 999px;
+        padding: 14px 22px;
+        background: var(--clay);
+        color: #fff;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .btn:disabled {
+        opacity: 0.65;
+        cursor: wait;
+      }
+      .status {
+        display: none;
+        margin-top: 14px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        background: #e8f3eb;
+        color: #235235;
+        font-weight: 700;
+      }
+      .status.error {
+        background: #fbe9e5;
+        color: #8b3528;
+      }
+      .privacy {
+        margin: 12px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      @media (max-width: 620px) {
+        .brand img {
+          width: 210px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .full {
+          grid-column: auto;
+        }
+        .hero {
+          padding-top: 34px;
+        }
+        .card {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap head">
+        <a class="brand" href="/" aria-label="Cave Homes Spain home">
+          <img src="/cave-homes-spain-logo.png" alt="Cave Homes Spain" />
+        </a>
+        <select class="language" id="pageLanguage" aria-label="Language">
+          <option value="en">🇬🇧 EN</option>
+          <option value="es">🇪🇸 ES</option>
+          <option value="fr-BE">🇫🇷 FR</option>
+          <option value="de">🇩🇪 DE</option>
+          <option value="nl">🇳🇱 NL</option>
+        </select>
+      </div>
+    </header>
+    <main class="wrap">
+      <section class="hero">
+        <div class="eyebrow" id="eyebrow">Personal property search</div>
+        <h1 id="title">Can’t see what you’re looking for?</h1>
+        <p id="intro">
+          Tell us the area, budget and type of property you would like. Using
+          our local knowledge and contacts, we can help search for suitable
+          opportunities that match your requirements.
+        </p>
+      </section>
+      <section class="card">
+        <h2 id="formTitle">Tell us what you would like</h2>
+        <p class="card-intro" id="formIntro">
+          Give us as much information as you can. Your request will be sent
+          directly to Cave Homes Spain.
+        </p>
+        <form id="propertySearchForm">
+          <div class="grid">
+            <div class="field">
+              <label id="nameLabel" for="name">Your name *</label
+              ><input id="name" name="name" required autocomplete="name" />
+            </div>
+            <div class="field">
+              <label id="emailLabel" for="email">Email *</label
+              ><input
+                id="email"
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+              />
+            </div>
+            <div class="field">
+              <label id="phoneLabel" for="phone">Phone</label
+              ><input id="phone" name="phone" type="tel" autocomplete="tel" />
+            </div>
+            <div class="field">
+              <label id="areasLabel" for="areas"
+                >Preferred towns or areas *</label
+              ><input
+                id="areas"
+                name="areas"
+                required
+                placeholder="For example: Baza, Benamaurel or Huéscar"
+              />
+            </div>
+            <div class="field">
+              <label id="typeLabel" for="propertyType">Property type *</label
+              ><select id="propertyType" name="property_type" required>
+                <option value="">Select</option>
+                <option>Cave Home</option>
+                <option>House</option>
+                <option>Finca</option>
+                <option>Cortijo</option>
+                <option>Apartment</option>
+                <option>Land</option>
+                <option>Any</option>
+              </select>
+            </div>
+            <div class="field">
+              <label id="bedroomsLabel" for="bedrooms">Minimum bedrooms</label
+              ><input id="bedrooms" name="bedrooms" type="number" min="0" />
+            </div>
+            <div class="field">
+              <label id="minBudgetLabel" for="minBudget"
+                >Minimum budget (€)</label
+              ><input
+                id="minBudget"
+                name="minimum_budget"
+                type="number"
+                min="0"
+                step="1000"
+              />
+            </div>
+            <div class="field">
+              <label id="maxBudgetLabel" for="maxBudget"
+                >Maximum budget (€) *</label
+              ><input
+                id="maxBudget"
+                name="maximum_budget"
+                type="number"
+                min="0"
+                step="1000"
+                required
+              />
+            </div>
+            <div class="field full">
+              <label id="requirementsLabel" for="requirements"
+                >Essential requirements</label
+              ><textarea
+                id="requirements"
+                name="requirements"
+                rows="4"
+                placeholder="For example: outside space, ready to live in, renovation project, garage or views"
+              ></textarea>
+            </div>
+            <div class="field full">
+              <label id="notesLabel" for="notes"
+                >Anything else we should know?</label
+              ><textarea id="notes" name="notes" rows="4"></textarea>
+            </div>
+            <div class="field full">
+              <button class="btn" id="submitButton" type="submit">
+                Send my property search
+              </button>
+              <div
+                class="status"
+                id="formStatus"
+                role="status"
+                aria-live="polite"
+              ></div>
+              <p class="privacy" id="privacy">
+                We will only use these details to respond to your property
+                search.
+              </p>
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const db = window.supabase.createClient(
+        "https://lesgzlhvrlxgtfuocadq.supabase.co",
+        "sb_publishable_pPS6fORJPGFcGBIUPcxOxQ_1g4vazyg",
+      );
+      const copy = {
+        en: {
+          eyebrow: "Personal property search",
+          title: "Can’t see what you’re looking for?",
+          intro:
+            "Tell us the area, budget and type of property you would like. Using our local knowledge and contacts, we can help search for suitable opportunities that match your requirements.",
+          formTitle: "Tell us what you would like",
+          formIntro:
+            "Give us as much information as you can. Your request will be sent directly to Cave Homes Spain.",
+          name: "Your name *",
+          email: "Email *",
+          phone: "Phone",
+          areas: "Preferred towns or areas *",
+          type: "Property type *",
+          bedrooms: "Minimum bedrooms",
+          minBudget: "Minimum budget (€)",
+          maxBudget: "Maximum budget (€) *",
+          requirements: "Essential requirements",
+          notes: "Anything else we should know?",
+          send: "Send my property search",
+          sending: "Sending…",
+          success:
+            "Thank you. Your property search has been sent to Cave Homes Spain.",
+          error:
+            "Your request could not be sent. Please try again or email info@cavehomesspain.com.",
+          privacy:
+            "We will only use these details to respond to your property search.",
+        },
+        es: {
+          eyebrow: "Búsqueda personalizada de propiedades",
+          title: "¿No encuentra lo que está buscando?",
+          intro:
+            "Díganos la zona, el presupuesto y el tipo de propiedad que desea. Con nuestro conocimiento y contactos locales, podemos ayudarle a buscar oportunidades adecuadas.",
+          formTitle: "Díganos qué está buscando",
+          formIntro:
+            "Facilite toda la información posible. Su solicitud se enviará directamente a Cave Homes Spain.",
+          name: "Nombre *",
+          email: "Correo electrónico *",
+          phone: "Teléfono",
+          areas: "Pueblos o zonas preferidas *",
+          type: "Tipo de propiedad *",
+          bedrooms: "Dormitorios mínimos",
+          minBudget: "Presupuesto mínimo (€)",
+          maxBudget: "Presupuesto máximo (€) *",
+          requirements: "Requisitos esenciales",
+          notes: "¿Algo más que debamos saber?",
+          send: "Enviar mi búsqueda",
+          sending: "Enviando…",
+          success: "Gracias. Su búsqueda se ha enviado a Cave Homes Spain.",
+          error:
+            "No se pudo enviar la solicitud. Inténtelo de nuevo o escriba a info@cavehomesspain.com.",
+          privacy:
+            "Solo utilizaremos estos datos para responder a su búsqueda.",
+        },
+        "fr-BE": {
+          eyebrow: "Recherche immobilière personnalisée",
+          title: "Vous ne trouvez pas ce que vous cherchez ?",
+          intro:
+            "Indiquez-nous la région, le budget et le type de bien souhaité. Grâce à notre connaissance locale et à nos contacts, nous pouvons rechercher des opportunités adaptées.",
+          formTitle: "Dites-nous ce que vous recherchez",
+          formIntro:
+            "Donnez-nous autant d’informations que possible. Votre demande sera envoyée directement à Cave Homes Spain.",
+          name: "Votre nom *",
+          email: "E-mail *",
+          phone: "Téléphone",
+          areas: "Villes ou régions préférées *",
+          type: "Type de bien *",
+          bedrooms: "Nombre minimum de chambres",
+          minBudget: "Budget minimum (€)",
+          maxBudget: "Budget maximum (€) *",
+          requirements: "Critères essentiels",
+          notes: "Autre chose à nous signaler ?",
+          send: "Envoyer ma recherche",
+          sending: "Envoi…",
+          success: "Merci. Votre recherche a été envoyée à Cave Homes Spain.",
+          error:
+            "Votre demande n’a pas pu être envoyée. Réessayez ou écrivez à info@cavehomesspain.com.",
+          privacy:
+            "Nous utiliserons ces informations uniquement pour répondre à votre recherche.",
+        },
+        de: {
+          eyebrow: "Persönliche Immobiliensuche",
+          title: "Nicht das Richtige gefunden?",
+          intro:
+            "Nennen Sie uns Region, Budget und gewünschte Immobilienart. Mit unserer Ortskenntnis und unseren Kontakten helfen wir bei der Suche nach passenden Möglichkeiten.",
+          formTitle: "Sagen Sie uns, was Sie suchen",
+          formIntro:
+            "Geben Sie uns möglichst viele Informationen. Ihre Anfrage wird direkt an Cave Homes Spain gesendet.",
+          name: "Ihr Name *",
+          email: "E-Mail *",
+          phone: "Telefon",
+          areas: "Bevorzugte Orte oder Regionen *",
+          type: "Immobilienart *",
+          bedrooms: "Mindestanzahl Schlafzimmer",
+          minBudget: "Mindestbudget (€)",
+          maxBudget: "Höchstbudget (€) *",
+          requirements: "Wichtige Anforderungen",
+          notes: "Was sollten wir noch wissen?",
+          send: "Immobiliensuche senden",
+          sending: "Wird gesendet…",
+          success:
+            "Vielen Dank. Ihre Suche wurde an Cave Homes Spain gesendet.",
+          error:
+            "Ihre Anfrage konnte nicht gesendet werden. Versuchen Sie es erneut oder schreiben Sie an info@cavehomesspain.com.",
+          privacy: "Wir verwenden diese Angaben nur für Ihre Immobiliensuche.",
+        },
+        nl: {
+          eyebrow: "Persoonlijke woningzoektocht",
+          title: "Ziet u niet wat u zoekt?",
+          intro:
+            "Vertel ons uw regio, budget en gewenste type woning. Met onze lokale kennis en contacten helpen we zoeken naar passende mogelijkheden.",
+          formTitle: "Vertel ons wat u zoekt",
+          formIntro:
+            "Geef ons zoveel mogelijk informatie. Uw aanvraag wordt rechtstreeks naar Cave Homes Spain gestuurd.",
+          name: "Uw naam *",
+          email: "E-mail *",
+          phone: "Telefoon",
+          areas: "Gewenste plaatsen of regio’s *",
+          type: "Woningtype *",
+          bedrooms: "Minimum aantal slaapkamers",
+          minBudget: "Minimumbudget (€)",
+          maxBudget: "Maximumbudget (€) *",
+          requirements: "Belangrijkste wensen",
+          notes: "Wat moeten we nog weten?",
+          send: "Mijn zoekopdracht versturen",
+          sending: "Versturen…",
+          success:
+            "Bedankt. Uw zoekopdracht is naar Cave Homes Spain verzonden.",
+          error:
+            "Uw aanvraag kon niet worden verzonden. Probeer opnieuw of mail info@cavehomesspain.com.",
+          privacy: "We gebruiken deze gegevens alleen voor uw woningzoektocht.",
+        },
+      };
+      const ids = {
+        eyebrow: "eyebrow",
+        title: "title",
+        intro: "intro",
+        formTitle: "formTitle",
+        formIntro: "formIntro",
+        name: "nameLabel",
+        email: "emailLabel",
+        phone: "phoneLabel",
+        areas: "areasLabel",
+        type: "typeLabel",
+        bedrooms: "bedroomsLabel",
+        minBudget: "minBudgetLabel",
+        maxBudget: "maxBudgetLabel",
+        requirements: "requirementsLabel",
+        notes: "notesLabel",
+        privacy: "privacy",
+      };
+      const supported = ["en", "es", "fr-BE", "de", "nl"];
+      const requested =
+        localStorage.getItem("caveHomesLanguageManual") ||
+        navigator.language ||
+        "en";
+      let activeLanguage = supported.includes(requested)
+        ? requested
+        : requested.startsWith("es")
+          ? "es"
+          : requested.startsWith("fr")
+            ? "fr-BE"
+            : requested.startsWith("de")
+              ? "de"
+              : requested.startsWith("nl")
+                ? "nl"
+                : "en";
+      function setLanguage(lang) {
+        activeLanguage = supported.includes(lang) ? lang : "en";
+        const c = copy[activeLanguage];
+        document.documentElement.lang = activeLanguage;
+        document.getElementById("pageLanguage").value = activeLanguage;
+        Object.entries(ids).forEach(
+          ([key, id]) => (document.getElementById(id).textContent = c[key]),
+        );
+        document.getElementById("submitButton").textContent = c.send;
+      }
+      document
+        .getElementById("pageLanguage")
+        .addEventListener("change", (event) => {
+          localStorage.setItem("caveHomesLanguageManual", event.target.value);
+          setLanguage(event.target.value);
+        });
+      setLanguage(activeLanguage);
+      document
+        .getElementById("propertySearchForm")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const form = event.currentTarget,
+            data = new FormData(form),
+            button = document.getElementById("submitButton"),
+            status = document.getElementById("formStatus"),
+            c = copy[activeLanguage];
+          button.disabled = true;
+          button.textContent = c.sending;
+          status.style.display = "none";
+          status.classList.remove("error");
+          const message = [
+            "Preferred areas: " + data.get("areas"),
+            "Property type: " + data.get("property_type"),
+            "Minimum bedrooms: " + (data.get("bedrooms") || "Not specified"),
+            "Budget: €" +
+              (data.get("minimum_budget") || "0") +
+              " to €" +
+              data.get("maximum_budget"),
+            "Essential requirements: " +
+              (data.get("requirements") || "None specified"),
+            "Other notes: " + (data.get("notes") || "None"),
+          ].join("\n");
+          try {
+            const { error } = await db.from("enquiries").insert({
+              name: String(data.get("name") || ""),
+              email: String(data.get("email") || ""),
+              phone: String(data.get("phone") || ""),
+              subject: "Personal property search",
+              message,
+              property_title: "Property search request",
+              source: "buyer",
+              status: "new",
+            });
+            if (error) throw error;
+            window.chsTrack?.("property_search_submitted", {
+              language: activeLanguage,
+              property_type: String(data.get("property_type") || ""),
+            });
+            form.reset();
+            status.textContent = c.success;
+            status.style.display = "block";
+          } catch (error) {
+            console.error("Property search could not be sent", error);
+            status.textContent = c.error;
+            status.classList.add("error");
+            status.style.display = "block";
+          } finally {
+            button.disabled = false;
+            button.textContent = c.send;
+          }
+        });
+    </script>
+  </body>
+</html>
