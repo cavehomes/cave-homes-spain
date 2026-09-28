@@ -2015,7 +2015,11 @@
           ><button class="tab" data-view="inquiries">
             Enquiries
             <span class="badge-count hidden" id="inquiryCount">0</span></button
-          ><button class="tab" data-view="community">Community</button
+          ><button class="tab" data-view="community">
+            Community
+            <span class="badge-count hidden" id="communityCount"
+              >0</span
+            ></button
           ><button class="tab" data-view="businesses" class="hidden">
             Maintenance businesses</button
           ><button class="tab" data-view="rentals">Holiday Rentals</button
@@ -2999,6 +3003,7 @@
           loadDrafts();
           updateDashboardCounts();
           loadInquiries();
+          loadCommunityPendingCount();
           if (location.hash === "#maintenance-businesses")
             setTimeout(() => switchView("businesses"), 100);
           if (location.hash === "#holiday-rentals")
@@ -3082,6 +3087,25 @@
               .publicUrl
           : "";
       }
+      async function loadCommunityPendingCount() {
+        const { count, error } = await db
+          .from("community_profiles")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "pending");
+        if (error) return;
+        const pending = count || 0,
+          tabBadge = $("communityCount"),
+          homeBadge = $("communityHomeCount");
+        if (tabBadge) {
+          tabBadge.textContent = pending;
+          tabBadge.classList.toggle("hidden", !pending);
+        }
+        if (homeBadge) {
+          homeBadge.textContent = pending
+            ? `${pending} waiting for approval`
+            : "Manage members and posts";
+        }
+      }
       async function loadCommunityModeration() {
         const memberList = $("communityMemberList"),
           postList = $("communityPostList"),
@@ -3153,6 +3177,7 @@
               )
               .join("")
           : '<div class="empty">No new reports.</div>';
+        loadCommunityPendingCount();
       }
       window.moderateCommunity = async (table, id, status) => {
         const { error } = await db.from(table).update({ status }).eq("id", id);
@@ -5810,10 +5835,11 @@
             "afterbegin",
             '<button class="tab active" data-view="home">Home</button>',
           );
-          const home = `<section id="homeView"><div class="stats dashboard-actions"><button class="stat stat-button action-stat" type="button" onclick="switchView(\'add\')"><strong>＋</strong><span>Add property</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'care\')"><strong>✓</strong><span>Property Care</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyer\')"><strong>🤝</strong><span>Buyer Assistance</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'inquiries\')"><strong>✉</strong><span>Enquiries</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'community\')"><strong>◉</strong><span>Community</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'rentals\')"><strong>⌂</strong><span>Holiday rentals</span></button><a class="stat stat-button action-stat" href="/rent.html" target="_blank"><strong>↗</strong><span>Homes to Rent</span></a></div></section>`;
+          const home = `<section id="homeView"><div class="stats dashboard-actions"><button class="stat stat-button action-stat" type="button" onclick="switchView(\'add\')"><strong>＋</strong><span>Add property</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'care\')"><strong>✓</strong><span>Property Care</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyer\')"><strong>🤝</strong><span>Buyer Assistance</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'inquiries\')"><strong>✉</strong><span>Enquiries</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'community\')"><strong>◉</strong><span>Community</span><small id="communityHomeCount">Manage members and posts</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'rentals\')"><strong>⌂</strong><span>Holiday rentals</span></button><a class="stat stat-button action-stat" href="/rent.html" target="_blank"><strong>↗</strong><span>Homes to Rent</span></a></div></section>`;
           document
             .querySelector("#addView")
             .insertAdjacentHTML("beforebegin", home);
+          loadCommunityPendingCount();
           [
             "addView",
             "careView",
