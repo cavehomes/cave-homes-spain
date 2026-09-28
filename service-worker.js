@@ -1,7 +1,8 @@
-const CACHE = "cave-homes-v15-careful-property-search",
+const CACHE = "cave-homes-v15-community-moderation",
   FILES = [
     "/",
     "/index.html",
+    "/community.html",
     "/property-search.html",
     "/admin.html",
     "/property-care-staff.html",
