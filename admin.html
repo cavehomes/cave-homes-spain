@@ -3149,7 +3149,7 @@
           ? members
               .map(
                 (member) =>
-                  `<article class="community-review-card"><h3>${communityEscape(member.display_name)}</h3><small>${communityEscape(member.town || "No town supplied")} · ${communityEscape(member.status)}</small><div class="community-review-actions">${member.status !== "approved" ? `<button class="btn green" type="button" onclick="moderateCommunity('community_profiles','${member.id}','approved')">Approve</button>` : ""}${member.status !== "blocked" ? `<button class="btn danger" type="button" onclick="moderateCommunity('community_profiles','${member.id}','blocked')">Block</button>` : ""}</div></article>`,
+                  `<article class="community-review-card"><h3>${communityEscape(member.display_name)}</h3><small>${communityEscape(member.town || "No town supplied")} · ${communityEscape(member.status)}</small><div class="community-review-actions">${member.status === "pending" ? `<button class="btn green" type="button" onclick="moderateCommunity('community_profiles','${member.id}','approved')">Approve</button>` : ""}${member.status === "blocked" ? `<button class="btn green" type="button" onclick="moderateCommunity('community_profiles','${member.id}','approved')">Unblock</button>` : ""}${member.status !== "blocked" ? `<button class="btn danger" type="button" onclick="moderateCommunity('community_profiles','${member.id}','blocked')">Block</button>` : ""}</div></article>`,
               )
               .join("")
           : '<div class="empty">No community members yet.</div>';
@@ -3180,9 +3180,24 @@
         loadCommunityPendingCount();
       }
       window.moderateCommunity = async (table, id, status) => {
-        const { error } = await db.from(table).update({ status }).eq("id", id);
+        const { data, error } = await db
+          .from(table)
+          .update({ status })
+          .eq("id", id)
+          .select("id,status")
+          .maybeSingle();
         if (error)
           return alert("Could not update the community item: " + error.message);
+        if (!data)
+          return alert(
+            "The member was not changed. Please sign out and back into the Owners app, then try again.",
+          );
+        if (table === "community_profiles")
+          alert(
+            status === "blocked"
+              ? "Member blocked."
+              : "Member approved and unblocked.",
+          );
         loadCommunityModeration();
       };
       async function ensureOwnerCommunityProfile() {

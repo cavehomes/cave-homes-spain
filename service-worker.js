@@ -1,4 +1,4 @@
-const CACHE = "cave-homes-v15-owner-community-controls",
+const CACHE = "cave-homes-v15-community-unblock-fix",
   FILES = [
     "/",
     "/index.html",
