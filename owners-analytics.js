@@ -1,31 +1,16 @@
 (function () {
   "use strict";
 
-  function setupOwnersAnalyticsDashboard() {
+  function setupWebsiteAnalyticsDashboard() {
     const db = window.CHSOwnerDb;
     const homeActions = document.querySelector("#homeView .dashboard-actions");
     const addView = document.getElementById("addView");
     if (!db || !homeActions || !addView || document.getElementById("analyticsView")) return;
 
-    const recordEvent = function (eventName, sectionName) {
-      const row = {
-        event_name: eventName,
-        section_name: sectionName ? String(sectionName).slice(0, 80) : null,
-      };
-      db.from("owner_app_events").insert(row).then(function () {});
-      if (typeof window.chsTrack === "function") {
-        window.chsTrack(eventName, {
-          app_name: "owners_app",
-          section_name: row.section_name || undefined,
-        });
-      }
-    };
-    window.recordOwnerEvent = recordEvent;
-
     const analyticsButton = document.createElement("button");
     analyticsButton.className = "stat stat-button action-stat";
     analyticsButton.type = "button";
-    analyticsButton.innerHTML = "<strong>▥</strong><span>Analytics</span>";
+    analyticsButton.innerHTML = "<strong>▥</strong><span>Website Analytics</span>";
     analyticsButton.addEventListener("click", function () {
       window.switchView("analytics");
     });
@@ -39,64 +24,29 @@
     analyticsView.className = "card hidden";
     analyticsView.innerHTML =
       '<button class="section-home" type="button" id="analyticsBack">← Back to Home</button>' +
-      "<h2>Owners App Analytics</h2>" +
-      '<p class="form-intro">Private activity from this app. Names, messages and property details are never recorded.</p>' +
+      "<h2>Website Analytics</h2>" +
+      '<p class="form-intro">What visitors are viewing on the public Cave Homes Spain website. Your activity inside this Owners app is not counted here.</p>' +
       '<div class="stats">' +
-      '<div class="stat"><strong id="analyticsToday">0</strong><span>Opens today</span></div>' +
-      '<div class="stat"><strong id="analyticsWeek">0</strong><span>Opens 7 days</span></div>' +
-      '<div class="stat"><strong id="analyticsMonth">0</strong><span>Opens 30 days</span></div>' +
-      '<div class="stat"><strong id="analyticsErrors">0</strong><span>Errors 30 days</span></div>' +
-      "</div><h3>Most-used areas</h3>" +
-      '<div id="analyticsSections" class="drafts"><div class="empty">Activity will appear here as you use the app.</div></div>';
+      '<div class="stat"><strong id="websiteViewsToday">0</strong><span>Views today</span></div>' +
+      '<div class="stat"><strong id="websiteVisitorsWeek">0</strong><span>Visitors 7 days</span></div>' +
+      '<div class="stat"><strong id="websiteViewsMonth">0</strong><span>Views 30 days</span></div>' +
+      '<div class="stat"><strong id="websiteEnquiriesMonth">0</strong><span>Enquiries 30 days</span></div>' +
+      "</div><h3>Most-viewed pages</h3>" +
+      '<div id="websiteTopPages" class="drafts"><div class="empty">Visitor activity will appear here.</div></div>' +
+      '<h3 style="margin-top:22px">Devices</h3>' +
+      '<div id="websiteDevices" class="drafts"><div class="empty">Device activity will appear here.</div></div>';
     addView.insertAdjacentElement("beforebegin", analyticsView);
     document.getElementById("analyticsBack").addEventListener("click", function () {
       window.switchView("home");
     });
 
-    async function loadAnalytics() {
-      const sectionList = document.getElementById("analyticsSections");
-      const monthAgo = new Date(Date.now() - 30 * 86400000).toISOString();
-      const result = await db
-        .from("owner_app_events")
-        .select("event_name,section_name,created_at")
-        .gte("created_at", monthAgo)
-        .order("created_at", { ascending: false });
-      if (result.error) {
-        sectionList.innerHTML = '<div class="empty">Analytics are temporarily unavailable.</div>';
-        return;
-      }
-      const events = result.data || [];
-      const now = Date.now();
-      const opens = events.filter(function (item) {
-        return item.event_name === "owners_app_open";
-      });
-      const countSince = function (days) {
-        return opens.filter(function (item) {
-          return now - new Date(item.created_at).getTime() < days * 86400000;
-        }).length;
-      };
-      document.getElementById("analyticsToday").textContent = countSince(1);
-      document.getElementById("analyticsWeek").textContent = countSince(7);
-      document.getElementById("analyticsMonth").textContent = opens.length;
-      document.getElementById("analyticsErrors").textContent = events.filter(function (item) {
-        return item.event_name === "owners_app_error";
-      }).length;
-
-      const counts = {};
-      events.forEach(function (item) {
-        if (item.event_name === "owners_section_view" && item.section_name) {
-          counts[item.section_name] = (counts[item.section_name] || 0) + 1;
-        }
-      });
-      const rows = Object.entries(counts).sort(function (a, b) {
-        return b[1] - a[1];
-      });
-      sectionList.textContent = "";
+    function renderRows(target, rows, emptyText) {
+      target.textContent = "";
       if (!rows.length) {
         const empty = document.createElement("div");
         empty.className = "empty";
-        empty.textContent = "Activity will appear here as you use the app.";
-        sectionList.appendChild(empty);
+        empty.textContent = emptyText;
+        target.appendChild(empty);
         return;
       }
       rows.forEach(function (row) {
@@ -107,38 +57,111 @@
         const head = document.createElement("div");
         head.className = "home-head";
         const title = document.createElement("h3");
-        title.textContent = row[0].charAt(0).toUpperCase() + row[0].slice(1);
+        title.textContent = row[0];
         const count = document.createElement("span");
         count.className = "photo-badge";
-        count.textContent = row[1] + " visits";
+        count.textContent = row[1] + (row[1] === 1 ? " view" : " views");
         head.append(title, count);
         body.appendChild(head);
         card.appendChild(body);
-        sectionList.appendChild(card);
+        target.appendChild(card);
       });
+    }
+
+    async function loadWebsiteAnalytics() {
+      const monthAgo = new Date(Date.now() - 30 * 86400000).toISOString();
+      const results = await Promise.all([
+        db
+          .from("website_events")
+          .select("session_id,page_path,page_title,device_type,created_at")
+          .gte("created_at", monthAgo)
+          .order("created_at", { ascending: false }),
+        db
+          .from("enquiries")
+          .select("id,created_at")
+          .gte("created_at", monthAgo),
+      ]);
+      const websiteResult = results[0];
+      const enquiryResult = results[1];
+      if (websiteResult.error) {
+        document.getElementById("websiteTopPages").innerHTML =
+          '<div class="empty">Website analytics are temporarily unavailable.</div>';
+        return;
+      }
+
+      const events = websiteResult.data || [];
+      const now = Date.now();
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      document.getElementById("websiteViewsToday").textContent = events.filter(function (item) {
+        return new Date(item.created_at).getTime() >= todayStart.getTime();
+      }).length;
+      const weekSessions = new Set(
+        events
+          .filter(function (item) {
+            return now - new Date(item.created_at).getTime() < 7 * 86400000;
+          })
+          .map(function (item) {
+            return item.session_id;
+          }),
+      );
+      document.getElementById("websiteVisitorsWeek").textContent = weekSessions.size;
+      document.getElementById("websiteViewsMonth").textContent = events.length;
+      document.getElementById("websiteEnquiriesMonth").textContent = enquiryResult.error
+        ? "—"
+        : (enquiryResult.data || []).length;
+
+      const pageCounts = {};
+      const pageLabels = {};
+      events.forEach(function (item) {
+        const path = item.page_path || "/";
+        pageCounts[path] = (pageCounts[path] || 0) + 1;
+        if (!pageLabels[path]) pageLabels[path] = item.page_title || path;
+      });
+      const topPages = Object.entries(pageCounts)
+        .sort(function (a, b) {
+          return b[1] - a[1];
+        })
+        .slice(0, 10)
+        .map(function (row) {
+          return [pageLabels[row[0]], row[1]];
+        });
+      renderRows(
+        document.getElementById("websiteTopPages"),
+        topPages,
+        "Visitor activity will appear here as people use the website.",
+      );
+
+      const deviceCounts = {};
+      events.forEach(function (item) {
+        const device = item.device_type || "unknown";
+        deviceCounts[device] = (deviceCounts[device] || 0) + 1;
+      });
+      const devices = Object.entries(deviceCounts)
+        .sort(function (a, b) {
+          return b[1] - a[1];
+        })
+        .map(function (row) {
+          return [row[0].charAt(0).toUpperCase() + row[0].slice(1), row[1]];
+        });
+      renderRows(
+        document.getElementById("websiteDevices"),
+        devices,
+        "Device activity will appear here as people use the website.",
+      );
     }
 
     const originalSwitchView = window.switchView;
     window.switchView = function (view) {
       originalSwitchView(view);
       analyticsView.classList.toggle("hidden", view !== "analytics");
-      if (view === "analytics") loadAnalytics();
-      if (view !== "home") recordEvent("owners_section_view", view);
+      if (view === "analytics") loadWebsiteAnalytics();
     };
-
-    db.auth.getSession().then(function (result) {
-      if (result.data && result.data.session) recordEvent("owners_app_open");
-    });
-    document.addEventListener("submit", function (event) {
-      if (event.target && event.target.id) {
-        recordEvent("owners_form_submit", event.target.id);
-      }
-    });
   }
 
   try {
-    setupOwnersAnalyticsDashboard();
+    setupWebsiteAnalyticsDashboard();
   } catch (error) {
-    console.warn("Owners analytics dashboard unavailable", error);
+    console.warn("Website analytics dashboard unavailable", error);
   }
 })();
