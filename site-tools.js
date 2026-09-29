@@ -88,3 +88,37 @@
     .then(r=>{if(!r.ok)throw new Error();return r.json()}).then(data=>{const current=data.current||{},daily=data.daily||{},temp=Math.round(current.temperature_2m),high=Math.round((daily.temperature_2m_max||[])[0]),low=Math.round((daily.temperature_2m_min||[])[0]),condition=code[current.weather_code]||'Current conditions';box.querySelector('.chs-weather-now').innerHTML=temp+'°C <small>'+condition+' · High '+high+'° · Low '+low+'°</small>'})
     .catch(()=>{box.querySelector('.chs-weather-now').innerHTML='<small>Forecast temporarily unavailable</small>'});
 })();
+
+
+/* Compact homepage weather. Loads after the main content and caches for 30 minutes. */
+(function(){
+  const file=location.pathname.split('/').pop()||'index.html';
+  if(file!=='index.html')return;
+  const hero=document.querySelector('main .hero');
+  if(!hero)return;
+  const style=document.createElement('style');
+  style.textContent='.chs-home-weather{display:flex;align-items:center;justify-content:center;gap:9px;width:min(720px,calc(100% - 28px));min-height:46px;margin:12px auto;padding:10px 16px;border:1px solid #d7cdbf;border-radius:999px;background:#fff;color:#214b3a;box-shadow:0 5px 16px rgba(31,48,40,.07);font-size:.94rem}.chs-home-weather strong{font-family:Georgia,serif}.chs-home-weather-temp{color:#ad5535;font-size:1.08rem;font-weight:900}.chs-home-weather-detail{color:#5f6963;font-weight:700}@media(max-width:560px){.chs-home-weather{justify-content:flex-start;gap:7px;overflow:hidden;white-space:nowrap;font-size:.82rem}.chs-home-weather-detail{overflow:hidden;text-overflow:ellipsis}.chs-home-weather-temp{font-size:.98rem}}';
+  document.head.appendChild(style);
+  const bar=document.createElement('aside');
+  bar.className='chs-home-weather';
+  bar.setAttribute('aria-label','Current weather in Baza');
+  bar.innerHTML='<span aria-hidden="true">☀️</span><strong>Baza today</strong><span class="chs-home-weather-temp">Loading…</span><span class="chs-home-weather-detail"></span>';
+  hero.insertAdjacentElement('afterend',bar);
+  const conditions={0:'Clear',1:'Mainly clear',2:'Partly cloudy',3:'Cloudy',45:'Fog',48:'Fog',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',73:'Snow',75:'Heavy snow',80:'Rain showers',81:'Rain showers',82:'Heavy showers',95:'Thunderstorms'};
+  const render=data=>{
+    const current=data.current||{},daily=data.daily||{};
+    bar.querySelector('.chs-home-weather-temp').textContent=Math.round(current.temperature_2m)+'°C';
+    bar.querySelector('.chs-home-weather-detail').textContent=(conditions[current.weather_code]||'Current conditions')+' · High '+Math.round((daily.temperature_2m_max||[])[0])+'° · Low '+Math.round((daily.temperature_2m_min||[])[0])+'°';
+  };
+  const start=()=>{
+    try{
+      const cached=JSON.parse(sessionStorage.getItem('chsBazaWeatherV1')||'null');
+      if(cached&&Date.now()-cached.saved<1800000){render(cached.data);return}
+    }catch(_){}
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=37.4907&longitude=-2.7726&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=Europe%2FMadrid&forecast_days=1')
+      .then(response=>{if(!response.ok)throw new Error();return response.json()})
+      .then(data=>{try{sessionStorage.setItem('chsBazaWeatherV1',JSON.stringify({saved:Date.now(),data}))}catch(_){}render(data)})
+      .catch(()=>{bar.querySelector('.chs-home-weather-temp').textContent='—';bar.querySelector('.chs-home-weather-detail').textContent='Forecast unavailable'});
+  };
+  if('requestIdleCallback' in window)requestIdleCallback(start,{timeout:1800});else setTimeout(start,300);
+})();
