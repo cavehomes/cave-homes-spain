@@ -3011,6 +3011,7 @@
       const SUPABASE_URL = "https://lesgzlhvrlxgtfuocadq.supabase.co",
         SUPABASE_KEY = "sb_publishable_pPS6fORJPGFcGBIUPcxOxQ_1g4vazyg";
       const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      window.CHSOwnerDb = db;
       let homes = [];
       const $ = (id) => document.getElementById(id),
         showNotice = (id, text, error = false) => {
@@ -5954,5 +5955,6 @@
       if ("serviceWorker" in navigator)
         navigator.serviceWorker.register("/service-worker.js");
     </script>
+    <script src="/owners-analytics.js"></script>
   </body>
 </html>
