@@ -97,7 +97,7 @@
   const hero=document.querySelector('main .hero');
   if(!hero)return;
   const style=document.createElement('style');
-  style.textContent='.chs-home-weather{order:2;display:flex;align-items:center;justify-content:center;gap:9px;width:min(720px,calc(100% - 28px));min-height:46px;margin:12px auto;padding:10px 16px;border:1px solid #d7cdbf;border-radius:999px;background:#fff;color:#214b3a;box-shadow:0 5px 16px rgba(31,48,40,.07);font-size:.94rem}.chs-home-weather strong{font-family:Georgia,serif}.chs-home-weather-temp{color:#ad5535;font-size:1.08rem;font-weight:900}.chs-home-weather-detail{color:#5f6963;font-weight:700}@media(max-width:560px){.chs-home-weather{display:grid;grid-template-columns:auto auto auto;grid-template-areas:"icon title temp" "detail detail detail";justify-content:center;column-gap:7px;row-gap:3px;width:calc(100% - 56px);min-height:58px;margin:14px auto 22px;padding:9px 14px;border-radius:16px;white-space:normal;font-size:.86rem}.chs-home-weather>span:first-child{grid-area:icon;font-size:1.2rem}.chs-home-weather strong{grid-area:title;white-space:nowrap}.chs-home-weather-temp{grid-area:temp;font-size:1rem;white-space:nowrap}.chs-home-weather-detail{grid-area:detail;min-width:0;text-align:center;white-space:nowrap;font-size:.75rem;line-height:1.2}}';
+  style.textContent='.chs-home-weather{order:2;display:flex;align-items:center;justify-content:center;gap:9px;width:min(720px,calc(100% - 28px));min-height:46px;margin:12px auto;padding:10px 16px;border:1px solid #d7cdbf;border-radius:999px;background:#fff;color:#214b3a;box-shadow:0 5px 16px rgba(31,48,40,.07);font-size:.94rem}.chs-home-weather strong{font-family:Georgia,serif}.chs-home-weather-temp{color:#ad5535;font-size:1.08rem;font-weight:900}.chs-home-weather-detail{color:#5f6963;font-weight:700}@media(max-width:560px){.chs-home-weather{display:grid;grid-template-columns:auto auto auto;grid-template-areas:"icon title temp" "detail detail detail";justify-content:center;column-gap:7px;row-gap:3px;width:calc(100% - 56px);min-height:58px;margin:14px auto 22px;padding:9px 14px;border-radius:16px;white-space:normal;font-size:.86rem}.chs-home-weather>span:first-child{grid-area:icon;font-size:1.2rem}.chs-home-weather strong{grid-area:title;white-space:nowrap}.chs-home-weather-temp{grid-area:temp;font-size:1rem;white-space:nowrap}.chs-home-weather-detail{grid-area:detail;min-width:0;text-align:center;white-space:nowrap;font-size:.75rem;line-height:1.2}#propertySearch{display:none!important}}';
   document.head.appendChild(style);
   const bar=document.createElement('aside');
   bar.className='chs-home-weather';
@@ -108,7 +108,8 @@
   const render=data=>{
     const current=data.current||{},daily=data.daily||{};
     bar.querySelector('.chs-home-weather-temp').textContent=Math.round(current.temperature_2m)+'°C';
-    const condition=conditions[current.weather_code]||'Current conditions',high=Math.round((daily.temperature_2m_max||[])[0]),low=Math.round((daily.temperature_2m_min||[])[0]);\n    bar.querySelector('.chs-home-weather-detail').textContent=window.matchMedia('(max-width:560px)').matches?condition+' · '+high+'° / '+low+'°':condition+' · High '+high+'° · Low '+low+'°';
+    const condition=conditions[current.weather_code]||'Current conditions',high=Math.round((daily.temperature_2m_max||[])[0]),low=Math.round((daily.temperature_2m_min||[])[0]);
+    bar.querySelector('.chs-home-weather-detail').textContent=window.matchMedia('(max-width:560px)').matches?condition+' · '+high+'° / '+low+'°':condition+' · High '+high+'° · Low '+low+'°';
   };
   const start=()=>{
     try{
