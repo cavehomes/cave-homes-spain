@@ -1,17 +1,47 @@
 (function(){
   const measurementId='G-E1EN0E3688';
   const hasConsent=()=>localStorage.getItem('caveHomesAnalyticsConsent')==='accepted';
+  function recordWebsitePageView(){
+    if(window.__websitePageViewRecorded||location.pathname==='/admin.html'||location.pathname==='/property-care-staff.html')return;
+    window.__websitePageViewRecorded=true;
+    let sessionId=sessionStorage.getItem('chsWebsiteSession');
+    if(!sessionId){sessionId=crypto.randomUUID();sessionStorage.setItem('chsWebsiteSession',sessionId)}
+    let referrerHost=null;
+    try{referrerHost=document.referrer?new URL(document.referrer).hostname:null}catch(_){}
+    const width=Math.max(window.innerWidth||0,screen.width||0);
+    const deviceType=width<600?'mobile':width<1000?'tablet':'desktop';
+    fetch('https://lesgzlhvrlxgtfuocadq.supabase.co/rest/v1/website_events',{
+      method:'POST',
+      headers:{
+        apikey:'sb_publishable_pPS6fORJPGFcGBIUPcxOxQ_1g4vazyg',
+        'Content-Type':'application/json',
+        Prefer:'return=minimal'
+      },
+      body:JSON.stringify({
+        event_name:'page_view',
+        session_id:sessionId,
+        page_path:location.pathname.slice(0,180),
+        page_title:document.title.slice(0,160)||null,
+        device_type:deviceType,
+        referrer_host:referrerHost?referrerHost.slice(0,120):null
+      }),
+      keepalive:true
+    }).catch(()=>{});
+  }
   function enable(){
     if(!hasConsent())return false;
-    if(typeof window.enableAnalytics==='function'){window.enableAnalytics();return true;}
-    window.dataLayer=window.dataLayer||[];
-    window.gtag=window.gtag||function(){window.dataLayer.push(arguments)};
-    if(!window.__analyticsLoaded){
-      window.__analyticsLoaded=true;
-      const script=document.createElement('script');
-      script.async=true;script.src='https://www.googletagmanager.com/gtag/js?id='+measurementId;
-      document.head.appendChild(script);window.gtag('js',new Date());window.gtag('config',measurementId);
+    if(typeof window.enableAnalytics==='function')window.enableAnalytics();
+    else{
+      window.dataLayer=window.dataLayer||[];
+      window.gtag=window.gtag||function(){window.dataLayer.push(arguments)};
+      if(!window.__analyticsLoaded){
+        window.__analyticsLoaded=true;
+        const script=document.createElement('script');
+        script.async=true;script.src='https://www.googletagmanager.com/gtag/js?id='+measurementId;
+        document.head.appendChild(script);window.gtag('js',new Date());window.gtag('config',measurementId);
+      }
     }
+    recordWebsitePageView();
     return true;
   }
   window.chsTrack=function(eventName,parameters){if(enable())window.gtag('event',eventName,parameters||{})};
