@@ -3025,10 +3025,6 @@
         $("loginView").classList.toggle("hidden", !!session);
         $("appView").classList.toggle("hidden", !session);
         if (session) {
-          if (!window.__ownerOpenRecorded) {
-            window.__ownerOpenRecorded = true;
-            window.recordOwnerEvent?.("owners_app_open");
-          }
           window.CaveHomesNotifications?.login(session.user.id);
           window.CaveHomesNotifications?.addEmail(session.user.email);
           window.CaveHomesNotifications?.addTag("app", "cave-homes-owner");
@@ -3091,9 +3087,6 @@
         $("businessesView").classList.toggle("hidden", view !== "businesses");
         $("rentalsView").classList.toggle("hidden", view !== "rentals");
         $("communityView").classList.toggle("hidden", view !== "community");
-        $("analyticsView")?.classList.toggle("hidden", view !== "analytics");
-        window.recordOwnerEvent?.("owners_section_view", view);
-        if (view === "analytics") loadOwnerAnalytics();
         if (view === "care") loadCareData();
         if (view === "drafts") loadDrafts();
         if (view === "live") loadLiveHomes();
@@ -5885,24 +5878,10 @@
             "afterbegin",
             '<button class="tab active" data-view="home">Home</button>',
           );
-          const home = `<section id="homeView"><div class="stats dashboard-actions"><button class="stat stat-button action-stat" type="button" onclick="switchView(\'add\')"><strong>＋</strong><span>Add property</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'care\')"><strong>✓</strong><span>Property Care</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyer\')"><strong>🤝</strong><span>Buyer Assistance</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'inquiries\')"><strong>✉</strong><span>Enquiries</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'community\')"><strong>◉</strong><span>Community</span><small id="communityHomeCount">Manage members and posts</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'analytics\')"><strong>▥</strong><span>Analytics</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'rentals\')"><strong>⌂</strong><span>Holiday rentals</span></button><a class="stat stat-button action-stat" href="/rent.html" target="_blank"><strong>↗</strong><span>Homes to Rent</span></a></div></section>`;
+          const home = `<section id="homeView"><div class="stats dashboard-actions"><button class="stat stat-button action-stat" type="button" onclick="switchView(\'add\')"><strong>＋</strong><span>Add property</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'care\')"><strong>✓</strong><span>Property Care</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyer\')"><strong>🤝</strong><span>Buyer Assistance</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'inquiries\')"><strong>✉</strong><span>Enquiries</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'community\')"><strong>◉</strong><span>Community</span><small id="communityHomeCount">Manage members and posts</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'rentals\')"><strong>⌂</strong><span>Holiday rentals</span></button><a class="stat stat-button action-stat" href="/rent.html" target="_blank"><strong>↗</strong><span>Homes to Rent</span></a></div></section>`;
           document
             .querySelector("#addView")
             .insertAdjacentHTML("beforebegin", home);
-          const analyticsView = document.createElement("section");
-          analyticsView.id = "analyticsView";
-          analyticsView.className = "card hidden";
-          analyticsView.innerHTML = \
-            '<button class="section-home" type="button" onclick="switchView(\\'home\\')">← Back to Home</button>' +
-            '<h2>Owners App Analytics</h2>' +
-            '<p class="form-intro">Private activity from this app. Names, messages and property details are never recorded.</p>' +
-            '<div class="stats">' +
-            '<div class="stat"><strong id="analyticsToday">0</strong><span>Opens today</span></div>' +
-            '<div class="stat"><strong id="analyticsWeek">0</strong><span>Opens 7 days</span></div>' +
-            '<div class="stat"><strong id="analyticsMonth">0</strong><span>Opens 30 days</span></div>' +
-            '<div class="stat"><strong id="analyticsErrors">0</strong><span>Errors 30 days</span></div>' +
-            '</div><h3>Most-used areas</h3><div id="analyticsSections" class="drafts"><div class="empty">Activity will appear here as you use the app.</div></div>';
-          document.querySelector("#addView").insertAdjacentElement("beforebegin", analyticsView);
           loadCommunityPendingCount();
           [
             "addView",
@@ -5915,7 +5894,6 @@
             "businessesView",
             "rentalsView",
             "communityView",
-            "analyticsView",
           ].forEach((id) => {
             const section = $(id);
             if (section && !section.querySelector(".section-home"))
@@ -5941,84 +5919,35 @@
       }
       setupOwnersV7();
       setupOwnersV8();
-      async function loadOwnerAnalytics() {
-        const monthAgo = new Date(Date.now() - 30 * 86400000).toISOString();
-        const { data, error } = await db
-          .from("owner_app_events")
-          .select("event_name,section_name,created_at")
-          .gte("created_at", monthAgo)
-          .order("created_at", { ascending: false });
-        if (error) {
-          $("analyticsSections").innerHTML =
-            '<div class="empty">Analytics are temporarily unavailable.</div>';
-          return;
-        }
-        const events = data || [],
-          now = Date.now(),
-          opens = events.filter((item) => item.event_name === "owners_app_open"),
-          countSince = (days) =>
-            opens.filter(
-              (item) => now - new Date(item.created_at).getTime() < days * 86400000,
-            ).length;
-        $("analyticsToday").textContent = countSince(1);
-        $("analyticsWeek").textContent = countSince(7);
-        $("analyticsMonth").textContent = opens.length;
-        $("analyticsErrors").textContent = events.filter(
-          (item) => item.event_name === "owners_app_error",
-        ).length;
-        const sectionCounts = {};
-        events
-          .filter((item) => item.event_name === "owners_section_view" && item.section_name)
-          .forEach((item) => {
-            sectionCounts[item.section_name] =
-              (sectionCounts[item.section_name] || 0) + 1;
-          });
-        const sections = Object.entries(sectionCounts).sort((a, b) => b[1] - a[1]);
-        $("analyticsSections").innerHTML = sections.length
-          ? sections
-              .map(
-                ([name, count]) =>
-                  '<div class="home"><div class="home-body"><div class="home-head"><h3>' +
-                  esc(name.charAt(0).toUpperCase() + name.slice(1)) +
-                  '</h3><span class="photo-badge">' +
-                  count +
-                  ' visits</span></div></div></div>',
-              )
-              .join("")
-          : '<div class="empty">Activity will appear here as you use the app.</div>';
-      }
-
       (function setupOwnersAnalytics() {
-        window.recordOwnerEvent = (eventName, sectionName = null) => {
-          db.from("owner_app_events")
-            .insert({
-              event_name: eventName,
-              section_name: sectionName ? String(sectionName).slice(0, 80) : null,
-            })
-            .then(() => {});
+        const track = (eventName, details = {}) => {
           if (typeof window.chsTrack === "function")
             window.chsTrack(eventName, {
               app_name: "owners_app",
-              ...(sectionName ? { section_name: String(sectionName).slice(0, 80) } : {}),
+              ...details,
             });
         };
         document.addEventListener("click", (event) => {
+          const tab = event.target.closest("[data-view]");
+          if (tab?.dataset.view)
+            track("owners_section_view", { section_name: tab.dataset.view });
+
           const control = event.target.closest("button, a");
-          if (!control) return;
+          if (!control || tab) return;
           const inlineAction =
             (control.getAttribute("onclick") || "").match(/^([A-Za-z0-9_]+)/)?.[1] ||
             "";
           const actionName = control.id || inlineAction;
-          if (actionName && actionName !== "switchView")
-            window.recordOwnerEvent("owners_action", actionName);
+          if (actionName)
+            track("owners_action", { action_name: actionName.slice(0, 80) });
         });
         document.addEventListener("submit", (event) => {
           const formName = event.target?.id;
           if (formName)
-            window.recordOwnerEvent("owners_form_submit", formName);
+            track("owners_form_submit", { form_name: formName.slice(0, 80) });
         });
         window.addEventListener("error", () =>
-          window.recordOwnerEvent("owners_app_error", "script_error"),
+          track("owners_app_error", { error_type: "script_error" }),
         );
       })();
 
