@@ -12,6 +12,34 @@
       defer
     ></script>
     <script src="/onesignal-service.js" defer></script>
+    <!-- Privacy-safe analytics: loads only after analytics consent -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      function enableAnalytics() {
+        if (window.__analyticsLoaded) return;
+        window.__analyticsLoaded = true;
+        const analyticsScript = document.createElement("script");
+        analyticsScript.async = true;
+        analyticsScript.src =
+          "https://www.googletagmanager.com/gtag/js?id=G-E1EN0E3688";
+        document.head.appendChild(analyticsScript);
+        gtag("js", new Date());
+        gtag("config", "G-E1EN0E3688", {
+          send_page_view: false,
+          app_name: "owners_app",
+        });
+        gtag("event", "page_view", {
+          page_title: "CHS Owners App",
+          page_path: "/admin.html",
+          app_name: "owners_app",
+        });
+        gtag("event", "owners_app_open", { app_name: "owners_app" });
+      }
+    </script>
+    <script src="/site-tools.js" defer></script>
     <title>Cave Homes Spain | Owners App</title>
     <meta name="robots" content="noindex,nofollow" />
     <link rel="manifest" href="/owners-manifest.webmanifest" />
@@ -5891,6 +5919,38 @@
       }
       setupOwnersV7();
       setupOwnersV8();
+      (function setupOwnersAnalytics() {
+        const track = (eventName, details = {}) => {
+          if (typeof window.chsTrack === "function")
+            window.chsTrack(eventName, {
+              app_name: "owners_app",
+              ...details,
+            });
+        };
+        document.addEventListener("click", (event) => {
+          const tab = event.target.closest("[data-view]");
+          if (tab?.dataset.view)
+            track("owners_section_view", { section_name: tab.dataset.view });
+
+          const control = event.target.closest("button, a");
+          if (!control || tab) return;
+          const inlineAction =
+            (control.getAttribute("onclick") || "").match(/^([A-Za-z0-9_]+)/)?.[1] ||
+            "";
+          const actionName = control.id || inlineAction;
+          if (actionName)
+            track("owners_action", { action_name: actionName.slice(0, 80) });
+        });
+        document.addEventListener("submit", (event) => {
+          const formName = event.target?.id;
+          if (formName)
+            track("owners_form_submit", { form_name: formName.slice(0, 80) });
+        });
+        window.addEventListener("error", () =>
+          track("owners_app_error", { error_type: "script_error" }),
+        );
+      })();
+
       if ("serviceWorker" in navigator)
         navigator.serviceWorker.register("/service-worker.js");
     </script>
