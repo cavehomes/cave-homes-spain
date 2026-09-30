@@ -5290,6 +5290,14 @@
               value="Please add this buyer to the new-property alert list."
             />
             <label
+              ><span>Your name *</span
+              ><input
+                name="name"
+                required
+                autocomplete="name"
+                placeholder="Your name"
+            /></label>
+            <label
               ><span>Email *</span
               ><input
                 name="email"
@@ -5297,6 +5305,20 @@
                 required
                 autocomplete="email"
                 placeholder="you@example.com"
+            /></label>
+            <label
+              ><span>Phone or WhatsApp</span
+              ><input
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                placeholder="+34 600 000 000"
+            /></label>
+            <label
+              ><span>Preferred area</span
+              ><input
+                name="preferred_area"
+                placeholder="e.g. Baza or Benamaurel"
             /></label>
             <label
               ><span>Property type</span
@@ -5311,16 +5333,32 @@
               </select></label
             >
             <label
-              ><span>Maximum price</span
+              ><span>Maximum budget</span
               ><select name="maximum_price">
-                <option value="Any">Any price</option>
+                <option value="Any">Any budget</option>
                 <option>€50,000</option>
                 <option>€100,000</option>
                 <option>€150,000</option>
                 <option>€250,000</option>
+                <option>Over €250,000</option>
               </select></label
             >
-            <button class="btn" type="submit">Create my alert</button>
+            <label
+              ><span>Property condition</span
+              ><select name="property_condition">
+                <option value="Any">Any condition</option>
+                <option>Move-in ready</option>
+                <option>Some work acceptable</option>
+                <option>Renovation project</option>
+              </select></label
+            >
+            <label style="grid-column: span 2"
+              ><span>Anything else?</span
+              ><input
+                name="buyer_notes"
+                placeholder="Bedrooms, land, access or other requirements"
+            /></label>
+            <button class="btn" type="submit">Send my requirements</button>
             <div class="form-message" role="status"></div>
           </form>
         </div>
@@ -7381,11 +7419,29 @@
               email: String(submission.get("email") || ""),
               phone: String(submission.get("phone") || ""),
               subject: String(submission.get("subject") || formType),
-              message: String(
-                submission.get("message") ||
-                  submission.get("property_details") ||
-                  "",
-              ),
+              message:
+                formType === "Property alert request"
+                  ? "PROPERTY_MATCH:" +
+                    JSON.stringify({
+                      property_type: String(
+                        submission.get("property_type") || "Any",
+                      ),
+                      preferred_area: String(
+                        submission.get("preferred_area") || "Any area",
+                      ),
+                      maximum_price: String(
+                        submission.get("maximum_price") || "Any budget",
+                      ),
+                      property_condition: String(
+                        submission.get("property_condition") || "Any condition",
+                      ),
+                      notes: String(submission.get("buyer_notes") || ""),
+                    })
+                  : String(
+                      submission.get("message") ||
+                        submission.get("property_details") ||
+                        "",
+                    ),
               property_title: String(
                 submission.get("property") || submission.get("location") || "",
               ),
@@ -7402,7 +7458,9 @@
             });
             form.reset();
             message.textContent =
-              "Thank you—your message has been sent successfully.";
+              formType === "Property alert request"
+                ? "Thank you—your property requirements have been sent. We’ll contact you when we find a suitable match."
+                : "Thank you—your message has been sent successfully.";
             message.style.display = "block";
           } catch (error) {
             message.textContent =
