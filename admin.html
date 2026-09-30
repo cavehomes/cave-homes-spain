@@ -2491,6 +2491,31 @@
             <div class="empty">Loading enquiries…</div>
           </div>
         </section>
+        <section class="hidden" id="buyerRequestsView">
+          <div class="care-intro">
+            <h2>Buyer Requests</h2>
+            <p>
+              Property requirements sent from the website. Contact buyers when
+              you have a suitable listed or off-market property.
+            </p>
+          </div>
+          <div class="list-tools">
+            <input
+              id="buyerRequestSearch"
+              type="search"
+              placeholder="Search buyer requests…"
+              aria-label="Search buyer requests"
+            />
+            <select id="buyerRequestStatus" aria-label="Filter buyer requests">
+              <option value="active">Active first</option>
+              <option value="all">All requests</option>
+              <option value="handled">Handled</option>
+            </select>
+          </div>
+          <div class="inbox" id="buyerRequestList">
+            <div class="empty">Loading buyer requests…</div>
+          </div>
+        </section>
         <section class="hidden" id="businessesView">
           <form class="card business-form" id="businessForm">
             <h2>Add a maintenance business</h2>
@@ -3085,6 +3110,10 @@
         $("liveView").classList.toggle("hidden", view !== "live");
         $("approvalsView").classList.toggle("hidden", view !== "approvals");
         $("inquiriesView").classList.toggle("hidden", view !== "inquiries");
+        $("buyerRequestsView").classList.toggle(
+          "hidden",
+          view !== "buyerRequests",
+        );
         $("businessesView").classList.toggle("hidden", view !== "businesses");
         $("rentalsView").classList.toggle("hidden", view !== "rentals");
         $("communityView").classList.toggle("hidden", view !== "community");
@@ -3093,6 +3122,7 @@
         if (view === "live") loadLiveHomes();
         if (view === "approvals") loadInquiries();
         if (view === "inquiries") loadInquiries();
+        if (view === "buyerRequests") loadInquiries();
         if (view === "businesses") loadBusinesses();
         if (view === "rentals") loadRentals();
         if (view === "community") loadCommunityModeration();
@@ -4159,6 +4189,7 @@
           return;
         }
         inquiries = data || [];
+        renderBuyerRequests();
         const applications = inquiries.filter(
             (x) =>
               longRentalDetails(x) ||
@@ -4171,7 +4202,8 @@
               !longRentalDetails(x) &&
               !rentalDetails(x) &&
               !businessDetails(x) &&
-              !propertyDetails(x),
+              !propertyDetails(x) &&
+              !propertyMatchDetails(x),
           );
         renderInquiries(normal);
         renderApprovals(applications);
@@ -4228,6 +4260,93 @@
           return null;
         }
       }
+      function propertyMatchDetails(q) {
+        if (!String(q.message || "").startsWith("PROPERTY_MATCH:")) return null;
+        try {
+          return JSON.parse(String(q.message).slice(15));
+        } catch {
+          return null;
+        }
+      }
+      function buyerRequestItems() {
+        return inquiries.filter((q) => propertyMatchDetails(q));
+      }
+      function renderBuyerRequests() {
+        const listEl = $("buyerRequestList");
+        if (!listEl) return;
+        const search = ($("buyerRequestSearch")?.value || "")
+            .toLowerCase()
+            .trim(),
+          filter = $("buyerRequestStatus")?.value || "active";
+        let list = buyerRequestItems().filter((q) => {
+          const d = propertyMatchDetails(q) || {};
+          return (
+            !search ||
+            [
+              q.name,
+              q.email,
+              q.phone,
+              d.preferred_area,
+              d.property_type,
+              d.maximum_price,
+              d.property_condition,
+              d.notes,
+            ].some((value) =>
+              String(value || "")
+                .toLowerCase()
+                .includes(search),
+            )
+          );
+        });
+        if (filter === "active") list = list.filter((q) => q.status === "new");
+        if (filter === "handled") list = list.filter((q) => q.status !== "new");
+        list.sort(
+          (a, b) =>
+            Number(b.status === "new") - Number(a.status === "new") ||
+            Date.parse(b.created_at || 0) - Date.parse(a.created_at || 0),
+        );
+        const activeCount = buyerRequestItems().filter(
+          (q) => q.status === "new",
+        ).length;
+        if ($("buyerRequestHomeCount"))
+          $("buyerRequestHomeCount").textContent = activeCount
+            ? activeCount + (activeCount === 1 ? " active request" : " active requests")
+            : "No active requests";
+        if (!list.length) {
+          listEl.innerHTML =
+            '<div class="card empty"><b>No matching buyer requests.</b><br>New property requirements from the website will appear here.</div>';
+          return;
+        }
+        listEl.innerHTML = list
+          .map((q) => {
+            const d = propertyMatchDetails(q) || {},
+              date = new Date(q.created_at).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              }),
+              phoneDigits = String(q.phone || "").replace(/[^\d]/g, ""),
+              emailSubject = "Cave Homes Spain — property match";
+            return `<article class="inquiry ${q.status === "new" ? "new" : ""}"><div class="inquiry-top"><h3>${q.status === "new" ? '<span class="new-dot"></span>' : ""}${esc(q.name || "Property buyer")}</h3><time>${date}</time></div><div class="inquiry-meta"><b>${esc(d.property_type || "Any property")}</b> · ${esc(d.preferred_area || "Any area")}<br>Budget: ${esc(d.maximum_price || "Any budget")} · Condition: ${esc(d.property_condition || "Any condition")}<br>${esc(q.email || "No email")}${q.phone ? " · " + esc(q.phone) : ""}</div>${d.notes ? `<p class="inquiry-message"><b>Extra requirements:</b> ${esc(d.notes)}</p>` : ""}<div class="inquiry-actions">${q.email ? `<a href="mailto:${encodeURIComponent(q.email)}?subject=${encodeURIComponent(emailSubject)}">Email buyer</a>` : ""}${phoneDigits ? `<a href="https://wa.me/${phoneDigits}" target="_blank" rel="noopener">WhatsApp</a><a href="tel:${esc(q.phone)}">Call</a>` : ""}${q.status === "new" ? `<button class="secondary" onclick="markBuyerRequestHandled('${q.id}')">Mark handled</button>` : '<strong class="approved-label">✓ Handled</strong>'}<button class="delete" onclick="deleteBuyerRequest('${q.id}')">Delete</button></div></article>`;
+          })
+          .join("");
+      }
+      window.markBuyerRequestHandled = async (id) => {
+        const { error } = await db
+          .from("enquiries")
+          .update({ status: "read" })
+          .eq("id", id);
+        if (error)
+          return alert("Could not update buyer request: " + error.message);
+        loadInquiries();
+      };
+      window.deleteBuyerRequest = async (id) => {
+        if (!confirm("Delete this buyer request?")) return;
+        const { error } = await db.from("enquiries").delete().eq("id", id);
+        if (error)
+          return alert("Could not delete buyer request: " + error.message);
+        loadInquiries();
+      };
       function renderInquiries(list = inquiries) {
         if (!list.length) {
           $("inquiryList").innerHTML =
@@ -5008,7 +5127,8 @@
             !longRentalDetails(x) &&
             !rentalDetails(x) &&
             !businessDetails(x) &&
-            !propertyDetails(x),
+            !propertyDetails(x) &&
+            !propertyMatchDetails(x),
         );
       }
       function applyInquiryFilters() {
@@ -5879,7 +5999,7 @@
             "afterbegin",
             '<button class="tab active" data-view="home">Home</button>',
           );
-          const home = `<section id="homeView"><div class="stats dashboard-actions"><button class="stat stat-button action-stat" type="button" onclick="switchView(\'add\')"><strong>＋</strong><span>Add property</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'care\')"><strong>✓</strong><span>Property Care</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyer\')"><strong>🤝</strong><span>Buyer Assistance</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'inquiries\')"><strong>✉</strong><span>Enquiries</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'community\')"><strong>◉</strong><span>Community</span><small id="communityHomeCount">Manage members and posts</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'rentals\')"><strong>⌂</strong><span>Holiday rentals</span></button><a class="stat stat-button action-stat" href="/rent.html" target="_blank"><strong>↗</strong><span>Homes to Rent</span></a></div></section>`;
+          const home = `<section id="homeView"><div class="stats dashboard-actions"><button class="stat stat-button action-stat" type="button" onclick="switchView(\'add\')"><strong>＋</strong><span>Add property</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'care\')"><strong>✓</strong><span>Property Care</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyer\')"><strong>🤝</strong><span>Buyer Assistance</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'inquiries\')"><strong>✉</strong><span>Enquiries</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyerRequests\')"><strong>⌕</strong><span>Buyer Requests</span><small id="buyerRequestHomeCount">Property matches</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'community\')"><strong>◉</strong><span>Community</span><small id="communityHomeCount">Manage members and posts</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'rentals\')"><strong>⌂</strong><span>Holiday rentals</span></button><a class="stat stat-button action-stat" href="/rent.html" target="_blank"><strong>↗</strong><span>Homes to Rent</span></a></div></section>`;
           document
             .querySelector("#addView")
             .insertAdjacentHTML("beforebegin", home);
@@ -5892,6 +6012,7 @@
             "liveView",
             "approvalsView",
             "inquiriesView",
+            "buyerRequestsView",
             "businessesView",
             "rentalsView",
             "communityView",
@@ -5920,6 +6041,8 @@
       }
       setupOwnersV7();
       setupOwnersV8();
+      $("buyerRequestSearch")?.addEventListener("input", renderBuyerRequests);
+      $("buyerRequestStatus")?.addEventListener("change", renderBuyerRequests);
       (function setupOwnersAnalytics() {
         const track = (eventName, details = {}) => {
           if (typeof window.chsTrack === "function")
