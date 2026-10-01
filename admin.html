@@ -5181,7 +5181,9 @@
                   ? "rentals"
                   : location.hash === "#maintenance-businesses"
                     ? "businesses"
-                    : "home";
+                    : location.hash === "#buyer-requests"
+                      ? "buyerRequests"
+                      : "home";
           setTimeout(() => switchView(requested), 120);
         }
       };
