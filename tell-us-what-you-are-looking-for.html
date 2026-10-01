@@ -103,7 +103,7 @@
               <label><span>Your name *</span><input name="name" required autocomplete="name" placeholder="Your name" /></label>
               <label><span>Email *</span><input name="email" type="email" required autocomplete="email" placeholder="you@example.com" /></label>
               <label><span>Phone or WhatsApp</span><input name="phone" type="tel" autocomplete="tel" placeholder="+34 600 000 000" /></label>
-              <label><span>Preferred area</span><input name="preferred_area" placeholder="e.g. Baza or Benamaurel" /></label>
+              <label><span>Preferred area</span><input id="preferredArea" name="preferred_area" placeholder="e.g. Baza or Benamaurel" /></label>
               <label><span>Property type</span><select name="property_type"><option value="Any">Any property</option><option>Cave Home</option><option>House</option><option>Finca</option><option>Cortijo</option><option>Apartment</option><option>Land</option></select></label>
               <label><span>Maximum budget</span><select name="maximum_price"><option value="Any">Any budget</option><option>€50,000</option><option>€100,000</option><option>€150,000</option><option>€250,000</option><option>Over €250,000</option></select></label>
               <label><span>Property condition</span><select name="property_condition"><option value="Any">Any condition</option><option>Move-in ready</option><option>Some work acceptable</option><option>Renovation project</option></select></label>
@@ -119,6 +119,10 @@
     <footer><div class="wrap">© <span id="year"></span> Cave Homes Spain · <a href="/contact.html">Contact</a></div></footer>
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
+      const requestedArea = new URLSearchParams(location.search).get("area");
+      const preferredAreaField = document.getElementById("preferredArea");
+      if (requestedArea && preferredAreaField)
+        preferredAreaField.value = requestedArea.slice(0, 100);
       const publicDb = window.supabase.createClient(
         "https://lesgzlhvrlxgtfuocadq.supabase.co",
         "sb_publishable_pPS6fORJPGFcGBIUPcxOxQ_1g4vazyg"
