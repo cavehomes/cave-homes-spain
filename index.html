@@ -5521,7 +5521,7 @@
           <div class="modal-actions">
             <button class="btn" id="modalEnquire">
               Enquire about this home →</button
-            ><button class="btn share-btn" id="modalShare">
+            ><a class="btn request-match-btn" id="modalRequestMatch" href="/tell-us-what-you-are-looking-for.html">Looking for a different home?</a><button class="btn share-btn" id="modalShare">
               Share property</button
             ><button class="btn save-btn" id="modalSave">♡ Save home</button>
           </div>
@@ -8714,7 +8714,16 @@
           /\s*Source:\s*tucueva\.com\s*[—-]\s*confirm bedroom count before publishing\.?/gi,
           "",
         );
+        const requestMatch = document.getElementById("modalRequestMatch");
+        const requestMatchUrl = new URL(
+          "/tell-us-what-you-are-looking-for.html",
+          location.origin,
+        );
+        if (home.town) requestMatchUrl.searchParams.set("area", home.town);
+        if (requestMatch) requestMatch.href = requestMatchUrl.toString();
         if (modalLang === "es") {
+          if (requestMatch)
+            requestMatch.textContent = "¿Buscas otra vivienda?";
           const label = document.querySelector(
             "#propertyModal .v15-detail-label",
           );
