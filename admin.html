@@ -2493,10 +2493,10 @@
         </section>
         <section class="hidden" id="buyerRequestsView">
           <div class="care-intro">
-            <h2>Buyer Requests</h2>
+            <h2>Website Buyer Enquiries</h2>
             <p>
-              Property requirements sent from the website. Contact buyers when
-              you have a suitable listed or off-market property.
+              Requests sent through “Tell us what you’re looking for” on the
+              website. Contact buyers when you have a suitable property.
             </p>
           </div>
           <div class="list-tools">
@@ -4310,8 +4310,8 @@
         ).length;
         if ($("buyerRequestHomeCount"))
           $("buyerRequestHomeCount").textContent = activeCount
-            ? activeCount + (activeCount === 1 ? " active request" : " active requests")
-            : "No active requests";
+            ? activeCount + (activeCount === 1 ? " new buyer enquiry" : " new buyer enquiries")
+            : "No new buyer enquiries";
         if (!list.length) {
           listEl.innerHTML =
             '<div class="card empty"><b>No matching buyer requests.</b><br>New property requirements from the website will appear here.</div>';
@@ -5999,7 +5999,7 @@
             "afterbegin",
             '<button class="tab active" data-view="home">Home</button>',
           );
-          const home = `<section id="homeView"><div class="stats dashboard-actions"><button class="stat stat-button action-stat" type="button" onclick="switchView(\'add\')"><strong>＋</strong><span>Add property</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'care\')"><strong>✓</strong><span>Property Care</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyer\')"><strong>🤝</strong><span>Buyer Assistance</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'inquiries\')"><strong>✉</strong><span>Enquiries</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyerRequests\')"><strong>⌕</strong><span>Buyer Requests</span><small id="buyerRequestHomeCount">Property matches</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'community\')"><strong>◉</strong><span>Community</span><small id="communityHomeCount">Manage members and posts</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'rentals\')"><strong>⌂</strong><span>Holiday rentals</span></button><a class="stat stat-button action-stat" href="/rent.html" target="_blank"><strong>↗</strong><span>Homes to Rent</span></a></div></section>`;
+          const home = `<section id="homeView"><div class="stats dashboard-actions"><button class="stat stat-button action-stat" type="button" onclick="switchView(\'add\')"><strong>＋</strong><span>Add property</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'care\')"><strong>✓</strong><span>Property Care</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyer\')"><strong>🤝</strong><span>Buyer Assistance</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'inquiries\')"><strong>✉</strong><span>Enquiries</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyerRequests\')"><strong>⌕</strong><span>Website Buyer Enquiries</span><small id="buyerRequestHomeCount">Open buyer enquiries</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'community\')"><strong>◉</strong><span>Community</span><small id="communityHomeCount">Manage members and posts</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'rentals\')"><strong>⌂</strong><span>Holiday rentals</span></button><a class="stat stat-button action-stat" href="/rent.html" target="_blank"><strong>↗</strong><span>Homes to Rent</span></a></div></section>`;
           document
             .querySelector("#addView")
             .insertAdjacentHTML("beforebegin", home);
