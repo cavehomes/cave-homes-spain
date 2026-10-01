@@ -5257,7 +5257,8 @@
           </div>
           <div class="cards" id="cards"></div>
           <div class="no-results" id="noResults">
-            No homes match those filters. Try a different location or price.
+            <p>No homes match those filters yet. Try a different search, or tell us what you’re looking for and we’ll keep an eye out for a possible match.</p>
+            <a class="btn small" id="noResultsRequestLink" href="/tell-us-what-you-are-looking-for.html">Tell us what you’re looking for</a>
           </div>
         </div>
       </section>
@@ -7168,6 +7169,13 @@
           });
         }, 100);
       }
+      document.getElementById("noResultsRequestLink")?.addEventListener("click", function () {
+        const selectedArea = document.getElementById("placeFilter")?.value;
+        if (!selectedArea) return;
+        const requestUrl = new URL(this.href, location.href);
+        requestUrl.searchParams.set("area", selectedArea);
+        this.href = requestUrl.toString();
+      });
       document.querySelectorAll("[data-collection]").forEach(
         (button) =>
           (button.onclick = () => {
