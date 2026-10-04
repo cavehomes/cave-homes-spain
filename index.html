@@ -8404,7 +8404,9 @@
           .map((home) => {
             const copy = translatedProperty(home, lang),
               conceptImage =
-                home.property_type === "Land"
+                home.property_type === "Land" &&
+                  seoPropertyPath(home) !==
+                    "/property/land-with-property-freila-27e8d074.html"
                   ? null
                   : renovationConceptsByPath[seoPropertyPath(home)] ||
                     renovationConceptsById[String(home.id || "")],
