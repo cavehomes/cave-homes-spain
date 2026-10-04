@@ -504,6 +504,19 @@
       .card:hover img {
         transform: scale(1.04);
       }
+      .before-after-card .before-after-after { position:absolute; inset:0; overflow:hidden; clip-path:inset(0 0 0 var(--ba-position,50%)); }
+      .before-after-card .before-after-after img { width:100%; height:100%; object-fit:cover; }
+      .before-after-label { position:absolute; z-index:5; bottom:14px; padding:5px 9px; border-radius:999px; background:rgba(20,42,33,.84); color:#fff; font-size:.68rem; font-weight:800; line-height:1.2; pointer-events:none; }
+      .before-label { left:14px; }
+      .after-label { right:14px; }
+      .before-after-divider { position:absolute; z-index:3; top:0; bottom:0; left:var(--ba-position,50%); width:2px; background:#fff; box-shadow:0 0 6px rgba(0,0,0,.5); transform:translateX(-1px); pointer-events:none; }
+      .before-after-divider i { position:absolute; top:50%; left:50%; width:36px; height:36px; border:2px solid #fff; border-radius:50%; background:var(--forest); box-shadow:0 2px 8px rgba(0,0,0,.3); transform:translate(-50%,-50%); }
+      .before-after-divider i::before,.before-after-divider i::after { position:absolute; top:50%; color:#fff; font-size:11px; font-style:normal; font-weight:800; line-height:1; transform:translateY(-50%); }
+      .before-after-divider i::before { content:'‹'; left:6px; } .before-after-divider i::after { content:'›'; right:6px; }
+      .before-after-range { position:absolute; z-index:4; inset:0; width:100%; height:100%; margin:0; padding:0; border:0; opacity:0; cursor:ew-resize; touch-action:pan-y; }
+      .before-after-card:focus-within .before-after-divider i { outline:3px solid #fff; outline-offset:3px; }
+      .before-after-card .badge,.before-after-card .new-badge { z-index:6; }
+      .before-after-card .card-save { z-index:7; }
       .badge {
         position: absolute;
         top: 16px;
@@ -8239,6 +8252,23 @@
         home.seo_path ||
         seoPropertyPaths[propertyKey(home)] ||
         propertyUrl(home);
+      const renovationConceptsByPath = {
+        "/property/casa-cueva-1-benamaurel-5579e6d9.html": "/ai-concepts/casa-cueva-1-benamaurel.webp",
+        "/property/casa-cueva-3-benamaurel-a89c631d.html": "/ai-concepts/casa-cueva-3-benamaurel.webp",
+        "/property/casa-cueva-4-cuevas-de-luna-6622b551.html": "/ai-concepts/casa-cueva-4-cuevas-de-luna.webp",
+        "/property/casa-cueva-5-benamaurel-24bc9279.html": "/ai-concepts/casa-cueva-5-benamaurel.webp",
+        "/property/casa-cueva-6-cuevas-del-negro-a79aecba.html": "/ai-concepts/casa-cueva-6-cuevas-del-negro.webp",
+        "/property/casa-cueva-7-cuevas-del-negro-dd8ba16f.html": "/ai-concepts/casa-cueva-7-cuevas-del-negro.webp",
+        "/property/cave-home-close-to-all-amenities-benamaurel-f5ef6f07.html": "/ai-concepts/cave-home-benamaurel-amenities.webp",
+        "/property/cave-home-for-reform-benamaurel-f0ff45f5.html": "/ai-concepts/cave-home-renovation-benamaurel.webp",
+        "/property/cave-home-for-restoration-benamaurel-9ad06f06.html": "/ai-concepts/cave-home-cuevas-de-blanca.webp",
+        "/property/cave-house-baza-9b3add65.html": "/ai-concepts/cave-house-near-baza.webp",
+        "/property/cave-house-renovation-project-in-peaceful-benamaurel-setting-benamaure-1af16115.html": "/ai-concepts/cave-house-renovation-benamaurel.webp",
+        "/property/cave-renovation-project-benamaurel-81785acf.html": "/ai-concepts/large-cave-renovation-benamaurel.webp",
+        "/property/land-for-sale-cuevas-de-luna-74e18312.html": "/ai-concepts/land-cuevas-de-luna.webp",
+        "/property/land-with-property-freila-27e8d074.html": "/ai-concepts/freila-land-and-house.webp",
+        "/property/magnificent-large-cortijo-near-caniles-6ae8bff7.html": "/ai-concepts/cortijo-caniles-interior.webp",
+      };
       function renderPublicHomes() {
         const lang = document.documentElement.lang,
           words =
@@ -8306,6 +8336,15 @@
                 : lang === "de"
                   ? "Immobilie vergleichen"
                   : "Compare property";
+        const comparisonWords = {
+          es: ["Estado actual", "Idea visual con IA", "Desliza para comparar la foto actual con una idea visual creada con IA"],
+          nl: ["Huidige staat", "AI-visualisatie", "Schuif om de huidige foto met de AI-visualisatie te vergelijken"],
+          "fr-BE": ["État actuel", "Visualisation IA", "Faites glisser pour comparer la photo actuelle et la visualisation IA"],
+          de: ["Aktueller Zustand", "KI-Visualisierung", "Ziehen, um das Originalfoto mit der KI-Visualisierung zu vergleichen"]
+        }[lang] || ["As listed", "AI visualisation", "Drag to compare the original photo with the AI visualisation"];
+        words.before = comparisonWords[0];
+        words.after = comparisonWords[1];
+        words.slider = comparisonWords[2];
         words.types =
           lang === "es"
             ? {
@@ -8361,14 +8400,21 @@
         document.getElementById("cards").innerHTML = orderedHomes
           .map((home) => {
             const copy = translatedProperty(home, lang),
+              conceptImage = renovationConceptsByPath[seoPropertyPath(home)],
               type =
                 words.types[home.property_type] ||
                 home.property_type ||
                 words.types["Cave Home"] ||
                 "Cave Home";
-            return `<article class="card ${home.featured ? "featured-card" : ""}" data-place="${safe((home.town + " " + (home.province || "")).toLowerCase())}" data-type="${safe(home.property_type || "Cave Home")}" data-price="${Number(home.price) || 0}" data-beds="${Number(home.bedrooms) || 0}" data-featured-order="${Number(home.featured_order) || 100}"><div class="card-media"><img src="${safe(home.main_image_url)}" alt="${safe(copy.title)}${home.town ? " in " + safe(home.town) : ""}${home.province ? ", " + safe(home.province) : ""}" loading="lazy" decoding="async" width="640" height="420"><span class="badge">${home.featured ? words.featured : words.sale}</span>${isNewListing(home) ? `<span class="new-badge">${safe(words.newListing)}</span>` : ""}${home.image_urls && home.image_urls.length > 1 ? `<span class="photo-count-badge">▧ ${home.image_urls.length} ${safe(words.photos)}</span>` : ""}<button class="card-save ${savedPropertyKeys().includes(propertyKey(home)) ? "saved" : ""}" type="button" data-save-key="${safe(propertyKey(home))}" aria-label="${savedPropertyKeys().includes(propertyKey(home)) ? "Remove from saved homes" : "Save this home"}" title="Save home">${savedPropertyKeys().includes(propertyKey(home)) ? "♥" : "♡"}</button></div><div class="card-body"><span class="card-place">${safe(home.town)}${home.province ? ", " + safe(home.province) : ""}</span><h3>${safe(copy.title)}</h3><div class="listing-meta"><span>⌂ ${safe(type)}</span><span>🛏 ${Number(home.bedrooms) > 0 ? safe(home.bedrooms) + " " + words.beds : words.bedsUnknown}</span>${furnishingLabel(home, lang) ? `<span>🛋 ${safe(furnishingLabel(home, lang))}</span>` : ""}<span class="energy-badge ${energyClass(home)}">⚡ ${safe(energyLabel(home))}</span></div><p class="listing-summary">${safe((copy.description || "").replace(/\s*Source:\s*tucueva\.com\s*[—-]\s*confirm bedroom count before publishing\.?/gi, ""))}</p><div class="tap-gallery-hint">${safe(words.gallery)}</div><div class="card-bottom"><strong class="price">€${Number(home.price).toLocaleString("en-GB")}</strong><a class="text-link enquire" href="${safe(seoPropertyPath(home))}" data-property="${safe(home.title)}">${lang === "es" ? "Ver propiedad →" : lang === "nl" ? "Woning bekijken →" : lang === "fr-BE" ? "Voir le bien →" : lang === "de" ? "Immobilie ansehen →" : "View property →"}</a></div><button class="compare-toggle" type="button" data-compare-title="${safe(home.title)}">＋ ${words.compare}</button></div></article>`;
+            return `<article class="card ${home.featured ? "featured-card" : ""}" data-place="${safe((home.town + " " + (home.province || "")).toLowerCase())}" data-type="${safe(home.property_type || "Cave Home")}" data-price="${Number(home.price) || 0}" data-beds="${Number(home.bedrooms) || 0}" data-featured-order="${Number(home.featured_order) || 100}"><div class="card-media${conceptImage ? " before-after-card" : ""}"><img src="${safe(home.main_image_url)}" alt="${safe(copy.title)}${home.town ? " in " + safe(home.town) : ""}${home.province ? ", " + safe(home.province) : ""}" loading="lazy" decoding="async" width="640" height="420">${conceptImage ? '<div class="before-after-after" aria-hidden="true"><img src="' + safe(conceptImage) + '" alt="" loading="lazy" decoding="async" width="640" height="420"></div><span class="before-after-label before-label">' + safe(words.before) + '</span><span class="before-after-label after-label">' + safe(words.after) + '</span><span class="before-after-divider" aria-hidden="true"><i></i></span><input class="before-after-range" type="range" min="0" max="100" value="50" aria-label="' + safe(words.slider) + '">' : ""}<span class="badge">${home.featured ? words.featured : words.sale}</span>${isNewListing(home) ? `<span class="new-badge">${safe(words.newListing)}</span>` : ""}${home.image_urls && home.image_urls.length > 1 ? `<span class="photo-count-badge">▧ ${home.image_urls.length} ${safe(words.photos)}</span>` : ""}<button class="card-save ${savedPropertyKeys().includes(propertyKey(home)) ? "saved" : ""}" type="button" data-save-key="${safe(propertyKey(home))}" aria-label="${savedPropertyKeys().includes(propertyKey(home)) ? "Remove from saved homes" : "Save this home"}" title="Save home">${savedPropertyKeys().includes(propertyKey(home)) ? "♥" : "♡"}</button></div><div class="card-body"><span class="card-place">${safe(home.town)}${home.province ? ", " + safe(home.province) : ""}</span><h3>${safe(copy.title)}</h3><div class="listing-meta"><span>⌂ ${safe(type)}</span><span>🛏 ${Number(home.bedrooms) > 0 ? safe(home.bedrooms) + " " + words.beds : words.bedsUnknown}</span>${furnishingLabel(home, lang) ? `<span>🛋 ${safe(furnishingLabel(home, lang))}</span>` : ""}<span class="energy-badge ${energyClass(home)}">⚡ ${safe(energyLabel(home))}</span></div><p class="listing-summary">${safe((copy.description || "").replace(/\s*Source:\s*tucueva\.com\s*[—-]\s*confirm bedroom count before publishing\.?/gi, ""))}</p><div class="tap-gallery-hint">${safe(words.gallery)}</div><div class="card-bottom"><strong class="price">€${Number(home.price).toLocaleString("en-GB")}</strong><a class="text-link enquire" href="${safe(seoPropertyPath(home))}" data-property="${safe(home.title)}">${lang === "es" ? "Ver propiedad →" : lang === "nl" ? "Woning bekijken →" : lang === "fr-BE" ? "Voir le bien →" : lang === "de" ? "Immobilie ansehen →" : "View property →"}</a></div><button class="compare-toggle" type="button" data-compare-title="${safe(home.title)}">＋ ${words.compare}</button></div></article>`;
           })
           .join("");
+        document.querySelectorAll(".before-after-range").forEach((range) => {
+          range.addEventListener("click", (event) => event.stopPropagation());
+          range.addEventListener("input", () => {
+            range.closest(".before-after-card")?.style.setProperty("--ba-position", range.value + "%");
+          });
+        });
         bindEnquiries();
         document.querySelectorAll(".card-save").forEach(
           (btn) =>
@@ -8787,6 +8833,7 @@
           moveGallery(1);
       });
       document.getElementById("cards").addEventListener("click", (e) => {
+        if (e.target.closest(".before-after-range")) return;
         if (!e.target.closest(".card-media") && !e.target.closest(".card h3"))
           return;
         const card = e.target.closest(".card"),
