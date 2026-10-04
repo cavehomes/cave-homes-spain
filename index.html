@@ -8252,6 +8252,9 @@
         home.seo_path ||
         seoPropertyPaths[propertyKey(home)] ||
         propertyUrl(home);
+      const renovationConceptsById = {
+        "e452d228-d3ed-4d33-9938-12553c0c1b04": "/ai-concepts/casa-cueva-2-benamaurel.webp",
+      };
       const renovationConceptsByPath = {
         "/property/casa-cueva-1-benamaurel-5579e6d9.html": "/ai-concepts/casa-cueva-1-benamaurel.webp",
         "/property/casa-cueva-3-benamaurel-a89c631d.html": "/ai-concepts/casa-cueva-3-benamaurel.webp",
@@ -8400,7 +8403,11 @@
         document.getElementById("cards").innerHTML = orderedHomes
           .map((home) => {
             const copy = translatedProperty(home, lang),
-              conceptImage = renovationConceptsByPath[seoPropertyPath(home)],
+              conceptImage =
+                home.property_type === "Land"
+                  ? null
+                  : renovationConceptsByPath[seoPropertyPath(home)] ||
+                    renovationConceptsById[String(home.id || "")],
               type =
                 words.types[home.property_type] ||
                 home.property_type ||
