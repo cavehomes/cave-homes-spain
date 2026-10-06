@@ -25,7 +25,7 @@
     try{await sdk.Notifications.requestPermission();if(sdk.Notifications.permission){await sdk.User.PushSubscription.optIn();await identity;await sdk.User.addTag('app','cave-homes-owner');}}
     catch(_){failed=true;}finally{render();}
   }
-  function withSdk(callback){window.OneSignalDeferred=window.OneSignalDeferred||[];window.OneSignalDeferred.push(async OneSignal=>{try{await initialized;await callback(OneSignal);render();}catch(_){failed=true;render();}});}
+  function withSdk(callback){window.OneSignalDeferred=window.OneSignalDeferred||[];window.OneSignalDeferred.push(async OneSignal=>{try{await initialized;await callback(OneSignal);render();}catch(error){failed=true;console.error('Owners notification registration:',String(error?.message||error));render();}});}
   let resolveReady;const initialized=new Promise(resolve=>resolveReady=resolve);
   window.CaveHomesNotifications={
     initialize(){return initialized},
@@ -44,7 +44,7 @@
       ready=true;resolveReady();
       OneSignal.User.PushSubscription.addEventListener('change',()=>{if(ownerId)OneSignal.User.addTag('app','cave-homes-owner').catch(()=>{});render()});
       OneSignal.Notifications.addEventListener('permissionChange',render);
-    }catch(_){failed=true;resolveReady();}
+    }catch(error){failed=true;console.error('Owners notification initialization:',String(error?.message||error));resolveReady();}
     render();
   });
   const observer=new MutationObserver(()=>{if(document.getElementById('homeView')&&!document.getElementById('ownerNotifications'))render()});
