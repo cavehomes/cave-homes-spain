@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const APP_ID='2bc7a85b-fae2-48d4-9df6-271e781c0aab';
-  let sdk=null,ready=false,failed=false,ownerId=null,identity=Promise.resolve();
+  let sdk=null,ready=false,failed=false,ownerId=null,identity=Promise.resolve(),setupError='';
   const isWebView=/; wv\)|\bwv\b/.test(navigator.userAgent);
   function render(){
     const home=document.getElementById('homeView');if(!home)return;
@@ -14,7 +14,7 @@
     if(isWebView){status.textContent='This downloaded app uses Android notification settings.';help.textContent='On your phone, open Settings → Apps → Cave Homes Spain Owners → Notifications and allow notifications. For browser alerts, open cavehomesspain.com/admin.html in Chrome and enable notifications there.';}
     else if(subscribed){status.textContent='Notifications enabled on this device.';help.textContent='New enquiries can alert you while the Owners app is closed. Delivery also depends on your phone and browser notification settings.';}
     else if(blocked){status.textContent='Notifications are blocked on this device.';help.textContent='In Chrome, open this site’s permissions and allow Notifications, then reopen the Owners app. Also check Settings → Apps → Chrome → Notifications on your phone.';}
-    else if(failed){status.textContent='Notification setup could not connect.';help.textContent='Open the Owners app in Chrome, check your connection and reload. Your enquiries are still saved in the inbox.';}
+    else if(failed){const wrongDomain=setupError.includes('Can only be used on:');status.textContent=wrongDomain?'Notification service is configured for the old website address.':'Notification setup could not connect.';help.textContent=wrongDomain?'The OneSignal website setting must be corrected to https://cavehomesspain.com. Your phone permission is not the cause, and enquiries are still saved in the inbox.':'Open the Owners app in Chrome, check your connection and reload. Your enquiries are still saved in the inbox.';}
     else if(!ready){status.textContent='Checking notification registration…';help.textContent='If this stays here, open the Owners app in Chrome and reload.';}
     else{status.textContent='This device is not subscribed to enquiry alerts.';help.textContent='Tap Enable notifications, then choose Allow when your phone asks. Keep Chrome notifications enabled in your phone settings.';}
     if(ready&&!sdk.Notifications.isPushSupported()){button.hidden=true;status.textContent='This browser does not support push notifications.';help.textContent='Open cavehomesspain.com/admin.html in Chrome on your Android phone to enable enquiry alerts.';}
@@ -44,7 +44,7 @@
       ready=true;resolveReady();
       OneSignal.User.PushSubscription.addEventListener('change',()=>{if(ownerId)OneSignal.User.addTag('app','cave-homes-owner').catch(()=>{});render()});
       OneSignal.Notifications.addEventListener('permissionChange',render);
-    }catch(error){failed=true;console.error('Owners notification initialization:',String(error?.message||error));resolveReady();}
+    }catch(error){failed=true;setupError=String(error?.message||error);console.error('Owners notification initialization:',setupError);resolveReady();}
     render();
   });
   const observer=new MutationObserver(()=>{if(document.getElementById('homeView')&&!document.getElementById('ownerNotifications'))render()});
