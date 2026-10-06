@@ -28,10 +28,10 @@
       '<p class="form-intro">What visitors are viewing on the public Cave Homes Spain website. Your activity inside this Owners app is not counted here.</p>' +
       '<div class="stats">' +
       '<div class="stat"><strong id="websiteViewsToday">0</strong><span>Views today</span></div>' +
-      '<div class="stat"><strong id="websiteVisitorsWeek">0</strong><span>Visitors 7 days</span></div>' +
+      '<div class="stat"><strong id="websiteVisitorsWeek">0</strong><span>Visitor sessions 7 days</span></div>' +
       '<div class="stat"><strong id="websiteViewsMonth">0</strong><span>Views 30 days</span></div>' +
-      '<div class="stat"><strong id="websiteEnquiriesMonth">0</strong><span>Enquiries 30 days</span></div>' +
-      "</div><h3>Most-viewed pages</h3>" +
+      '<div class="stat"><strong id="websiteEnquiriesMonth">0</strong><span>Received enquiries 30 days</span></div><div class="stat"><strong id="websitePropertyViews">0</strong><span>Property views 30 days</span></div><div class="stat"><strong id="websiteEnquiryStarts">0</strong><span>Property enquiry starts 30 days</span></div>' +
+      '</div><p>Viewing figures cover visitors who accept analytics. Received enquiries come from the inbox. Visits inside this Owners app are excluded.</p><h3>Most-viewed properties</h3><div id="websiteTopProperties" class="drafts"></div><h3>Most-viewed pages</h3>' +
       '<div id="websiteTopPages" class="drafts"><div class="empty">Visitor activity will appear here.</div></div>' +
       '<h3 style="margin-top:22px">Devices</h3>' +
       '<div id="websiteDevices" class="drafts"><div class="empty">Device activity will appear here.</div></div>';
@@ -69,13 +69,18 @@
     }
 
     async function loadWebsiteAnalytics() {
+      async function allEvents(since){
+        const rows=[];
+        for(let start=0;;start+=1000){
+          const result=await db.from("website_events").select("id,event_name,session_id,page_path,page_title,device_type,created_at").gte("created_at",since).order("id",{ascending:false}).range(start,start+999);
+          if(result.error)return result;
+          rows.push(...(result.data||[]));if((result.data||[]).length<1000)break;
+        }
+        return {data:rows,error:null};
+      }
       const monthAgo = new Date(Date.now() - 30 * 86400000).toISOString();
       const results = await Promise.all([
-        db
-          .from("website_events")
-          .select("session_id,page_path,page_title,device_type,created_at")
-          .gte("created_at", monthAgo)
-          .order("created_at", { ascending: false }),
+        allEvents(monthAgo),
         db
           .from("enquiries")
           .select("id,created_at")
@@ -89,7 +94,13 @@
         return;
       }
 
-      const events = websiteResult.data || [];
+      const allActivity = websiteResult.data || [];
+      const events=allActivity.filter(item=>item.event_name==='page_view');
+      const propertyEvents=allActivity.filter(item=>item.event_name==='property_view');
+      document.getElementById("websitePropertyViews").textContent=propertyEvents.length;
+      document.getElementById("websiteEnquiryStarts").textContent=allActivity.filter(item=>item.event_name==='property_enquiry_start').length;
+      const propertyCounts={};const propertyLabels={};propertyEvents.forEach(item=>{propertyCounts[item.page_path]=(propertyCounts[item.page_path]||0)+1;propertyLabels[item.page_path]=item.page_title||item.page_path});
+      renderRows(document.getElementById("websiteTopProperties"),Object.entries(propertyCounts).sort((a,b)=>b[1]-a[1]).slice(0,10).map(row=>[propertyLabels[row[0]],row[1]]),"Property views will appear here as visitors browse the listings.");
       const now = Date.now();
       const todayStart = new Date();
       todayStart.setHours(0, 0, 0, 0);
@@ -97,7 +108,7 @@
         return new Date(item.created_at).getTime() >= todayStart.getTime();
       }).length;
       const weekSessions = new Set(
-        events
+        allActivity
           .filter(function (item) {
             return now - new Date(item.created_at).getTime() < 7 * 86400000;
           })

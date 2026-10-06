@@ -4188,7 +4188,7 @@
           $("approvalList").innerHTML = warning;
           return;
         }
-        inquiries = data || [];
+        inquiries = (data || []).map(q=>({...q,name:q.name||q.buyer_name,email:q.email||q.buyer_email,phone:q.phone||q.buyer_phone}));
         renderBuyerRequests();
         const applications = inquiries.filter(
             (x) =>
@@ -4347,6 +4347,25 @@
           return alert("Could not delete buyer request: " + error.message);
         loadInquiries();
       };
+      function inquiryProperty(q){
+        return homes.find(h=>h.id===q.property_id || (q.property_title && h.title===q.property_title));
+      }
+      function inquiryReplyUrl(q){
+        const h=inquiryProperty(q),title=h?.title||q.property_title||q.subject||"your enquiry";
+        const link=q.property_id?"https://cavehomesspain.com/?home="+encodeURIComponent(q.property_id):"";
+        const body="Hello "+(q.name||"there")+",\n\nThank you for your enquiry about "+title+".\n\n"+(link?"Property: "+link+"\n\n":"")+"Kind regards,\nCave Homes Spain\n\nYour message:\n"+(q.message||"");
+        return "mailto:"+encodeURIComponent(q.email||"")+"?subject="+encodeURIComponent("Re: "+title)+"&body="+encodeURIComponent(body);
+      }
+      function inquiryExtraActions(q){
+        const h=inquiryProperty(q),path=h?.seo_path || (q.property_id?"/?home="+encodeURIComponent(q.property_id):null);
+        let digits=String(q.phone||"").replace(/[^0-9]/g,"");if(digits.startsWith("00"))digits=digits.slice(2);if(digits.length===9)digits="34"+digits;
+        return (path?'<a class="inquiry-property-link" href="'+esc(path)+'" target="_blank" rel="noopener">View property</a>':"")+(digits.length>=10&&digits.length<=15?'<a href="https://wa.me/'+digits+'" target="_blank" rel="noopener">WhatsApp</a>':"")+(q.status==='replied'?'<strong class="approved-label">✓ Replied</strong>':'<button class="secondary" onclick="markInquiryReplied(\''+q.id+'\')">Mark replied</button>');
+      }
+      async function markInquiryReplied(id){
+        const {error}=await db.from("enquiries").update({status:"replied"}).eq("id",id);
+        if(error)return alert("Could not update enquiry: "+error.message);
+        closeInquiryReader();await loadInquiries();
+      }
       function renderInquiries(list = inquiries) {
         if (!list.length) {
           $("inquiryList").innerHTML =
@@ -4394,7 +4413,7 @@
                       .join("")}</div>`
                   : ""
               }<div><div class="inquiry-meta"><b>${esc(q.name || "Rental owner")}</b> · ${esc(rental.location)}<br>${esc(rental.email)} · ${esc(rental.phone)}</div><p class="inquiry-message">${esc(rental.description)}</p>${rental.website ? `<a href="${esc(rental.website)}" target="_blank" rel="noopener">Open booking website ↗</a>` : ""}</div></div><div class="inquiry-actions">${q.status !== "approved" ? `<button class="approve-rental" onclick="approveRental('${q.id}')">Approve and publish</button>` : '<strong class="approved-label">✓ Approved and published</strong>'}<a href="mailto:${encodeURIComponent(rental.email)}?subject=${encodeURIComponent("Your holiday rental " + rental.name)}">Reply by email</a><button class="delete" onclick="deleteInquiry('${q.id}')">Delete application</button></div></article>`;
-            return `<article class="inquiry ${q.status === "new" ? "new" : ""}"><div class="inquiry-top"><h3>${q.status === "new" ? '<span class="new-dot"></span>' : ""}${esc(q.subject || q.property_title || "Website enquiry")}</h3><time>${date}</time></div><div class="inquiry-meta"><b>${esc(q.name || "Unknown")}</b> · ${esc(q.email || "No email")}${q.phone ? " · " + esc(q.phone) : ""}${q.property_title ? "<br>Property: " + esc(q.property_title) : ""}</div><p class="inquiry-message">${esc(q.message || "No message supplied.")}</p><div class="inquiry-actions">${q.email ? `<a href="mailto:${encodeURIComponent(q.email)}?subject=${encodeURIComponent("Re: " + (q.subject || q.property_title || "your enquiry"))}">Reply by email</a>` : ""}${q.phone ? `<a href="tel:${esc(q.phone)}">Call</a>` : ""}${q.status === "new" ? `<button class="secondary" onclick="markInquiryRead('${q.id}')">Mark read</button>` : ""}<button class="delete" onclick="deleteInquiry('${q.id}')">Delete</button></div></article>`;
+            return `<article class="inquiry ${q.status === "new" ? "new" : ""}"><div class="inquiry-top"><h3>${q.status === "new" ? '<span class="new-dot"></span>' : ""}${esc(q.subject || q.property_title || "Website enquiry")}</h3><time>${date}</time></div><div class="inquiry-meta"><b>${esc(q.name || "Unknown")}</b> · ${esc(q.email || "No email")}${q.phone ? " · " + esc(q.phone) : ""}${q.property_title ? "<br>Property: " + esc(q.property_title) : ""}${inquiryProperty(q) ? "<br>"+esc(inquiryProperty(q).town||"")+" · €"+Number(inquiryProperty(q).price||0).toLocaleString("en-GB") : ""}</div><p class="inquiry-message">${esc(q.message || "No message supplied.")}</p><div class="inquiry-actions">${q.email ? `<a href="${esc(inquiryReplyUrl(q))}">Reply by email</a>` : ""}${inquiryExtraActions(q)}${q.phone ? `<a href="tel:${esc(q.phone)}">Call</a>` : ""}${q.status === "new" ? `<button class="secondary" onclick="markInquiryRead('${q.id}')">Mark read</button>` : ""}<button class="delete" onclick="deleteInquiry('${q.id}')">Delete</button></div></article>`;
           })
           .join("");
       }
@@ -4436,7 +4455,7 @@
         actions.replaceChildren();
         sourceActions
           ?.querySelectorAll(
-            'a[href^="mailto:"],a[href^="tel:"],.buyer-price-email',
+            'a[href^="mailto:"],a[href^="tel:"],a[href^="https://wa.me/"],.inquiry-property-link,.buyer-price-email,button[onclick^="markInquiry"]',
           )
           .forEach((control) => {
             const copy = control.cloneNode(true);
@@ -4455,14 +4474,14 @@
           .forEach((card) => {
             const actions = card.querySelector(".inquiry-actions"),
               reply = actions?.querySelector('a[href^="mailto:"]');
-            if (!actions || !reply) return;
+            if (!actions) return;
             const email = decodeURIComponent(
-                reply.getAttribute("href").slice(7).split("?")[0],
+                reply?.getAttribute("href")?.slice(7).split("?")[0] || "",
               ),
               name =
                 card.querySelector(".inquiry-meta b")?.textContent?.trim() ||
                 "";
-            if (!actions.querySelector(".buyer-price-email")) {
+            if (reply && /buyer assistance/i.test(card.textContent) && !actions.querySelector(".buyer-price-email")) {
               const priceButton = document.createElement("button");
               priceButton.type = "button";
               priceButton.className = "secondary buyer-price-email";
@@ -5097,7 +5116,7 @@
         if (brandLabel && !brandLabel.querySelector(".owner-version"))
           brandLabel.insertAdjacentHTML(
             "beforeend",
-            '<b class="owner-version">V10</b>',
+            '<b class="owner-version">V16</b>',
           );
         const tabs = document.querySelector(".tabs"),
           inquiryTab = document.querySelector('[data-view="inquiries"]');
@@ -5113,7 +5132,7 @@
         if (inquiryTools && !$("inquiryStatusFilter"))
           inquiryTools.insertAdjacentHTML(
             "beforeend",
-            '<select class="inquiry-filter" id="inquiryStatusFilter" aria-label="Filter enquiries"><option value="unread">Unread first</option><option value="all">All enquiries</option><option value="read">Read</option></select>',
+            '<select class="inquiry-filter" id="inquiryStatusFilter" aria-label="Filter enquiries"><option value="unread">Unread first</option><option value="all">All enquiries</option><option value="read">Read</option><option value="replied">Replied</option></select>',
           );
         $("inquiryStatusFilter")?.addEventListener(
           "change",
@@ -5152,6 +5171,7 @@
         );
         if (filter === "unread") list = list.filter((x) => x.status === "new");
         if (filter === "read") list = list.filter((x) => x.status !== "new");
+        if (filter === "replied") list = list.filter((x) => x.status === "replied");
         list.sort(
           (a, b) =>
             Number(b.status === "new") - Number(a.status === "new") ||
@@ -6080,6 +6100,6 @@
       if ("serviceWorker" in navigator)
         navigator.serviceWorker.register("/service-worker.js");
     </script>
-    <script src="/owners-analytics.js"></script>
+    <script src="/owners-analytics.js?v=16"></script>
   </body>
 </html>
