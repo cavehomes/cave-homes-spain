@@ -1,92 +1,53 @@
 (() => {
-  const APP_ID = '2bc7a85b-fae2-48d4-9df6-271e781c0aab';
-  let initialized = false;
-  let sdk = null;
-
-  function withOneSignal(callback) {
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    window.OneSignalDeferred.push(async OneSignal => {
-      sdk = OneSignal;
-      await callback(OneSignal);
-    });
+  'use strict';
+  const APP_ID='2bc7a85b-fae2-48d4-9df6-271e781c0aab';
+  let sdk=null,ready=false,failed=false,ownerId=null,identity=Promise.resolve();
+  const isWebView=/; wv\)|\bwv\b/.test(navigator.userAgent);
+  function render(){
+    const home=document.getElementById('homeView');if(!home)return;
+    let panel=document.getElementById('ownerNotifications');
+    if(!panel){panel=document.createElement('section');panel.id='ownerNotifications';panel.className='card';panel.style.cssText='margin-top:16px;padding:18px;border:1px solid #ded8cd';panel.innerHTML='<h3 style="margin:0 0 8px">Phone notifications</h3><p id="ownerNotificationStatus" role="status" aria-live="polite"></p><button class="btn" type="button" id="enableOwnerNotifications">Enable notifications</button><p id="ownerNotificationHelp" style="margin-bottom:0;font-size:.9rem"></p>';home.appendChild(panel);document.getElementById('enableOwnerNotifications').onclick=enable;}
+    const status=document.getElementById('ownerNotificationStatus'),button=document.getElementById('enableOwnerNotifications'),help=document.getElementById('ownerNotificationHelp');
+    const blocked=typeof Notification!=='undefined'&&Notification.permission==='denied';
+    const subscribed=ready&&sdk.Notifications.permission&&sdk.User.PushSubscription.optedIn&&sdk.User.PushSubscription.id;
+    button.hidden=!!subscribed||isWebView;button.disabled=!ready||blocked;
+    if(isWebView){status.textContent='This downloaded app uses Android notification settings.';help.textContent='On your phone, open Settings → Apps → Cave Homes Spain Owners → Notifications and allow notifications. For browser alerts, open cavehomesspain.com/admin.html in Chrome and enable notifications there.';}
+    else if(subscribed){status.textContent='Notifications enabled on this device.';help.textContent='New enquiries can alert you while the Owners app is closed. Delivery also depends on your phone and browser notification settings.';}
+    else if(blocked){status.textContent='Notifications are blocked on this device.';help.textContent='In Chrome, open this site’s permissions and allow Notifications, then reopen the Owners app. Also check Settings → Apps → Chrome → Notifications on your phone.';}
+    else if(failed){status.textContent='Notification setup could not connect.';help.textContent='Open the Owners app in Chrome, check your connection and reload. Your enquiries are still saved in the inbox.';}
+    else if(!ready){status.textContent='Checking notification registration…';help.textContent='If this stays here, open the Owners app in Chrome and reload.';}
+    else{status.textContent='This device is not subscribed to enquiry alerts.';help.textContent='Tap Enable notifications, then choose Allow when your phone asks. Keep Chrome notifications enabled in your phone settings.';}
+    if(ready&&!sdk.Notifications.isPushSupported()){button.hidden=true;status.textContent='This browser does not support push notifications.';help.textContent='Open cavehomesspain.com/admin.html in Chrome on your Android phone to enable enquiry alerts.';}
   }
-
-  function showVerificationDialog() {
-    if (document.getElementById('onesignalVerificationDialog')) return;
-
-    const overlay = document.createElement('div');
-    overlay.id = 'onesignalVerificationDialog';
-    overlay.setAttribute('role', 'dialog');
-    overlay.setAttribute('aria-modal', 'true');
-    overlay.setAttribute('aria-labelledby', 'onesignalDialogTitle');
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:20px;background:rgba(16,29,24,.72)';
-
-    const panel = document.createElement('div');
-    panel.style.cssText = 'width:min(430px,100%);padding:28px;border-radius:20px;background:#fff;color:#203129;box-shadow:0 24px 70px rgba(0,0,0,.3);font-family:system-ui,-apple-system,sans-serif';
-    panel.innerHTML = '<h2 id="onesignalDialogTitle" style="margin:0 0 12px;font:700 27px/1.15 Georgia,serif">Your OneSignal SDK integration is complete!</h2><p style="margin:0 0 22px;color:#5f6c66;line-height:1.55">You can now send Push Notifications &amp; In-App Messages through OneSignal. Tap below to enable push notifications.</p><button id="onesignalDialogConfirm" type="button" style="width:100%;min-height:50px;border:0;border-radius:999px;background:#b85f3b;color:#fff;font:700 16px system-ui,-apple-system,sans-serif">Got it</button>';
-
-    overlay.appendChild(panel);
-    document.body.appendChild(overlay);
-    const button = document.getElementById('onesignalDialogConfirm');
-    button.focus();
-    button.addEventListener('click', async () => {
-      button.disabled = true;
-      try {
-        await sdk.Notifications.requestPermission();
-      } finally {
-        overlay.remove();
-      }
-    }, { once: true });
+  async function enable(){
+    if(!ready)return render();
+    const button=document.getElementById('enableOwnerNotifications');button.disabled=true;
+    try{await sdk.Notifications.requestPermission();if(sdk.Notifications.permission){await sdk.User.PushSubscription.optIn();await identity;await sdk.User.addTag('app','cave-homes-owner');}}
+    catch(_){failed=true;}finally{render();}
   }
-
-  function observeSubscription(OneSignal) {
-    const reportRegistration = () => {
-      const id = OneSignal.User.PushSubscription.id;
-      if (id) console.info('OneSignal push subscription registered:', id);
-    };
-    OneSignal.User.PushSubscription.addEventListener('change', reportRegistration);
-    reportRegistration();
-  }
-
-  async function initialize() {
-    if (initialized) return;
-    initialized = true;
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    window.OneSignalDeferred.push(async OneSignal => {
-      sdk = OneSignal;
-      await OneSignal.init({
-        appId: APP_ID,
-        safari_web_id: 'web.onesignal.auto.11512f5d-61af-48e1-99c6-cc09fe5cc2c2',
-        notifyButton: { enable: true },
-        serviceWorkerPath: 'push/onesignal/OneSignalSDKWorker.js',
-        serviceWorkerParam: { scope: '/push/onesignal/' }
-      });
-      observeSubscription(OneSignal);
-      showVerificationDialog();
-    });
-  }
-
-  window.CaveHomesNotifications = {
-    initialize,
-    login(externalId) {
-      if (externalId) withOneSignal(OneSignal => OneSignal.login(externalId));
-    },
-    logout() {
-      withOneSignal(OneSignal => OneSignal.logout());
-    },
-    addEmail(email) {
-      if (email) withOneSignal(OneSignal => OneSignal.User.addEmail(email));
-    },
-    addSms(phone) {
-      if (phone) withOneSignal(OneSignal => OneSignal.User.addSms(phone));
-    },
-    addTag(key, value) {
-      if (key && value) withOneSignal(OneSignal => OneSignal.User.addTag(key, value));
-    },
-    requestPermission() {
-      withOneSignal(OneSignal => OneSignal.Notifications.requestPermission());
-    }
+  function withSdk(callback){window.OneSignalDeferred=window.OneSignalDeferred||[];window.OneSignalDeferred.push(async OneSignal=>{try{await initialized;await callback(OneSignal);render();}catch(_){failed=true;render();}});}
+  let resolveReady;const initialized=new Promise(resolve=>resolveReady=resolve);
+  window.CaveHomesNotifications={
+    initialize(){return initialized},
+    login(id){if(!id)return;ownerId=id;withSdk(async OneSignal=>{identity=(async()=>{await OneSignal.login(id);await OneSignal.User.addTag('app','cave-homes-owner')})();await identity;});},
+    logout(){ownerId=null;withSdk(OneSignal=>OneSignal.logout());},
+    addEmail(email){if(email)withSdk(async OneSignal=>{await identity;await OneSignal.User.addEmail(email)});},
+    addSms(phone){if(phone)withSdk(async OneSignal=>{await identity;await OneSignal.User.addSms(phone)});},
+    addTag(key,value){if(key&&value)withSdk(async OneSignal=>{await identity;await OneSignal.User.addTag(key,value)});},
+    requestPermission:enable
   };
-
-  initialize().catch(error => console.error('OneSignal initialization failed:', error));
+  window.OneSignalDeferred=window.OneSignalDeferred||[];
+  window.OneSignalDeferred.push(async OneSignal=>{
+    sdk=OneSignal;
+    try{
+      await OneSignal.init({appId:APP_ID,safari_web_id:'web.onesignal.auto.11512f5d-61af-48e1-99c6-cc09fe5cc2c2',notifyButton:{enable:false},autoResubscribe:true,serviceWorkerPath:'push/onesignal/OneSignalSDKWorker.js',serviceWorkerParam:{scope:'/push/onesignal/'}});
+      ready=true;resolveReady();
+      OneSignal.User.PushSubscription.addEventListener('change',()=>{if(ownerId)OneSignal.User.addTag('app','cave-homes-owner').catch(()=>{});render()});
+      OneSignal.Notifications.addEventListener('permissionChange',render);
+    }catch(_){failed=true;resolveReady();}
+    render();
+  });
+  const observer=new MutationObserver(()=>{if(document.getElementById('homeView')&&!document.getElementById('ownerNotifications'))render()});
+  observer.observe(document.documentElement,{childList:true,subtree:true});
+  document.addEventListener('DOMContentLoaded',render);
 })();
