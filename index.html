@@ -4952,6 +4952,96 @@
         }
       }
     </style>
+    <style>
+      /* Compact desktop welcome and optional filters; retain the mobile layout. */
+      @media (min-width: 901px) {
+        .hero {
+          min-height: 0;
+        }
+        .hero-copy {
+          max-width: 1180px;
+          padding: 48px 0 52px;
+        }
+        .hero h1 {
+          max-width: 680px;
+          font-size: clamp(2.8rem, 4.2vw, 3.6rem);
+          margin-bottom: 18px;
+        }
+        .hero-copy > p:not(.eyebrow) {
+          max-width: 650px;
+          font-size: 1.0625rem;
+          line-height: 1.55;
+          margin-bottom: 20px;
+        }
+        .hero .eyebrow {
+          font-size: 0.875rem;
+        }
+        .hero-search {
+          margin: 0;
+          padding: 6px 0 18px;
+        }
+        .v15-filter-toggle {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          width: 100%;
+          min-height: 48px;
+          padding: 12px 18px;
+          border: 1px solid var(--line);
+          border-radius: 14px;
+          background: #fff;
+          color: var(--forest);
+          font: 700 1rem "DM Sans", sans-serif;
+          cursor: pointer;
+        }
+        .v15-filter-toggle[aria-expanded="true"] {
+          background: #e8efe9;
+        }
+        .filter-bar.v15-collapsible {
+          display: none;
+          margin-top: 10px;
+        }
+        .filter-bar.v15-collapsible.open {
+          display: grid;
+        }
+        .v14-paths {
+          padding: 28px 0 36px;
+        }
+        .v14-path-head {
+          max-width: 820px;
+          margin-bottom: 20px;
+        }
+        .v14-path-head h2 {
+          font-size: 1.875rem;
+          line-height: 1.2;
+        }
+        .v14-path-head > p:last-child {
+          margin: 12px 0 0;
+        }
+        .v14-path-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 14px;
+        }
+        .v14-path-grid > a {
+          min-height: 88px;
+          padding: 16px 20px;
+        }
+        .v14-path-grid small {
+          font-size: 0.875rem;
+        }
+        .listings {
+          padding-top: 44px;
+        }
+        .buyer-safety {
+          margin-bottom: 28px;
+        }
+        .cards {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 32px;
+        }
+      }
+    </style>
   </head>
   <body data-version="15">
     <div class="v11-topline">
@@ -5123,6 +5213,7 @@
             id="v15FilterToggle"
             type="button"
             aria-expanded="false"
+            aria-controls="v15FilterBar"
           >
             <span>⌕ Search & filters</span
             ><span id="v15FilterSummary" class="v15-filter-summary"
