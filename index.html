@@ -30,7 +30,7 @@
     </script>
     <script src="/site-tools.js?v=20261006-weather-icon" defer></script>
     <script src="/property-copy-v16.js?v=16"></script>
-    <script src="/v16-tracking.js?v=16" defer></script>
+    <script src="/buyer-request-v16.js?v=16" defer></script><script src="/v16-tracking.js?v=16" defer></script>
     <title>Cave Homes for Sale in Granada, Spain | Cave Homes Spain</title>
     <meta
       name="description"
@@ -7307,6 +7307,7 @@
         return "en";
       }
       const savedLanguage =
+        new URLSearchParams(location.search).get("lang") ||
         localStorage.getItem("caveHomesLanguageManual") ||
         detectVisitorLanguage();
       languageSelect.value = savedLanguage;
