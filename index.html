@@ -511,6 +511,8 @@
       .before-after-label { position:absolute; z-index:5; bottom:14px; padding:5px 9px; border-radius:999px; background:rgba(20,42,33,.84); color:#fff; font-size:.68rem; font-weight:800; line-height:1.2; pointer-events:none; }
       .before-label { left:14px; }
       .after-label { right:14px; }
+      /* Keep the photo count clear of both image comparison labels. */
+      .before-after-card .photo-count-badge { bottom:52px; z-index:5; pointer-events:none; }
       .before-after-divider { position:absolute; z-index:3; top:0; bottom:0; left:var(--ba-position,100%); width:2px; background:#fff; box-shadow:0 0 6px rgba(0,0,0,.5); transform:translateX(-1px); pointer-events:none; }
       .before-after-divider i { position:absolute; top:50%; left:50%; width:36px; height:36px; border:2px solid #fff; border-radius:50%; background:var(--forest); box-shadow:0 2px 8px rgba(0,0,0,.3); transform:translate(-50%,-50%); }
       .before-after-divider i::before,.before-after-divider i::after { position:absolute; top:50%; color:#fff; font-size:11px; font-style:normal; font-weight:800; line-height:1; transform:translateY(-50%); }
