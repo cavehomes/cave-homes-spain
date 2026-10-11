@@ -4777,6 +4777,21 @@
         }
       }
 
+
+      .homepage-buyer-assistance{padding:28px 0 12px;scroll-margin-top:90px}
+      .homepage-buyer-panel{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:40px;padding:38px 40px;border-radius:22px;background:#183d32;color:#fff;box-shadow:0 12px 35px #183d3214}
+      .homepage-buyer-panel .eyebrow{color:#efc6b3;margin:0 0 12px;font-size:.75rem;letter-spacing:.11em}
+      .homepage-buyer-panel h2{color:#fff;font:700 clamp(1.7rem,3.1vw,2.5rem)/1.13 Georgia,serif;margin:0 0 16px;max-width:650px}
+      .homepage-buyer-panel p{color:#e6f0e9;line-height:1.65;margin:0;font-size:.96rem;max-width:660px}
+      .homepage-buyer-actions{display:flex;align-items:center;flex-wrap:wrap;gap:16px;margin-top:24px}
+      .homepage-buyer-actions .btn{background:#fff;color:#183d32;border:1px solid #fff;min-height:48px;padding:12px 19px}
+      .homepage-buyer-details{color:#fff;text-underline-offset:4px;font-weight:700;font-size:.9rem}
+      .homepage-buyer-services{display:flex;flex-direction:column;justify-content:center;gap:18px;border-left:1px solid #ffffff2b;padding-left:32px}
+      .homepage-buyer-service{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;align-items:start}
+      .homepage-buyer-service>span{color:#efc6b3;font-size:22px;line-height:1.2}
+      .homepage-buyer-service strong{display:block;font-size:.94rem;color:#fff;margin-bottom:3px}
+      .homepage-buyer-service small{color:#d7e5dd;font-size:.83rem;line-height:1.5;display:block}
+      @media(max-width:760px){.homepage-buyer-panel{grid-template-columns:1fr;padding:27px 24px;gap:26px}.homepage-buyer-services{border-left:0;border-top:1px solid #ffffff2b;padding:23px 0 0;gap:15px}.homepage-buyer-assistance{padding-top:20px}.homepage-buyer-actions{gap:14px}.homepage-buyer-actions .btn{width:100%;text-align:center;justify-content:center}}
     </style>
 
     <style id="energy-compliance-styles">
@@ -5187,8 +5202,8 @@
             <a class="btn" href="#buy">Browse properties <span>→</span></a
             ><a class="btn outline" href="/property-watch.html"
               >Explore Property Watch</a
-            ><a class="btn outline" href="/list-your-property.html"
-              >Sell your property</a
+            ><a class="btn outline homepage-buyer-link" href="/buyer-assistance.html#buyer-assistance-contact"
+              >Get Buyer Assistance</a
             >
           </div>
         </div>
@@ -5327,6 +5342,13 @@
           </div>
         </div>
       </div>
+
+      <section class="homepage-buyer-assistance" id="homepageBuyerAssistance" aria-labelledby="homepageBuyerTitle">
+        <div class="wrap"><div class="homepage-buyer-panel">
+          <div><p class="eyebrow">Buyer Assistance · Inland Granada</p><h2 id="homepageBuyerTitle">Buying from a distance? We can be there for you.</h2><p>Get a full property and local-area video tour, explore villages with us, or ask for practical help with appointments, keys and utilities.</p><div class="homepage-buyer-actions"><a class="btn homepage-buyer-link" href="/buyer-assistance.html#buyer-assistance-contact">Tell us what help you need</a><a class="homepage-buyer-details homepage-buyer-link" href="/buyer-assistance.html">Explore Buyer Assistance →</a></div></div>
+          <div class="homepage-buyer-services"><div class="homepage-buyer-service"><span aria-hidden="true">▷</span><div><strong>See the property from home</strong><small>Full narrated video tours and photographs</small></div></div><div class="homepage-buyer-service"><span aria-hidden="true">⌖</span><div><strong>Get to know the area</strong><small>Village visits and everyday practicalities</small></div></div><div class="homepage-buyer-service"><span aria-hidden="true">⌂</span><div><strong>Have someone there when needed</strong><small>Appointment, key and utility coordination</small></div></div></div>
+        </div></div>
+      </section>
 
       <section class="v14-paths" aria-labelledby="v14PathTitle">
         <div class="wrap">
@@ -7201,6 +7223,10 @@
         "Agreed visits, photo reports and help if something seems wrong":
           "Vereinbarte Besuche, Fotoberichte und Hilfe, wenn etwas nicht stimmt.",
       });
+      Object.assign(translations["es"], {"Get Buyer Assistance": "Solicita asistencia al comprador", "Buyer Assistance · Inland Granada": "Asistencia al comprador · Interior de Granada", "Buying from a distance? We can be there for you.": "¿Compras desde lejos? Podemos estar allí por ti.", "Get a full property and local-area video tour, explore villages with us, or ask for practical help with appointments, keys and utilities.": "Solicita un vídeo completo de la propiedad y la zona, visita pueblos con nosotros o pide ayuda práctica con citas, llaves y suministros.", "Tell us what help you need": "Cuéntanos qué ayuda necesitas", "Explore Buyer Assistance →": "Descubre la asistencia al comprador →", "See the property from home": "Visita la propiedad desde casa", "Full narrated video tours and photographs": "Vídeos completos narrados y fotografías", "Get to know the area": "Conoce la zona", "Village visits and everyday practicalities": "Visitas a pueblos y aspectos prácticos del día a día", "Have someone there when needed": "Cuenta con alguien allí cuando lo necesites", "Appointment, key and utility coordination": "Coordinación de citas, llaves y suministros"});
+      Object.assign(translations["nl"], {"Get Buyer Assistance": "Vraag aankoopbegeleiding aan", "Buyer Assistance · Inland Granada": "Aankoopbegeleiding · Binnenland van Granada", "Buying from a distance? We can be there for you.": "Koopt u op afstand? Wij kunnen ter plaatse zijn.", "Get a full property and local-area video tour, explore villages with us, or ask for practical help with appointments, keys and utilities.": "Vraag een volledige videotour van de woning en omgeving, verken dorpen met ons of vraag praktische hulp met afspraken, sleutels en nutsvoorzieningen.", "Tell us what help you need": "Vertel ons welke hulp u nodig heeft", "Explore Buyer Assistance →": "Ontdek onze aankoopbegeleiding →", "See the property from home": "Bekijk de woning vanuit huis", "Full narrated video tours and photographs": "Volledige videotours met uitleg en foto’s", "Get to know the area": "Leer de omgeving kennen", "Village visits and everyday practicalities": "Dorpsbezoeken en dagelijkse praktische zaken", "Have someone there when needed": "Iemand ter plaatse wanneer dat nodig is", "Appointment, key and utility coordination": "Coördinatie van afspraken, sleutels en nutsvoorzieningen"});
+      Object.assign(translations["fr-BE"], {"Get Buyer Assistance": "Demander une assistance à l’achat", "Buyer Assistance · Inland Granada": "Assistance aux acheteurs · Intérieur de Grenade", "Buying from a distance? We can be there for you.": "Vous achetez à distance ? Nous pouvons être sur place pour vous.", "Get a full property and local-area video tour, explore villages with us, or ask for practical help with appointments, keys and utilities.": "Demandez une visite vidéo complète du bien et des environs, découvrez les villages avec nous ou obtenez une aide pratique pour les rendez-vous, les clés et les services publics.", "Tell us what help you need": "Dites-nous de quelle aide vous avez besoin", "Explore Buyer Assistance →": "Découvrir notre assistance aux acheteurs →", "See the property from home": "Visitez le bien depuis chez vous", "Full narrated video tours and photographs": "Visites vidéo complètes commentées et photographies", "Get to know the area": "Découvrez la région", "Village visits and everyday practicalities": "Visites de villages et aspects pratiques du quotidien", "Have someone there when needed": "Une présence sur place quand vous en avez besoin", "Appointment, key and utility coordination": "Coordination des rendez-vous, des clés et des services publics"});
+      Object.assign(translations["de"], {"Get Buyer Assistance": "Kaufbegleitung anfragen", "Buyer Assistance · Inland Granada": "Kaufbegleitung · Landesinneres von Granada", "Buying from a distance? We can be there for you.": "Kaufen Sie aus der Ferne? Wir können vor Ort für Sie da sein.", "Get a full property and local-area video tour, explore villages with us, or ask for practical help with appointments, keys and utilities.": "Nutzen Sie eine vollständige Videotour der Immobilie und Umgebung, erkunden Sie Dörfer mit uns oder erhalten Sie praktische Hilfe bei Terminen, Schlüsseln und Versorgungsdiensten.", "Tell us what help you need": "Sagen Sie uns, welche Hilfe Sie benötigen", "Explore Buyer Assistance →": "Unsere Kaufbegleitung entdecken →", "See the property from home": "Besichtigen Sie die Immobilie von zu Hause", "Full narrated video tours and photographs": "Vollständige kommentierte Videotours und Fotos", "Get to know the area": "Lernen Sie die Gegend kennen", "Village visits and everyday practicalities": "Dorfbesuche und praktische Fragen des Alltags", "Have someone there when needed": "Jemand vor Ort, wenn Sie Unterstützung brauchen", "Appointment, key and utility coordination": "Koordination von Terminen, Schlüsseln und Versorgungsdiensten"});
       const textNodes = [];
       const walker = document.createTreeWalker(
         document.body,
@@ -7248,6 +7274,11 @@
           const original = node.original.trim(),
             translated = dict[original] || original;
           node.nodeValue = node.original.replace(original, translated);
+        });
+        document.querySelectorAll(".homepage-buyer-link").forEach(link => {
+          const url = new URL(link.getAttribute("href"), location.origin);
+          url.searchParams.set("lang", lang);
+          link.href = url.pathname + url.search + url.hash;
         });
         translatableInputs.forEach((el) => {
           const original = el.dataset.originalPlaceholder;
