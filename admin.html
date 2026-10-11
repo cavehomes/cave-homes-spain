@@ -2479,6 +2479,7 @@
           </div>
         </section>
         <section class="hidden" id="inquiriesView">
+          <div class="care-intro"><h2>Property enquiries &amp; messages</h2><p>Messages about individual properties and general website enquiries appear here.</p><button class="secondary" type="button" onclick="refreshOwnerInbox()">Refresh messages</button></div>
           <div class="list-tools">
             <input
               id="inquirySearch"
@@ -2493,7 +2494,7 @@
         </section>
         <section class="hidden" id="buyerRequestsView">
           <div class="care-intro">
-            <h2>Website Buyer Enquiries</h2>
+            <h2>Buyer search requests</h2>
             <p>
               Requests sent through “Tell us what you’re looking for” on the
               website. Contact buyers when you have a suitable property.
@@ -3038,6 +3039,8 @@
       const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       window.CHSOwnerDb = db;
       let homes = [];
+      let ownerSessionActive = false;
+      let inquiryRefreshInFlight = false;
       const $ = (id) => document.getElementById(id),
         showNotice = (id, text, error = false) => {
           const el = $(id);
@@ -3048,6 +3051,7 @@
       db.auth.getSession().then(({ data }) => setSession(data.session));
       db.auth.onAuthStateChange((_, session) => setSession(session));
       function setSession(session) {
+        ownerSessionActive = !!session;
         $("loginView").classList.toggle("hidden", !!session);
         $("appView").classList.toggle("hidden", !session);
         if (session) {
@@ -4310,8 +4314,8 @@
         ).length;
         if ($("buyerRequestHomeCount"))
           $("buyerRequestHomeCount").textContent = activeCount
-            ? activeCount + (activeCount === 1 ? " new buyer enquiry" : " new buyer enquiries")
-            : "No new buyer enquiries";
+            ? activeCount + (activeCount === 1 ? " new search request" : " new search requests")
+            : "No new search requests";
         if (!list.length) {
           listEl.innerHTML =
             '<div class="card empty"><b>No matching buyer requests.</b><br>New property requirements from the website will appear here.</div>';
@@ -5169,7 +5173,7 @@
                 .includes(q),
             ),
         );
-        if (filter === "unread") list = list.filter((x) => x.status === "new");
+        // The default shows all messages with unread messages sorted first.
         if (filter === "read") list = list.filter((x) => x.status !== "new");
         if (filter === "replied") list = list.filter((x) => x.status === "replied");
         list.sort(
@@ -5186,24 +5190,39 @@
           (x) => x.status === "new",
         ).length;
         if ($("unreadStat")) $("unreadStat").textContent = unread;
+        if ($("propertyEnquiryHomeCount")) $("propertyEnquiryHomeCount").textContent = unread ? unread + (unread === 1 ? " unread message" : " unread messages") : "View all messages";
         applyInquiryFilters();
       };
+      function requestedOwnerView() {
+        return ({
+          "#inquiries": "inquiries",
+          "#enquiries": "inquiries",
+          "#buyer-requests": "buyerRequests",
+          "#property-care": "care",
+          "#approvals": "approvals",
+          "#holiday-rentals": "rentals",
+          "#maintenance-businesses": "businesses"
+        })[location.hash] || "home";
+      }
+      async function refreshOwnerInbox() {
+        if (!ownerSessionActive || document.visibilityState === "hidden" || inquiryRefreshInFlight) return;
+        inquiryRefreshInFlight = true;
+        try { await loadInquiries(); }
+        finally { inquiryRefreshInFlight = false; }
+      }
+      window.addEventListener("hashchange", () => {
+        if (ownerSessionActive) switchView(requestedOwnerView());
+      });
+      window.addEventListener("focus", refreshOwnerInbox);
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") refreshOwnerInbox();
+      });
+      setInterval(refreshOwnerInbox, 30000);
       const setSessionV6 = setSession;
       setSession = function (session) {
         setSessionV6(session);
         if (session) {
-          const requested =
-            location.hash === "#property-care"
-              ? "care"
-              : location.hash === "#approvals"
-                ? "approvals"
-                : location.hash === "#holiday-rentals"
-                  ? "rentals"
-                  : location.hash === "#maintenance-businesses"
-                    ? "businesses"
-                    : location.hash === "#buyer-requests"
-                      ? "buyerRequests"
-                      : "home";
+          const requested = requestedOwnerView();
           setTimeout(() => switchView(requested), 120);
         }
       };
@@ -6021,7 +6040,7 @@
             "afterbegin",
             '<button class="tab active" data-view="home">Home</button>',
           );
-          const home = `<section id="homeView"><div class="stats dashboard-actions"><button class="stat stat-button action-stat" type="button" onclick="switchView(\'add\')"><strong>＋</strong><span>Add property</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'care\')"><strong>✓</strong><span>Property Care</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyer\')"><strong>🤝</strong><span>Buyer Assistance</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'inquiries\')"><strong>✉</strong><span>Enquiries</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyerRequests\')"><strong>⌕</strong><span>Website Buyer Enquiries</span><small id="buyerRequestHomeCount">Open buyer enquiries</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'community\')"><strong>◉</strong><span>Community</span><small id="communityHomeCount">Manage members and posts</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'rentals\')"><strong>⌂</strong><span>Holiday rentals</span></button><a class="stat stat-button action-stat" href="/rent.html" target="_blank"><strong>↗</strong><span>Homes to Rent</span></a></div></section>`;
+          const home = `<section id="homeView"><div class="stats dashboard-actions"><button class="stat stat-button action-stat" type="button" onclick="switchView(\'add\')"><strong>＋</strong><span>Add property</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'care\')"><strong>✓</strong><span>Property Care</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyer\')"><strong>🤝</strong><span>Buyer Assistance</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'inquiries\')"><strong>✉</strong><span>Property enquiries &amp; messages</span><small id="propertyEnquiryHomeCount">Open property messages</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyerRequests\')"><strong>⌕</strong><span>Buyer search requests</span><small id="buyerRequestHomeCount">Tell us what you’re looking for</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'community\')"><strong>◉</strong><span>Community</span><small id="communityHomeCount">Manage members and posts</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'rentals\')"><strong>⌂</strong><span>Holiday rentals</span></button><a class="stat stat-button action-stat" href="/rent.html" target="_blank"><strong>↗</strong><span>Homes to Rent</span></a></div></section>`;
           document
             .querySelector("#addView")
             .insertAdjacentHTML("beforebegin", home);
