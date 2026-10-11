@@ -1867,6 +1867,8 @@
         gap: 10px;
         align-items: end;
       }
+      .owner-assistance-form {grid-template-columns:1fr 1fr;}
+      @media(max-width:620px){.owner-assistance-form {grid-template-columns:1fr;}.owner-assistance-form .field {min-width:0;}}
       .buyer-email-form .field {
         margin: 0;
       }
@@ -2060,6 +2062,10 @@
           >
         </div>
         <section class="hidden" id="buyerView">
+          <div class="care-card"><h3>Buyer Assistance enquiries</h3><p>Requests from the dedicated website form. Open a message, reply or send your private price list.</p><div class="list-tools"><input type="search" id="assistanceEnquirySearch" placeholder="Search Buyer Assistance enquiries…" aria-label="Search Buyer Assistance enquiries"><button class="secondary" type="button" onclick="refreshOwnerInbox()">Refresh</button></div><div class="inbox" id="assistanceEnquiryList"><div class="empty">Loading Buyer Assistance enquiries…</div></div></div>
+          <details class="care-card"><summary><b>Add a Buyer Assistance enquiry</b></summary><p>Record an enquiry received by phone or elsewhere. This saves it to your inbox; it does not contact the buyer.</p><form id="ownerAssistanceForm" class="buyer-email-form owner-assistance-form">
+          <div class="field"><label for="ownerBAName">Buyer name *</label><input id="ownerBAName" name="name" required maxlength="120"></div><div class="field"><label for="ownerBAEmail">Email</label><input id="ownerBAEmail" name="email" type="email" maxlength="200"></div><div class="field"><label for="ownerBAPhone">Phone or WhatsApp</label><input id="ownerBAPhone" name="phone" type="tel" maxlength="40"></div><div class="field"><label for="ownerBAService">Service *</label><select id="ownerBAService" name="service" required><option value="">Choose a service</option><option>Full property &amp; area video tour</option><option>Area-orientation visit</option><option>Builder and survey coordination</option><option>Translation assistance</option><option>Key handover</option><option>Utility coordination</option><option>Several services / advice on options</option></select></div><div class="field"><label for="ownerBALocation">Location *</label><input id="ownerBALocation" name="location" required maxlength="250"></div><div class="field"><label for="ownerBADate">Preferred date</label><input id="ownerBADate" name="date" type="date"></div><div class="field" style="grid-column:1/-1"><label for="ownerBAMessage">Request or notes *</label><textarea id="ownerBAMessage" name="message" required maxlength="5000" rows="4"></textarea></div><button class="btn green" type="submit">Save Buyer Assistance enquiry</button><p id="ownerBAStatus" role="status" aria-live="polite"></p></form></details>
+
           <div class="care-intro">
             <h2>Buyer Assistance — Private Prices</h2>
             <p>
@@ -3121,6 +3127,7 @@
         $("businessesView").classList.toggle("hidden", view !== "businesses");
         $("rentalsView").classList.toggle("hidden", view !== "rentals");
         $("communityView").classList.toggle("hidden", view !== "community");
+        if (view === "buyer") loadInquiries();
         if (view === "care") loadCareData();
         if (view === "drafts") loadDrafts();
         if (view === "live") loadLiveHomes();
@@ -4194,6 +4201,7 @@
         }
         inquiries = (data || []).map(q=>({...q,name:q.name||q.buyer_name,email:q.email||q.buyer_email,phone:q.phone||q.buyer_phone}));
         renderBuyerRequests();
+        renderAssistanceEnquiries();
         const applications = inquiries.filter(
             (x) =>
               longRentalDetails(x) ||
@@ -4272,6 +4280,27 @@
           return null;
         }
       }
+      function assistanceEnquiries() {
+        return inquiries.filter(q => /^Buyer Assistance(?:\s*[—–-]|\s+enquiry|\s+request)/i.test(String(q.subject || "")));
+      }
+      function renderAssistanceEnquiries() {
+        const search = ($("assistanceEnquirySearch")?.value || "").toLowerCase().trim();
+        const all = assistanceEnquiries();
+        const list = all.filter(q => !search || [q.name,q.email,q.phone,q.subject,q.property_title,q.message].some(v => String(v || "").toLowerCase().includes(search)));
+        list.sort((a,b) => Number(b.status === "new") - Number(a.status === "new") || Date.parse(b.created_at) - Date.parse(a.created_at));
+        if ($("assistanceEnquiryHomeCount")) { const unread = all.filter(q => q.status === "new").length; $("assistanceEnquiryHomeCount").textContent = unread ? unread + (unread === 1 ? " new assistance enquiry" : " new assistance enquiries") : "Enquiries & private prices"; }
+        if (!list.length) { $("assistanceEnquiryList").innerHTML = '<div class="card empty">No matching Buyer Assistance enquiries. Requests from the website form will appear here.</div>'; return; }
+        renderInquiries(list, "assistanceEnquiryList");
+      }
+      $("assistanceEnquirySearch").addEventListener("input", renderAssistanceEnquiries);
+      $("ownerAssistanceForm").addEventListener("submit", async event => {
+        event.preventDefault(); const form=event.currentTarget,button=form.querySelector('button[type="submit"]'),status=$("ownerBAStatus"); if(button.disabled)return;
+        const data=new FormData(form),value=k=>String(data.get(k)||"").trim();button.disabled=true;status.textContent="Saving…";
+        try {
+          const {error}=await db.from("enquiries").insert({name:value("name"),email:value("email"),phone:value("phone"),subject:"Buyer Assistance — "+value("service"),message:"Service: "+value("service")+"\nLocation: "+value("location")+(value("date")?"\nPreferred date: "+value("date"):"")+"\nRecorded in Owners app\n\n"+value("message"),property_title:value("location"),source:"buyer",status:"new"});
+          if(error)throw error;form.reset();status.textContent="Buyer Assistance enquiry saved.";await loadInquiries();
+        } catch (_) {status.textContent="Could not save. Please try again.";} finally {button.disabled=false;}
+      });
       function buyerRequestItems() {
         return inquiries.filter((q) => propertyMatchDetails(q));
       }
@@ -4370,13 +4399,13 @@
         if(error)return alert("Could not update enquiry: "+error.message);
         closeInquiryReader();await loadInquiries();
       }
-      function renderInquiries(list = inquiries) {
+      function renderInquiries(list = inquiries, targetId = "inquiryList") {
         if (!list.length) {
-          $("inquiryList").innerHTML =
+          $(targetId).innerHTML =
             '<div class="card empty"><b>No enquiries yet.</b><br>New buyer, seller and rental applications will appear here.</div>';
           return;
         }
-        $("inquiryList").innerHTML = list
+        $(targetId).innerHTML = list
           .map((q) => {
             const longRental = longRentalDetails(q),
               rental = rentalDetails(q),
@@ -4471,10 +4500,10 @@
         reader.querySelector(".inquiry-reader-close").focus();
       }
       const renderInquiriesBase = renderInquiries;
-      renderInquiries = function (list = inquiries) {
-        renderInquiriesBase(list);
+      renderInquiries = function (list = inquiries, targetId = "inquiryList") {
+        renderInquiriesBase(list, targetId);
         document
-          .querySelectorAll("#inquiryList .inquiry:not(.rental-review)")
+          .querySelectorAll("#" + targetId + " .inquiry:not(.rental-review)")
           .forEach((card) => {
             const actions = card.querySelector(".inquiry-actions"),
               reply = actions?.querySelector('a[href^="mailto:"]');
@@ -5198,6 +5227,7 @@
           "#inquiries": "inquiries",
           "#enquiries": "inquiries",
           "#buyer-requests": "buyerRequests",
+          "#buyer-assistance": "buyer",
           "#property-care": "care",
           "#approvals": "approvals",
           "#holiday-rentals": "rentals",
@@ -6040,7 +6070,7 @@
             "afterbegin",
             '<button class="tab active" data-view="home">Home</button>',
           );
-          const home = `<section id="homeView"><div class="stats dashboard-actions"><button class="stat stat-button action-stat" type="button" onclick="switchView(\'add\')"><strong>＋</strong><span>Add property</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'care\')"><strong>✓</strong><span>Property Care</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyer\')"><strong>🤝</strong><span>Buyer Assistance</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'inquiries\')"><strong>✉</strong><span>Property enquiries &amp; messages</span><small id="propertyEnquiryHomeCount">Open property messages</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyerRequests\')"><strong>⌕</strong><span>Buyer search requests</span><small id="buyerRequestHomeCount">Tell us what you’re looking for</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'community\')"><strong>◉</strong><span>Community</span><small id="communityHomeCount">Manage members and posts</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'rentals\')"><strong>⌂</strong><span>Holiday rentals</span></button><a class="stat stat-button action-stat" href="/rent.html" target="_blank"><strong>↗</strong><span>Homes to Rent</span></a></div></section>`;
+          const home = `<section id="homeView"><div class="stats dashboard-actions"><button class="stat stat-button action-stat" type="button" onclick="switchView(\'add\')"><strong>＋</strong><span>Add property</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'care\')"><strong>✓</strong><span>Property Care</span></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyer\')"><strong>🤝</strong><span>Buyer Assistance</span><small id="assistanceEnquiryHomeCount">Enquiries &amp; private prices</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'inquiries\')"><strong>✉</strong><span>Property enquiries &amp; messages</span><small id="propertyEnquiryHomeCount">Open property messages</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'buyerRequests\')"><strong>⌕</strong><span>Buyer search requests</span><small id="buyerRequestHomeCount">Tell us what you’re looking for</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'community\')"><strong>◉</strong><span>Community</span><small id="communityHomeCount">Manage members and posts</small></button><button class="stat stat-button action-stat" type="button" onclick="switchView(\'rentals\')"><strong>⌂</strong><span>Holiday rentals</span></button><a class="stat stat-button action-stat" href="/rent.html" target="_blank"><strong>↗</strong><span>Homes to Rent</span></a></div></section>`;
           document
             .querySelector("#addView")
             .insertAdjacentHTML("beforebegin", home);
