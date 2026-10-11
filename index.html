@@ -4778,6 +4778,21 @@
       }
 
 
+      .homepage-buyer-assistance{padding:28px 0 12px;scroll-margin-top:90px}
+      .homepage-buyer-panel{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:40px;padding:38px 40px;border-radius:22px;background:#183d32;color:#fff;box-shadow:0 12px 35px #183d3214}
+      .homepage-buyer-panel .eyebrow{color:#efc6b3;margin:0 0 12px;font-size:.75rem;letter-spacing:.11em}
+      .homepage-buyer-panel h2{color:#fff;font:700 clamp(1.7rem,3.1vw,2.5rem)/1.13 Georgia,serif;margin:0 0 16px;max-width:650px}
+      .homepage-buyer-panel p{color:#e6f0e9;line-height:1.65;margin:0;font-size:.96rem;max-width:660px}
+      .homepage-buyer-actions{display:flex;align-items:center;flex-wrap:wrap;gap:16px;margin-top:24px}
+      .homepage-buyer-actions .btn{background:#fff;color:#183d32;border:1px solid #fff;min-height:48px;padding:12px 19px}
+      .homepage-buyer-details{color:#fff;text-underline-offset:4px;font-weight:700;font-size:.9rem}
+      .homepage-buyer-services{display:flex;flex-direction:column;justify-content:center;gap:18px;border-left:1px solid #ffffff2b;padding-left:32px}
+      .homepage-buyer-service{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;align-items:start}
+      .homepage-buyer-service>span{color:#efc6b3;font-size:22px;line-height:1.2}
+      .homepage-buyer-service strong{display:block;font-size:.94rem;color:#fff;margin-bottom:3px}
+      .homepage-buyer-service small{color:#d7e5dd;font-size:.83rem;line-height:1.5;display:block}
+      @media(max-width:760px){.homepage-buyer-panel{grid-template-columns:1fr;padding:27px 24px;gap:26px}.homepage-buyer-services{border-left:0;border-top:1px solid #ffffff2b;padding:23px 0 0;gap:15px}.homepage-buyer-assistance{padding-top:20px}.homepage-buyer-actions{gap:14px}.homepage-buyer-actions .btn{width:100%;text-align:center;justify-content:center}}
+      @media(max-width:760px){.homepage-buyer-assistance{display:none}}
     </style>
 
     <style id="energy-compliance-styles">
@@ -5329,7 +5344,14 @@
         </div>
       </div>
 
-<section class="v14-paths" aria-labelledby="v14PathTitle">
+      <section class="homepage-buyer-assistance" id="homepageBuyerAssistance" aria-labelledby="homepageBuyerTitle">
+        <div class="wrap"><div class="homepage-buyer-panel">
+          <div><p class="eyebrow">Buyer Assistance · Inland Granada</p><h2 id="homepageBuyerTitle">Buying from a distance? We can be there for you.</h2><p>Get a full property and local-area video tour, explore villages with us, or ask for practical help with appointments, keys and utilities.</p><div class="homepage-buyer-actions"><a class="btn homepage-buyer-link" href="/buyer-assistance.html#buyer-assistance-contact">Tell us what help you need</a><a class="homepage-buyer-details homepage-buyer-link" href="/buyer-assistance.html">Explore Buyer Assistance →</a></div></div>
+          <div class="homepage-buyer-services"><div class="homepage-buyer-service"><span aria-hidden="true">▷</span><div><strong>See the property from home</strong><small>Full narrated video tours and photographs</small></div></div><div class="homepage-buyer-service"><span aria-hidden="true">⌖</span><div><strong>Get to know the area</strong><small>Village visits and everyday practicalities</small></div></div><div class="homepage-buyer-service"><span aria-hidden="true">⌂</span><div><strong>Have someone there when needed</strong><small>Appointment, key and utility coordination</small></div></div></div>
+        </div></div>
+      </section>
+
+      <section class="v14-paths" aria-labelledby="v14PathTitle">
         <div class="wrap">
           <div class="v14-path-head">
             <p class="eyebrow">Start here</p>
