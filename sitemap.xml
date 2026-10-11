@@ -4,7 +4,7 @@
   <url><loc>https://cavehomesspain.com/cave-houses-for-sale-spain.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://cavehomesspain.com/grotwoningen-te-koop-spanje.html</loc><lastmod>2026-10-04</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://cavehomesspain.com/property-guides.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://cavehomesspain.com/buying-a-cave-house-in-spain.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cavehomesspain.com/buying-a-cave-house-in-spain.html</loc><lastmod>2026-10-11</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://cavehomesspain.com/selling-a-cave-house-in-spain.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://cavehomesspain.com/list-your-property.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://cavehomesspain.com/holiday-stays.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -12,10 +12,10 @@
   <url><loc>https://cavehomesspain.com/news-and-advice.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://cavehomesspain.com/market-update.html</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://cavehomesspain.com/blog/history-of-cave-houses-andalucia.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://cavehomesspain.com/baza.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://cavehomesspain.com/benamaurel.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cavehomesspain.com/baza.html</loc><lastmod>2026-10-11</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cavehomesspain.com/benamaurel.html</loc><lastmod>2026-10-11</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://cavehomesspain.com/caniles.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://cavehomesspain.com/castillejar.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cavehomesspain.com/castillejar.html</loc><lastmod>2026-10-11</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://cavehomesspain.com/castril.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://cavehomesspain.com/cortes-de-baza.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://cavehomesspain.com/san-marcos.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -24,8 +24,8 @@
   <url><loc>https://cavehomesspain.com/cuevas-del-campo.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://cavehomesspain.com/cullar.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://cavehomesspain.com/freila.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://cavehomesspain.com/galera.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://cavehomesspain.com/huescar.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cavehomesspain.com/galera.html</loc><lastmod>2026-10-11</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cavehomesspain.com/huescar.html</loc><lastmod>2026-10-11</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://cavehomesspain.com/orce.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
   <url><loc>https://cavehomesspain.com/zujar.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
@@ -57,8 +57,7 @@
   <url><loc>https://cavehomesspain.com/estate-agents.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://cavehomesspain.com/property/land-for-sale-cuevas-de-luna-74e18312.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url>
-    <loc>https://cavehomesspain.com/buyer-assistance.html</loc>
-    <lastmod>2026-09-27</lastmod>
+    <loc>https://cavehomesspain.com/buyer-assistance.html</loc><lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
