@@ -1770,6 +1770,7 @@
       .quote-preview{font:14px/1.6 Arial,sans-serif;min-height:280px;background:#f7f9f7}.followup-save button{margin:0 6px 10px 0}
       .followup-dialog::backdrop{background:#0a1c1694}.followup-private{font-size:13px;color:#5c6c61}.followup-fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}.followup-notes{grid-column:1/-1}.followup-save{margin-top:18px}.followup-save p{font-size:14px}.followup-fields small{font-size:12px;color:#657269}
       @media(max-width:600px){.followup-fields{grid-template-columns:1fr}.followup-dialog{padding:20px}.followup-notes{grid-column:auto}}
+      .report-editor{width:min(860px,calc(100% - 28px))}.report-state{display:inline-block;font-size:12px;font-weight:800;color:var(--green);padding:6px 10px;background:#e8f0ec;border-radius:999px}.report-photo-section{border-top:1px solid #ded8cd;padding-top:20px;margin-top:20px}.report-photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.report-photo-card{padding:14px;border:1px solid #ded8cd;border-radius:12px}.report-photo-card img{display:block;width:100%;height:190px;object-fit:contain;background:#f7f2e9;border-radius:8px;margin-bottom:12px}.report-photo-card label{display:block;font-size:13px;font-weight:700}.report-photo-card input{display:block;box-sizing:border-box;width:100%;padding:10px;border:1px solid #ded8cd;border-radius:8px;font:inherit;margin:6px 0 10px}.report-photo-card button{margin:4px 5px 4px 0}.report-photo-section input[type=file]{display:block;max-width:100%;margin:14px 0}.report-photo-section p{font-size:14px}@media(max-width:600px){.report-photo-grid{grid-template-columns:1fr}}
     </style>
     <style>
       /* Owners App V7 operations upgrade */
@@ -3046,8 +3047,9 @@
         </section>
       </main>
     </div>
+    <script src="/owners-viewing-reports.js?v=20261013"></script>
     <script src="/owners-quotes.js?v=20261013"></script>
-    <script src="/owners-followups.js?v=20261013-quotes" ></script>
+    <script src="/owners-followups.js?v=20261013-reports" ></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       const SUPABASE_URL = "https://lesgzlhvrlxgtfuocadq.supabase.co",
@@ -3085,6 +3087,7 @@
           if (location.hash === "#approvals")
             setTimeout(() => switchView("approvals"), 100);
         } else {
+          window.CHSOwnerReports?.reset();
           window.CHSOwnerQuotes?.reset();
           window.CHSOwnerFollowups?.reset();
           window.CaveHomesNotifications?.logout();
@@ -4197,6 +4200,7 @@
         }
         inquiries = (data || []).map(q=>({...q,name:q.name||q.buyer_name,email:q.email||q.buyer_email,phone:q.phone||q.buyer_phone}));
         await window.CHSOwnerFollowups?.load(db);
+        await window.CHSOwnerReports?.load(db);
         renderBuyerRequests();
         renderAssistanceEnquiries();
         const applications = inquiries.filter(
@@ -4492,11 +4496,11 @@
         actions.replaceChildren();
         sourceActions
           ?.querySelectorAll(
-            'a[href^="mailto:"],a[href^="tel:"],a[href^="https://wa.me/"],.inquiry-property-link,.buyer-price-email,.followup-edit,.quote-edit,button[onclick^="markInquiry"]',
+            'a[href^="mailto:"],a[href^="tel:"],a[href^="https://wa.me/"],.inquiry-property-link,.buyer-price-email,.followup-edit,.quote-edit,.viewing-report-edit,button[onclick^="markInquiry"]',
           )
           .forEach((control) => {
             const copy = control.cloneNode(true);
-            if (control.classList.contains("buyer-price-email") || control.classList.contains("followup-edit") || control.classList.contains("quote-edit"))
+            if (control.classList.contains("buyer-price-email") || control.classList.contains("followup-edit") || control.classList.contains("quote-edit") || control.classList.contains("viewing-report-edit"))
               copy.onclick = control.onclick;
             actions.appendChild(copy);
           });
