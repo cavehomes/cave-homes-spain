@@ -54,6 +54,9 @@
  try{const v=new URLSearchParams(location.search).get('lang')||localStorage.getItem('caveHomesLanguageManual')||navigator.language;lang=v.startsWith('fr')?'fr-BE':v.slice(0,2);if(!texts[lang])lang='en'}catch(_){}
  function apply(){const copy=texts[lang];form.closest('section').lang=lang;select.value=lang;document.querySelectorAll('[data-ba]').forEach(e=>e.textContent=copy[e.dataset.ba]);}
  select.onchange=()=>{lang=select.value;try{localStorage.setItem('caveHomesLanguageManual',lang)}catch(_){}apply()};apply();
+ const context=new URLSearchParams(location.search);
+ document.getElementById('baLocation').value=(context.get('location')||'').slice(0,250);
+ try{const link=new URL(context.get('property_link')||'');if(['https:','http:'].includes(link.protocol))document.getElementById('baLink').value=link.href.slice(0,1500)}catch(_){}
  form.addEventListener('submit',async event=>{
  event.preventDefault();if(busy||!form.reportValidity())return;busy=true;const copy=texts[lang],button=form.querySelector('button[type="submit"]'),d=new FormData(form);button.disabled=true;select.disabled=true;button.textContent=copy.sending;status.hidden=true;status.classList.remove('error');
  const value=k=>String(d.get(k)||'').trim();

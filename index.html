@@ -5810,7 +5810,7 @@
           <div class="modal-actions">
             <button class="btn" id="modalEnquire">
               Enquire about this home →</button
-            ><a class="btn request-match-btn" id="modalRequestMatch" href="/tell-us-what-you-are-looking-for.html">Looking for a different home?</a><button class="btn share-btn" id="modalShare">
+            ><a class="btn share-btn" id="modalBuyerAssistance" href="/buyer-assistance.html">Buyer assistance →</a><a class="btn request-match-btn" id="modalRequestMatch" href="/tell-us-what-you-are-looking-for.html">Looking for a different home?</a><button class="btn share-btn" id="modalShare">
               Share property</button
             ><button class="btn save-btn" id="modalSave">♡ Save home</button>
           </div>
@@ -9049,6 +9049,13 @@
           /\s*Source:\s*tucueva\.com\s*[—-]\s*confirm bedroom count before publishing\.?/gi,
           "",
         );
+        const buyerAssistance = document.getElementById("modalBuyerAssistance");
+        const buyerAssistanceUrl = new URL("/buyer-assistance.html", location.origin);
+        buyerAssistanceUrl.searchParams.set("lang", modalLang || "en");
+        buyerAssistanceUrl.searchParams.set("property_link", new URL(seoPropertyPath(home), location.origin).href);
+        buyerAssistanceUrl.searchParams.set("location", [home.town, home.province].filter(Boolean).join(", "));
+        buyerAssistance.href = buyerAssistanceUrl.toString();
+        buyerAssistance.textContent = ({en:'Buyer assistance →',es:'Ayuda para compradores →','fr-BE':'Assistance à l’achat →',de:'Unterstützung beim Immobilienkauf →',nl:'Hulp bij aankoop →'})[modalLang] || "Buyer assistance →";
         const requestMatch = document.getElementById("modalRequestMatch");
         const requestMatchUrl = new URL(
           "/tell-us-what-you-are-looking-for.html",
