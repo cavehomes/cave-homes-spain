@@ -4454,7 +4454,7 @@
                       .join("")}</div>`
                   : ""
               }<div><div class="inquiry-meta"><b>${esc(q.name || "Rental owner")}</b> · ${esc(rental.location)}<br>${esc(rental.email)} · ${esc(rental.phone)}</div><p class="inquiry-message">${esc(rental.description)}</p>${rental.website ? `<a href="${esc(rental.website)}" target="_blank" rel="noopener">Open booking website ↗</a>` : ""}</div></div><div class="inquiry-actions">${q.status !== "approved" ? `<button class="approve-rental" onclick="approveRental('${q.id}')">Approve and publish</button>` : '<strong class="approved-label">✓ Approved and published</strong>'}<a href="mailto:${encodeURIComponent(rental.email)}?subject=${encodeURIComponent("Your holiday rental " + rental.name)}">Reply by email</a><button class="delete" onclick="deleteInquiry('${q.id}')">Delete application</button></div></article>`;
-            return `<article class="inquiry ${q.status === "new" ? "new" : ""}"><div class="inquiry-top"><h3>${q.status === "new" ? '<span class="new-dot"></span>' : ""}${esc(q.subject || q.property_title || "Website enquiry")}</h3><time>${date}</time></div><div class="inquiry-meta"><b>${esc(q.name || "Unknown")}</b> · ${esc(q.email || "No email")}${q.phone ? " · " + esc(q.phone) : ""}${q.property_title ? "<br>Property: " + esc(q.property_title) : ""}${inquiryProperty(q) ? "<br>"+esc(inquiryProperty(q).town||"")+" · €"+Number(inquiryProperty(q).price||0).toLocaleString("en-GB") : ""}</div><p class="inquiry-message">${esc(q.message || "No message supplied.")}</p><div class="inquiry-actions">${q.email ? `<a href="${esc(inquiryReplyUrl(q))}">Reply by email</a>` : ""}${inquiryExtraActions(q)}${q.phone ? `<a href="tel:${esc(q.phone)}">Call</a>` : ""}${q.status === "new" ? `<button class="secondary" onclick="markInquiryRead('${q.id}')">Mark read</button>` : ""}<button class="delete" onclick="deleteInquiry('${q.id}')">Delete</button></div></article>`;
+            return `<article data-enquiry-id="${esc(q.id)}" class="inquiry ${q.status === "new" ? "new" : ""}"><div class="inquiry-top"><h3>${q.status === "new" ? '<span class="new-dot"></span>' : ""}${esc(q.subject || q.property_title || "Website enquiry")}</h3><time>${date}</time></div><div class="inquiry-meta"><b>${esc(q.name || "Unknown")}</b> · ${esc(q.email || "No email")}${q.phone ? " · " + esc(q.phone) : ""}${q.property_title ? "<br>Property: " + esc(q.property_title) : ""}${inquiryProperty(q) ? "<br>"+esc(inquiryProperty(q).town||"")+" · €"+Number(inquiryProperty(q).price||0).toLocaleString("en-GB") : ""}</div><p class="inquiry-message">${esc(q.message || "No message supplied.")}</p><div class="inquiry-actions">${q.email ? `<a href="${esc(inquiryReplyUrl(q))}">Reply by email</a>` : ""}${inquiryExtraActions(q)}${q.phone ? `<a href="tel:${esc(q.phone)}">Call</a>` : ""}${q.status === "new" ? `<button class="secondary" onclick="markInquiryRead('${q.id}')">Mark read</button>` : ""}<button class="delete" onclick="deleteInquiry('${q.id}')">Delete</button></div></article>`;
           })
           .join("");
       }
@@ -4498,11 +4498,11 @@
         actions.replaceChildren();
         sourceActions
           ?.querySelectorAll(
-            'a[href^="mailto:"],a[href^="tel:"],a[href^="https://wa.me/"],.inquiry-property-link,.buyer-price-email,.followup-edit,.quote-edit,.viewing-report-edit,button[onclick^="markInquiry"]',
+            'a[href^="mailto:"],a[href^="tel:"],a[href^="https://wa.me/"],.inquiry-property-link,.buyer-price-email,.followup-edit,.quote-edit,.booking-edit,.viewing-report-edit,button[onclick^="markInquiry"]',
           )
           .forEach((control) => {
             const copy = control.cloneNode(true);
-            if (control.classList.contains("buyer-price-email") || control.classList.contains("followup-edit") || control.classList.contains("quote-edit") || control.classList.contains("viewing-report-edit"))
+            if (control.classList.contains("buyer-price-email") || control.classList.contains("followup-edit") || control.classList.contains("quote-edit") || control.classList.contains("booking-edit") || control.classList.contains("viewing-report-edit"))
               copy.onclick = control.onclick;
             actions.appendChild(copy);
           });
