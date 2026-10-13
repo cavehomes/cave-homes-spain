@@ -2295,16 +2295,15 @@
               </select>
             </div>
             <div class="field">
-              <label for="energyConsumption">Type of energy consumption *</label
-              ><select id="energyConsumption" required>
-                <option value="">Select</option>
+              <label for="energyConsumption">Energy information</label
+              ><select id="energyConsumption">
                 <option value="waiting">
-                  Waiting for energy rating confirmation
+                  Not available / awaiting energy paperwork
                 </option>
                 <option value="renovation_exempt">
-                  Cave requiring major renovation — no energy rating required
+                  Renovation property — energy status unconfirmed
                 </option>
-                <option value="exempt">Other legally exempt property</option>
+                <option value="exempt">Owner-declared exemption (paperwork optional)</option>
                 <option value="A">A</option>
                 <option value="B">B</option>
                 <option value="C">C</option>
@@ -2316,17 +2315,16 @@
             </div>
             <div class="field hidden" id="ownerEnergyExemptionField">
               <label for="ownerEnergyExemptionReason"
-                >Legal exemption reason *</label
+                >Declared exemption reason (optional)</label
               ><textarea
                 id="ownerEnergyExemptionReason"
-                placeholder="State the exemption and supporting declaration"
+                placeholder="Describe the claimed exemption, if known"
               ></textarea
               ><label class="feature-choice"
                 ><input id="ownerEnergyDeclaration" type="checkbox" /><span
-                  ><strong>Supporting declaration held</strong
+                  ><strong>Supporting paperwork available (optional)</strong
                   ><span
-                    >I confirm the owner holds the declaration or documents
-                    supporting this exemption.</span
+                    >Tick only if supporting exemption paperwork is available.</span
                   ></span
                 ></label
               >
@@ -2343,9 +2341,10 @@
                     >I confirm that the property information, description,
                     price, photographs and other details supplied are accurate
                     to the best of my knowledge. I accept responsibility for the
-                    information I have supplied and confirm that I will provide
-                    the correct Energy Performance Certificate and energy rating
-                    where legally required, or evidence of a valid exemption. I
+                    information I have supplied, including the declared energy
+                    status. If the rating or paperwork is unavailable, I declare
+                    it as awaiting confirmation. I am responsible for obtaining
+                    any legally required energy documents. I
                     authorise Cave Homes Spain to advertise the property using
                     the information I have supplied.</span
                   ></span
@@ -3820,8 +3819,8 @@
           rated = /^[A-G]$/.test(value),
           exempt = value === "exempt";
         $("ownerEnergyExemptionField").classList.toggle("hidden", !exempt);
-        $("ownerEnergyExemptionReason").required = exempt;
-        $("ownerEnergyDeclaration").required = exempt;
+        $("ownerEnergyExemptionReason").required = false;
+        $("ownerEnergyDeclaration").required = false;
         if (!exempt) {
           $("ownerEnergyExemptionReason").value = "";
           $("ownerEnergyDeclaration").checked = false;
@@ -3840,20 +3839,18 @@
         try {
           const images = await uploadPhotos([...$("photo").files]);
           if (!images.length) throw Error("Please add at least one photo.");
-          const energySelection = $("energyConsumption").value;
-          if (!energySelection)
-            throw Error("Please select the energy consumption type.");
+          const energySelection = $("energyConsumption").value || "waiting";
           if (!$("ownerLegalDeclaration").checked)
             throw Error(
               "The owner legal declaration must be accepted before saving the property.",
             );
           const energyExempt =
-              energySelection === "exempt" ||
-              energySelection === "renovation_exempt",
+              energySelection === "exempt",
             energyWaiting =
               energySelection === "waiting" ||
+              energySelection === "renovation_exempt" ||
               energySelection === "renovation_waiting",
-            renovationExempt = energySelection === "renovation_exempt";
+            renovationUnconfirmed = energySelection === "renovation_exempt";
           const property = {
             title: $("title").value.trim(),
             town: $("town").value.trim(),
@@ -3871,15 +3868,11 @@
               energyExempt || energyWaiting ? null : energySelection,
             energy_certificate_reference: null,
             energy_exemption_reason: energyExempt
-              ? renovationExempt
-                ? "Cave requiring major renovation — energy rating not required."
-                : $("ownerEnergyExemptionReason").value.trim()
-              : energySelection === "renovation_waiting"
-                ? "Unreformed cave / renovation project - exemption awaiting confirmation."
+              ? $("ownerEnergyExemptionReason").value.trim() || null
+              : renovationUnconfirmed || energySelection === "renovation_waiting"
+                ? "Renovation property — energy status awaiting confirmation."
                 : null,
-            energy_declaration_confirmed: renovationExempt
-              ? true
-              : energyExempt && $("ownerEnergyDeclaration").checked,
+            energy_declaration_confirmed: $("ownerLegalDeclaration").checked,
             description: $("description").value.trim(),
             main_image_url: images[0],
             image_urls: images,
@@ -4045,7 +4038,7 @@
                   ? "exempt"
                   : /^[A-G]$/.test(String(h.energy_rating || "").toUpperCase())
                     ? String(h.energy_rating).toUpperCase()
-                    : "";
+                    : "waiting";
         $("ownerEnergyExemptionReason").value = h.energy_exemption_reason || "";
         $("ownerEnergyDeclaration").checked = !!h.energy_declaration_confirmed;
         updateOwnerEnergyFields();
@@ -4154,21 +4147,11 @@
       window.publishHome = async (id) => {
         const home = homes.find((item) => String(item.id) === String(id));
         if (!home) return alert("This property could not be found.");
-        if (home.energy_status === "waiting")
-          return alert(
-            "This property is waiting for energy rating confirmation and must remain a draft.",
-          );
-        if (
-          home.energy_status !== "exempt" &&
-          !/^[A-G]$/.test(String(home.energy_rating || "").toUpperCase())
-        )
-          return alert(
-            "Add a confirmed A–G energy rating or select Exempt property before publishing.",
-          );
-        if (!confirm("Publish this home on the public website now?")) return;
+
+        if (!confirm("I accept responsibility for the property details and declared energy information, including any unavailable paperwork. Publish this home now?")) return;
         const { error } = await db
           .from("properties")
-          .update({ published: true })
+          .update({ published: true, energy_declaration_confirmed: true })
           .eq("id", id);
         if (error) return alert("Could not publish: " + error.message);
         alert("Published successfully. The home is now live.");
@@ -4727,24 +4710,14 @@
           property = q && propertyDetails(q);
         if (!property)
           return alert("This property application could not be read.");
-        if (property.energy_status === "waiting")
-          return alert(
-            "This property is waiting for energy rating confirmation and cannot be published yet.",
-          );
-        if (
-          property.energy_status !== "exempt" &&
-          !/^[A-G]$/.test(String(property.energy_rating || "").toUpperCase())
-        )
-          return alert(
-            "A confirmed A–G energy rating or valid exemption is required before publishing.",
-          );
+
         const paid =
           property.plan === "standard" || property.plan === "featured";
         if (
           !confirm(
             paid
-              ? "Only continue if the one-time payment has been received. Publish this property now?"
-              : "Approve this free listing and publish it now?",
+              ? "Only continue if the one-time payment has been received. I accept responsibility for the listing and declared energy information, including unavailable paperwork. Publish now?"
+              : "I accept responsibility for the listing and declared energy information, including unavailable paperwork. Approve this free listing and publish now?",
           )
         )
           return;
@@ -4774,7 +4747,7 @@
             price: Number(property.price || 0),
             bedrooms: Number(property.bedrooms || 0),
             property_type: property.property_type || "Cave Home",
-            energy_status: property.energy_status,
+            energy_status: property.energy_status || "waiting",
             energy_rating:
               property.energy_status === "registered"
                 ? property.energy_rating
@@ -4787,8 +4760,7 @@
               property.energy_status === "exempt"
                 ? property.energy_exemption_reason
                 : null,
-            energy_declaration_confirmed:
-              !!property.energy_declaration_confirmed,
+            energy_declaration_confirmed: true,
             description: property.description,
             main_image_url: image_urls[0],
             image_urls,
@@ -5354,21 +5326,11 @@
       window.publishHome = async (id) => {
         const home = homes.find((item) => String(item.id) === String(id));
         if (!home) return alert("This property could not be found.");
-        if (home.energy_status === "waiting")
-          return alert(
-            "This property is waiting for energy rating confirmation and must remain a draft.",
-          );
-        if (
-          home.energy_status !== "exempt" &&
-          !/^[A-G]$/.test(String(home.energy_rating || "").toUpperCase())
-        )
-          return alert(
-            "Add a confirmed A–G energy rating or select Exempt property before publishing.",
-          );
-        if (!confirm("Publish this home on the public website now?")) return;
+
+        if (!confirm("I accept responsibility for the property details and declared energy information, including any unavailable paperwork. Publish this home now?")) return;
         const { error } = await db
           .from("properties")
-          .update({ published: true, status: "for_sale" })
+          .update({ published: true, status: "for_sale", energy_declaration_confirmed: true })
           .eq("id", id);
         if (error) return alert("Could not publish: " + error.message);
         alert(
