@@ -5812,7 +5812,7 @@
           <div class="modal-actions">
             <button class="btn" id="modalEnquire">
               Enquire about this home →</button
-            ><a class="btn share-btn" id="modalBuyerAssistance" href="/buyer-assistance.html">Viewing & Local Support →</a><a class="btn request-match-btn" id="modalRequestMatch" href="/tell-us-what-you-are-looking-for.html">Looking for a different home?</a><button class="btn share-btn" id="modalShare">
+            ><a class="btn share-btn" id="modalBuyerAssistance" href="/buyer-assistance.html">Viewing & Local Support →</a><a class="btn share-btn" id="modalPlanTrip" href="/buyer-assistance.html?service=trip#buyer-assistance-contact">Plan my viewing trip →</a><a class="btn request-match-btn" id="modalRequestMatch" href="/tell-us-what-you-are-looking-for.html">Looking for a different home?</a><button class="btn share-btn" id="modalShare">
               Share property</button
             ><button class="btn save-btn" id="modalSave">♡ Save home</button>
           </div>
@@ -9061,6 +9061,12 @@
         buyerAssistanceUrl.searchParams.set("location", [home.town, home.province].filter(Boolean).join(", "));
         buyerAssistance.href = buyerAssistanceUrl.toString();
         buyerAssistance.textContent = ({en:'Viewing & Local Support →',es:'Visitas y apoyo local →','fr-BE':'Visites et accompagnement local →',de:'Besichtigungen und Unterstützung vor Ort →',nl:'Bezichtigingen en lokale ondersteuning →'})[modalLang] || "Viewing & Local Support →";
+        const planTrip = document.getElementById("modalPlanTrip");
+        const planTripUrl = new URL(buyerAssistanceUrl);
+        planTripUrl.searchParams.set("service", "trip");
+        planTripUrl.hash = "buyer-assistance-contact";
+        planTrip.href = planTripUrl.toString();
+        planTrip.textContent = ({en:"Plan my viewing trip →",es:"Planifica mi viaje de visitas →","fr-BE":"Organiser mon séjour de visites →",de:"Meine Besichtigungsreise planen →",nl:"Mijn bezichtigingsreis plannen →"})[modalLang] || "Plan my viewing trip →";
         const requestMatch = document.getElementById("modalRequestMatch");
         const requestMatchUrl = new URL(
           "/tell-us-what-you-are-looking-for.html",
