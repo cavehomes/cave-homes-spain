@@ -3048,8 +3048,9 @@
       </main>
     </div>
     <script src="/owners-viewing-reports.js?v=20261013"></script>
+    <script src="/owners-bookings.js?v=20261013"></script>
     <script src="/owners-quotes.js?v=20261013"></script>
-    <script src="/owners-followups.js?v=20261013-reports" ></script>
+    <script src="/owners-followups.js?v=20261013-bookings" ></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       const SUPABASE_URL = "https://lesgzlhvrlxgtfuocadq.supabase.co",
@@ -3089,6 +3090,7 @@
         } else {
           window.CHSOwnerReports?.reset();
           window.CHSOwnerQuotes?.reset();
+          window.CHSOwnerBookings?.reset();
           window.CHSOwnerFollowups?.reset();
           window.CaveHomesNotifications?.logout();
         }

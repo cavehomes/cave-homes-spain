@@ -95,6 +95,7 @@
     }
     const quoteButton = document.createElement('button'); quoteButton.type = 'button'; quoteButton.className = 'secondary quote-edit'; quoteButton.textContent = get(q).quote_saved_at ? 'Review quote' : 'Create a quote'; quoteButton.disabled = !available || !window.CHSOwnerQuotes; quoteButton.onclick = () => { if (available) window.CHSOwnerQuotes?.open(q, get(q), db, refresh, quoteButton); }; actions.appendChild(quoteButton);
     const button = document.createElement('button'); button.type = 'button'; button.className = 'secondary followup-edit'; button.textContent = 'Manage follow-up'; button.disabled = !available; button.onclick = () => open(q, db, refresh, button); actions.appendChild(button);
+    window.CHSOwnerBookings?.decorate(card, q, get(q), db, refresh, available);
     window.CHSOwnerReports?.decorate(card, q, get(q), db, refresh);
   }
   window.CHSOwnerFollowups = { load, reset, get, isDue, matches, compare, summary, decorate };
