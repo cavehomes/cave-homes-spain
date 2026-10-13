@@ -2072,7 +2072,7 @@
           >
         </div>
         <section class="hidden" id="buyerView">
-          <div class="care-card"><h3>Property Viewing & Local Support enquiries</h3><p>Requests from the dedicated website form, including viewing trips with travel dates, properties or villages and the help needed. Open a message, create a quote, manage follow-up or send your private price list.</p><div class="list-tools"><input type="search" id="assistanceEnquirySearch" placeholder="Search Property Viewing & Local Support enquiries…" aria-label="Search Property Viewing & Local Support enquiries"><select id="assistanceStageFilter" aria-label="Filter booking stage"><option value="all">All stages</option><option value="new">New</option><option value="contacted">Contacted</option><option value="quote_sent">Quote sent</option><option value="booked">Booked</option><option value="completed">Completed</option></select><select id="assistanceDueFilter" aria-label="Filter follow-up dates"><option value="all">All follow-ups</option><option value="due">Due today or overdue</option></select><button class="secondary" type="button" onclick="refreshOwnerInbox()">Refresh</button></div><div id="assistancePipeline" class="followup-pipeline" aria-live="polite"></div><p id="assistanceFollowupWarning" role="status" hidden></p><div class="inbox" id="assistanceEnquiryList"><div class="empty">Loading Property Viewing & Local Support enquiries…</div></div></div>
+          <div class="care-card"><h3>Property Viewing & Local Support enquiries</h3><div class="list-tools"><select id="bookingEnquiryChoice" aria-label="Choose enquiry for booking confirmation"><option value="">Choose a viewing enquiry</option></select><button id="openBookingConfirmation" class="btn green" type="button" onclick="openOwnerBookingConfirmation()">Booking confirmation</button></div><p id="bookingLaunchStatus" role="status" aria-live="polite"></p><p>Requests from the dedicated website form, including viewing trips with travel dates, properties or villages and the help needed. Open a message, create a quote, manage follow-up or send your private price list.</p><div class="list-tools"><input type="search" id="assistanceEnquirySearch" placeholder="Search Property Viewing & Local Support enquiries…" aria-label="Search Property Viewing & Local Support enquiries"><select id="assistanceStageFilter" aria-label="Filter booking stage"><option value="all">All stages</option><option value="new">New</option><option value="contacted">Contacted</option><option value="quote_sent">Quote sent</option><option value="booked">Booked</option><option value="completed">Completed</option></select><select id="assistanceDueFilter" aria-label="Filter follow-up dates"><option value="all">All follow-ups</option><option value="due">Due today or overdue</option></select><button class="secondary" type="button" onclick="refreshOwnerInbox()">Refresh</button></div><div id="assistancePipeline" class="followup-pipeline" aria-live="polite"></div><p id="assistanceFollowupWarning" role="status" hidden></p><div class="inbox" id="assistanceEnquiryList"><div class="empty">Loading Property Viewing & Local Support enquiries…</div></div></div>
           <details class="care-card"><summary><b>Add a Property Viewing & Local Support enquiry</b></summary><p>Record an enquiry received by phone or elsewhere. This saves it to your inbox; it does not contact the buyer. For viewing trips, include arrival and departure dates, property links or villages and the help needed in the notes.</p><form id="ownerAssistanceForm" class="buyer-email-form owner-assistance-form">
           <div class="field"><label for="ownerBAName">Buyer name *</label><input id="ownerBAName" name="name" required maxlength="120"></div><div class="field"><label for="ownerBAEmail">Email</label><input id="ownerBAEmail" name="email" type="email" maxlength="200"></div><div class="field"><label for="ownerBAPhone">Phone or WhatsApp</label><input id="ownerBAPhone" name="phone" type="tel" maxlength="40"></div><div class="field"><label for="ownerBAService">Service *</label><select id="ownerBAService" name="service" required><option value="">Choose a service</option><option>Full property &amp; area video tour</option><option>Exterior &amp; neighbourhood video tour</option><option value="Area-orientation visit">Explore an area before buying</option><option>Builder and survey coordination</option><option>Translation assistance</option><option>Key handover</option><option>Utility coordination</option><option>Viewing trip planning</option><option>Several services / advice on options</option></select></div><div class="field"><label for="ownerBALocation">Location *</label><input id="ownerBALocation" name="location" required maxlength="250"></div><div class="field"><label for="ownerBADate">Preferred date</label><input id="ownerBADate" name="date" type="date"></div><div class="field" style="grid-column:1/-1"><label for="ownerBAMessage">Request or notes *</label><textarea id="ownerBAMessage" name="message" required maxlength="5000" rows="4"></textarea></div><button class="btn green" type="submit">Save Property Viewing & Local Support enquiry</button><p id="ownerBAStatus" role="status" aria-live="polite"></p></form></details>
 
@@ -4289,6 +4289,11 @@
       function renderAssistanceEnquiries() {
         const search = ($("assistanceEnquirySearch")?.value || "").toLowerCase().trim();
         const all = assistanceEnquiries();
+        const bookingChoice = $("bookingEnquiryChoice"), previousChoice = bookingChoice.value;
+        bookingChoice.replaceChildren();
+        const prompt = document.createElement("option"); prompt.value = ""; prompt.textContent = all.length ? "Choose a viewing enquiry" : "Add a viewing enquiry below first"; bookingChoice.appendChild(prompt);
+        all.forEach(q => { const option = document.createElement("option"); option.value = q.id; option.textContent = (q.name || "Enquirer") + " · " + (q.property_title || q.subject || "Viewing enquiry"); bookingChoice.appendChild(option); });
+        bookingChoice.value = all.some(q => String(q.id) === previousChoice) ? previousChoice : all.length === 1 ? all[0].id : "";
         const tracker = window.CHSOwnerFollowups;
         const stage = $("assistanceStageFilter").value, due = $("assistanceDueFilter").value;
         const list = all.filter(q => (!tracker || tracker.matches(q, stage, due)) && (!search || [q.name,q.email,q.phone,q.subject,q.property_title,q.message,tracker?.get(q).notes].some(v => String(v || "").toLowerCase().includes(search))));
@@ -4297,6 +4302,27 @@
         if ($("assistanceEnquiryHomeCount")) { const unread = all.filter(q => q.status === "new").length; const dueCount = tracker ? all.filter(tracker.isDue).length : 0; $("assistanceEnquiryHomeCount").textContent = dueCount ? dueCount + (dueCount === 1 ? " follow-up due" : " follow-ups due") : unread ? unread + (unread === 1 ? " new assistance enquiry" : " new assistance enquiries") : "Enquiries & private prices"; }
         if (!list.length) { $("assistanceEnquiryList").innerHTML = '<div class="card empty">No matching Property Viewing & Local Support enquiries. Requests from the website form will appear here.</div>'; return; }
         renderInquiries(list, "assistanceEnquiryList");
+      }
+      async function openOwnerBookingConfirmation() {
+        const status = $("bookingLaunchStatus"), button = $("openBookingConfirmation");
+        const rows = assistanceEnquiries(), q = rows.find(q => String(q.id) === $("bookingEnquiryChoice").value);
+        if (!rows.length) {
+          const form = $("ownerAssistanceForm"); form.closest("details").open = true;
+          status.textContent = "Add the customer’s enquiry below and save it, then tap Booking confirmation.";
+          form.scrollIntoView({behavior:"smooth",block:"start"}); $("ownerBAName").focus(); return;
+        }
+        if (!q) { status.textContent = "Choose the customer’s enquiry, then tap Booking confirmation."; $("bookingEnquiryChoice").focus(); return; }
+        if (!window.CHSOwnerBookings) { status.textContent = "The booking editor could not load. Please reopen this page and try again."; return; }
+        if (button.disabled) return;
+        button.disabled = true; status.textContent = "Opening booking confirmation…";
+        try {
+          const {data,error} = await db.from("enquiry_followups").select("*").eq("enquiry_id",q.id).maybeSingle();
+          if (error) throw error;
+          if (!ownerSessionActive) return;
+          window.CHSOwnerBookings.open(q, data || {enquiry_id:q.id,stage:"new",quoted_price:null}, db, loadInquiries, button);
+          status.textContent = "";
+        } catch (_) { status.textContent = "Could not load booking details. Check your connection and admin access, then try again."; }
+        finally {button.disabled = false;}
       }
       $("assistanceEnquirySearch").addEventListener("input", renderAssistanceEnquiries);
       $("assistanceStageFilter").addEventListener("change", renderAssistanceEnquiries);
