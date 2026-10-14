@@ -1,90 +1,87 @@
 (function(){
   'use strict';
   if(location.pathname==='/admin.html'||location.pathname==='/property-care-staff.html') return;
+
   const KEY='caveHomesLanguageManual';
-  const LEGACY_KEY='caveHomesLang';
   const LANGS=['en','es','nl','fr','fr-BE','de'];
-  const T={
+  const BASE={
+    en:{'Buy':'Buy','Properties':'Properties','About':'About','Sell':'Sell','Saved':'Saved','Home':'Home','Map':'Map','Contact us':'Contact us','Contact':'Contact','Language':'Language','Featured':'Featured','Recent':'Recent','All':'All','List':'List','View':'View','View property':'View property','View details':'View details','Save':'Save','Saved homes':'Saved homes','Search':'Search','Filters':'Filters','Any price':'Any price','Less than €50,000':'Less than €50,000','Up to €100,000':'Up to €100,000','All towns and villages':'All towns and villages','Any type':'Any type','Cave homes':'Cave homes','Cave house':'Cave house','Houses':'Houses','Apartments':'Apartments','Land':'Land','Fincas':'Fincas','Cortijos':'Cortijos','Holiday rentals':'Holiday rentals','Find your home':'Find your home','Featured and recent properties':'Featured and recent properties','Browse cave homes, houses, fincas, cortijos, apartments and land across southern Spain.':'Browse cave homes, houses, fincas, cortijos, apartments and land across southern Spain.','Featured of the week':'Featured of the week','New':'New','Property':'Property','Properties you open will appear here.':'Properties you open will appear here.','Homes you save will appear here.':'Homes you save will appear here.','Inland Granada property pulse':'Inland Granada property pulse','See live asking-price figures from the properties currently published on Cave Homes Spain.':'See live asking-price figures from the properties currently published on Cave Homes Spain.','View the latest figures →':'View the latest figures →','Buyer guide':'Buyer guide','Buying a cave house safely':'Buying a cave house safely','The important legal, structural, utility and paperwork checks to make before buying.':'The important legal, structural, utility and paperwork checks to make before buying.','Read the guide →':'Read the guide →','News & advice':'News & advice','Connect buyers and sellers':'Connect buyers and sellers','Cave Homes Spain brings buyers and sellers together.':'Cave Homes Spain brings buyers and sellers together.','Before purchasing, you should independently check planning and building permissions and have all legal documents and purchase paperwork verified by qualified professionals.':'Before purchasing, you should independently check planning and building permissions and have all legal documents and purchase paperwork verified by qualified professionals.','Tell us what you are looking for':'Tell us what you are looking for','Latest properties':'Latest properties','Market update':'Market update','Buying advice':'Buying advice','Selling':'Selling','Selling a distinctive property':'Selling a distinctive property','List your property':'List your property','Estate agents':'Estate agents','Village guides':'Village guides','Community':'Community','Blog':'Blog','News':'News','Read more →':'Read more →','Learn more →':'Learn more →','Back to properties':'Back to properties','Send enquiry':'Send enquiry','Enquire':'Enquire','Name':'Name','Email':'Email','Message':'Message','Phone':'Phone','Submit':'Submit','Thank you':'Thank you','Loading…':'Loading…','No results found':'No results found','Current asking price':'Current asking price','per hour':'per hour','Practical local support for property buyers':'Practical local support for property buyers','Property viewing and local support':'Property viewing and local support','Property video tours':'Property video tours','Area visits':'Area visits','Translation assistance':'Translation assistance','Key handover':'Key handover','Utility coordination':'Utility coordination','Builder and survey coordination':'Builder and survey coordination','No legal or technical advice':'No legal or technical advice','Choose a language':'Choose a language','English':'English','Spanish':'Spanish','Dutch':'Dutch','French':'French','German':'German'},
     es:{'Buy':'Comprar','Properties':'Propiedades','About':'Información','Sell':'Vender','Saved':'Guardados','Home':'Inicio','Map':'Mapa','Contact us':'Contáctanos','Contact':'Contacto','Language':'Idioma','Featured':'Destacadas','Recent':'Recientes','All':'Todas','List':'Lista','View':'Ver','View property':'Ver propiedad','View details':'Ver detalles','Save':'Guardar','Saved homes':'Propiedades guardadas','Search':'Buscar','Filters':'Filtros','Any price':'Cualquier precio','Less than €50,000':'Menos de 50.000 €','Up to €100,000':'Hasta 100.000 €','All towns and villages':'Todos los pueblos y aldeas','Any type':'Cualquier tipo','Cave homes':'Casas cueva','Cave house':'Casa cueva','Houses':'Casas','Apartments':'Apartamentos','Land':'Terreno','Fincas':'Fincas','Cortijos':'Cortijos','Holiday rentals':'Alquileres vacacionales','Find your home':'Encuentra tu hogar','Featured and recent properties':'Propiedades destacadas y recientes','Browse cave homes, houses, fincas, cortijos, apartments and land across southern Spain.':'Explora casas cueva, casas, fincas, cortijos, apartamentos y terrenos en el sur de España.','Featured of the week':'Destacada de la semana','New':'Nueva','Property':'Propiedad','Properties you open will appear here.':'Las propiedades que abras aparecerán aquí.','Homes you save will appear here.':'Las viviendas que guardes aparecerán aquí.','Inland Granada property pulse':'Panorama del mercado inmobiliario del interior de Granada','See live asking-price figures from the properties currently published on Cave Homes Spain.':'Consulta los precios de oferta actuales de las propiedades publicadas en Cave Homes Spain.','View the latest figures →':'Ver las últimas cifras →','Buyer guide':'Guía del comprador','Buying a cave house safely':'Comprar una casa cueva de forma segura','The important legal, structural, utility and paperwork checks to make before buying.':'Las comprobaciones legales, estructurales, de suministros y documentación que debes realizar antes de comprar.','Read the guide →':'Leer la guía →','News & advice':'Noticias y consejos','Connect buyers and sellers':'Conectamos compradores y vendedores','Cave Homes Spain brings buyers and sellers together.':'Cave Homes Spain conecta a compradores y vendedores.','Before purchasing, you should independently check planning and building permissions and have all legal documents and purchase paperwork verified by qualified professionals.':'Antes de comprar, debes comprobar de forma independiente los permisos urbanísticos y de construcción y hacer que profesionales cualificados verifiquen toda la documentación legal y de compraventa.','Tell us what you are looking for':'Cuéntanos qué estás buscando','Latest properties':'Últimas propiedades','Market update':'Actualización del mercado','Buying advice':'Consejos para comprar','Selling':'Vender','Selling a distinctive property':'Vender una propiedad especial','List your property':'Publica tu propiedad','Estate agents':'Agentes inmobiliarios','Village guides':'Guías de pueblos','Community':'Comunidad','Blog':'Blog','News':'Noticias','Read more →':'Leer más →','Learn more →':'Más información →','Back to properties':'← Volver a las propiedades','Send enquiry':'Enviar consulta','Enquire':'Consultar','Name':'Nombre','Email':'Correo electrónico','Message':'Mensaje','Phone':'Teléfono','Submit':'Enviar','Thank you':'Gracias','Loading…':'Cargando…','No results found':'No se han encontrado resultados','Current asking price':'Precio de oferta actual','per hour':'por hora','Practical local support for property buyers':'Apoyo local práctico para compradores de propiedades','Property viewing and local support':'Visitas a propiedades y apoyo local','Property video tours':'Visitas en vídeo de propiedades','Area visits':'Visitas por la zona','Translation assistance':'Asistencia de traducción','Key handover':'Entrega de llaves','Utility coordination':'Coordinación de suministros','Builder and survey coordination':'Coordinación con constructores y técnicos','No legal or technical advice':'Sin asesoramiento legal ni técnico','Choose a language':'Elige un idioma','English':'Inglés','Spanish':'Español','Dutch':'Neerlandés','French':'Francés','German':'Alemán'},
     nl:{'Buy':'Kopen','Properties':'Woningen','About':'Over ons','Sell':'Verkopen','Saved':'Opgeslagen','Home':'Home','Map':'Kaart','Contact us':'Neem contact op','Contact':'Contact','Language':'Taal','Featured':'Uitgelicht','Recent':'Recent','All':'Alle','List':'Lijst','View':'Bekijken','View property':'Woning bekijken','View details':'Details bekijken','Save':'Opslaan','Saved homes':'Opgeslagen woningen','Search':'Zoeken','Filters':'Filters','Any price':'Elke prijs','Less than €50,000':'Minder dan €50.000','Up to €100,000':'Tot €100.000','All towns and villages':'Alle plaatsen en dorpen','Any type':'Elk type','Cave homes':'Grotwoningen','Cave house':'Grotwoning','Houses':'Huizen','Apartments':'Appartementen','Land':'Grond','Fincas':'Finca’s','Cortijos':'Cortijo’s','Holiday rentals':'Vakantieverhuur','Find your home':'Vind jouw woning','Featured and recent properties':'Uitgelichte en recente woningen','Browse cave homes, houses, fincas, cortijos, apartments and land across southern Spain.':'Bekijk grotwoningen, huizen, finca’s, cortijo’s, appartementen en grond in Zuid-Spanje.','Featured of the week':'Uitgelicht van de week','New':'Nieuw','Property':'Woning','Properties you open will appear here.':'Woningen die je opent verschijnen hier.','Homes you save will appear here.':'Woningen die je opslaat verschijnen hier.','Inland Granada property pulse':'Vastgoedmarkt in het binnenland van Granada','See live asking-price figures from the properties currently published on Cave Homes Spain.':'Bekijk actuele vraagprijzen van de woningen die momenteel op Cave Homes Spain staan.','View the latest figures →':'Bekijk de nieuwste cijfers →','Buyer guide':'Kopersgids','Buying a cave house safely':'Veilig een grotwoning kopen','The important legal, structural, utility and paperwork checks to make before buying.':'De belangrijkste juridische, bouwkundige, nuts- en documentcontroles vóór aankoop.','Read the guide →':'Lees de gids →','News & advice':'Nieuws & advies','Connect buyers and sellers':'We brengen kopers en verkopers samen','Cave Homes Spain brings buyers and sellers together.':'Cave Homes Spain brengt kopers en verkopers samen.','Before purchasing, you should independently check planning and building permissions and have all legal documents and purchase paperwork verified by qualified professionals.':'Controleer vóór aankoop zelfstandig de bestemmings- en bouwvergunningen en laat alle juridische documenten en aankoopdocumenten door gekwalificeerde professionals controleren.','Tell us what you are looking for':'Vertel ons wat je zoekt','Latest properties':'Nieuwste woningen','Market update':'Marktupdate','Buying advice':'Koopadvies','Selling':'Verkopen','Selling a distinctive property':'Een bijzondere woning verkopen','List your property':'Plaats je woning','Estate agents':'Makelaar','Village guides':'Dorpsgidsen','Community':'Community','Blog':'Blog','News':'Nieuws','Read more →':'Lees meer →','Learn more →':'Meer informatie →','Back to properties':'← Terug naar woningen','Send enquiry':'Vraag versturen','Enquire':'Informeer','Name':'Naam','Email':'E-mail','Message':'Bericht','Phone':'Telefoon','Submit':'Versturen','Thank you':'Bedankt','Loading…':'Laden…','No results found':'Geen resultaten gevonden','Current asking price':'Huidige vraagprijs','per hour':'per uur','Practical local support for property buyers':'Praktische lokale ondersteuning voor vastgoedkopers','Property viewing and local support':'Bezichtiging en lokale ondersteuning','Property video tours':'Videobezichtigingen van woningen','Area visits':'Bezoeken in de omgeving','Translation assistance':'Vertaalhulp','Key handover':'Sleuteloverdracht','Utility coordination':'Coördinatie van nutsvoorzieningen','Builder and survey coordination':'Coördinatie met bouwers en inspecteurs','No legal or technical advice':'Geen juridisch of technisch advies','Choose a language':'Kies een taal','English':'Engels','Spanish':'Spaans','Dutch':'Nederlands','French':'Frans','German':'Duits'},
     fr:{'Buy':'Acheter','Properties':'Propriétés','About':'À propos','Sell':'Vendre','Saved':'Enregistrés','Home':'Accueil','Map':'Carte','Contact us':'Contactez-nous','Contact':'Contact','Language':'Langue','Featured':'À la une','Recent':'Récentes','All':'Toutes','List':'Liste','View':'Voir','View property':'Voir la propriété','View details':'Voir les détails','Save':'Enregistrer','Saved homes':'Propriétés enregistrées','Search':'Rechercher','Filters':'Filtres','Any price':'Tous les prix','Less than €50,000':'Moins de 50 000 €','Up to €100,000':'Jusqu’à 100 000 €','All towns and villages':'Toutes les villes et tous les villages','Any type':'Tous les types','Cave homes':'Maisons troglodytes','Cave house':'Maison troglodyte','Houses':'Maisons','Apartments':'Appartements','Land':'Terrains','Fincas':'Fincas','Cortijos':'Cortijos','Holiday rentals':'Locations de vacances','Find your home':'Trouvez votre maison','Featured and recent properties':'Propriétés à la une et récentes','Browse cave homes, houses, fincas, cortijos, apartments and land across southern Spain.':'Découvrez des maisons troglodytes, maisons, fincas, cortijos, appartements et terrains dans le sud de l’Espagne.','Featured of the week':'À la une de la semaine','New':'Nouveau','Property':'Propriété','Properties you open will appear here.':'Les propriétés que vous ouvrez apparaîtront ici.','Homes you save will appear here.':'Les maisons que vous enregistrez apparaîtront ici.','Inland Granada property pulse':'Baromètre immobilier de l’intérieur de Grenade','See live asking-price figures from the properties currently published on Cave Homes Spain.':'Consultez les prix demandés actuels des propriétés publiées sur Cave Homes Spain.','View the latest figures →':'Voir les derniers chiffres →','Buyer guide':'Guide de l’acheteur','Buying a cave house safely':'Acheter une maison troglodyte en toute sécurité','The important legal, structural, utility and paperwork checks to make before buying.':'Les principales vérifications juridiques, structurelles, des services et des documents à effectuer avant l’achat.','Read the guide →':'Lire le guide →','News & advice':'Actualités et conseils','Connect buyers and sellers':'Nous mettons en relation acheteurs et vendeurs','Cave Homes Spain brings buyers and sellers together.':'Cave Homes Spain met en relation acheteurs et vendeurs.','Before purchasing, you should independently check planning and building permissions and have all legal documents and purchase paperwork verified by qualified professionals.':'Avant l’achat, vérifiez indépendamment les autorisations d’urbanisme et de construction et faites contrôler tous les documents juridiques et d’achat par des professionnels qualifiés.','Tell us what you are looking for':'Dites-nous ce que vous recherchez','Latest properties':'Dernières propriétés','Market update':'Actualité du marché','Buying advice':'Conseils d’achat','Selling':'Vendre','Selling a distinctive property':'Vendre une propriété unique','List your property':'Publier votre propriété','Estate agents':'Agents immobiliers','Village guides':'Guides des villages','Community':'Communauté','Blog':'Blog','News':'Actualités','Read more →':'Lire la suite →','Learn more →':'En savoir plus →','Back to properties':'← Retour aux propriétés','Send enquiry':'Envoyer une demande','Enquire':'Demander des informations','Name':'Nom','Email':'E-mail','Message':'Message','Phone':'Téléphone','Submit':'Envoyer','Thank you':'Merci','Loading…':'Chargement…','No results found':'Aucun résultat trouvé','Current asking price':'Prix demandé actuel','per hour':'par heure','Practical local support for property buyers':'Assistance locale pratique pour les acheteurs','Property viewing and local support':'Visites de propriétés et assistance locale','Property video tours':'Visites vidéo des propriétés','Area visits':'Visites de la région','Translation assistance':'Assistance à la traduction','Key handover':'Remise des clés','Utility coordination':'Coordination des services','Builder and survey coordination':'Coordination avec les artisans et experts','No legal or technical advice':'Aucun conseil juridique ou technique','Choose a language':'Choisissez une langue','English':'Anglais','Spanish':'Espagnol','Dutch':'Néerlandais','French':'Français','German':'Allemand'},
     de:{'Buy':'Kaufen','Properties':'Immobilien','About':'Über uns','Sell':'Verkaufen','Saved':'Gespeichert','Home':'Startseite','Map':'Karte','Contact us':'Kontaktieren Sie uns','Contact':'Kontakt','Language':'Sprache','Featured':'Ausgewählt','Recent':'Neueste','All':'Alle','List':'Liste','View':'Ansehen','View property':'Immobilie ansehen','View details':'Details ansehen','Save':'Speichern','Saved homes':'Gespeicherte Immobilien','Search':'Suchen','Filters':'Filter','Any price':'Jeder Preis','Less than €50,000':'Unter 50.000 €','Up to €100,000':'Bis 100.000 €','All towns and villages':'Alle Orte und Dörfer','Any type':'Jeder Typ','Cave homes':'Höhlenhäuser','Cave house':'Höhlenhaus','Houses':'Häuser','Apartments':'Wohnungen','Land':'Grundstücke','Fincas':'Fincas','Cortijos':'Cortijos','Holiday rentals':'Ferienvermietungen','Find your home':'Finden Sie Ihr Zuhause','Featured and recent properties':'Ausgewählte und aktuelle Immobilien','Browse cave homes, houses, fincas, cortijos, apartments and land across southern Spain.':'Entdecken Sie Höhlenhäuser, Häuser, Fincas, Cortijos, Wohnungen und Grundstücke in Südspanien.','Featured of the week':'Highlight der Woche','New':'Neu','Property':'Immobilie','Properties you open will appear here.':'Geöffnete Immobilien erscheinen hier.','Homes you save will appear here.':'Gespeicherte Immobilien erscheinen hier.','Inland Granada property pulse':'Immobilienmarkt im Landesinneren von Granada','See live asking-price figures from the properties currently published on Cave Homes Spain.':'Sehen Sie aktuelle Angebotspreise der derzeit auf Cave Homes Spain veröffentlichten Immobilien.','View the latest figures →':'Neueste Zahlen ansehen →','Buyer guide':'Käuferleitfaden','Buying a cave house safely':'Ein Höhlenhaus sicher kaufen','The important legal, structural, utility and paperwork checks to make before buying.':'Die wichtigsten rechtlichen, baulichen, Versorgungs- und Dokumentenprüfungen vor dem Kauf.','Read the guide →':'Leitfaden lesen →','News & advice':'Neuigkeiten & Ratgeber','Connect buyers and sellers':'Wir bringen Käufer und Verkäufer zusammen','Cave Homes Spain brings buyers and sellers together.':'Cave Homes Spain bringt Käufer und Verkäufer zusammen.','Before purchasing, you should independently check planning and building permissions and have all legal documents and purchase paperwork verified by qualified professionals.':'Prüfen Sie vor dem Kauf unabhängig die Bau- und Planungsgenehmigungen und lassen Sie alle rechtlichen Unterlagen von qualifizierten Fachleuten prüfen.','Tell us what you are looking for':'Sagen Sie uns, was Sie suchen','Latest properties':'Neueste Immobilien','Market update':'Marktupdate','Buying advice':'Kaufberatung','Selling':'Verkaufen','Selling a distinctive property':'Eine besondere Immobilie verkaufen','List your property':'Immobilie inserieren','Estate agents':'Immobilienmakler','Village guides':'Dorfguides','Community':'Community','Blog':'Blog','News':'Neuigkeiten','Read more →':'Mehr lesen →','Learn more →':'Mehr erfahren →','Back to properties':'← Zurück zu den Immobilien','Send enquiry':'Anfrage senden','Enquire':'Anfragen','Name':'Name','Email':'E-Mail','Message':'Nachricht','Phone':'Telefon','Submit':'Senden','Thank you':'Danke','Loading…':'Laden…','No results found':'Keine Ergebnisse gefunden','Current asking price':'Aktueller Angebotspreis','per hour':'pro Stunde','Practical local support for property buyers':'Praktische lokale Unterstützung für Immobilienkäufer','Property viewing and local support':'Immobilienbesichtigungen und lokale Unterstützung','Property video tours':'Videobesichtigungen von Immobilien','Area visits':'Besuche in der Umgebung','Translation assistance':'Übersetzungshilfe','Key handover':'Schlüsselübergabe','Utility coordination':'Koordination der Versorgungsanschlüsse','Builder and survey coordination':'Koordination mit Handwerkern und Gutachtern','No legal or technical advice':'Keine Rechts- oder technische Beratung','Choose a language':'Sprache wählen','English':'Englisch','Spanish':'Spanisch','Dutch':'Niederländisch','French':'Französisch','German':'Deutsch'}
   };
+  BASE['fr-BE']=BASE.fr;
+
+  const selector=()=>document.querySelector('#pageLanguage,#language,#contactLanguage,#reportLanguage,#chsGlobalLanguage,select.language,select[id*="Language"],select[aria-label="Language"]');
+  const supported=(v)=>LANGS.includes(v)?v:(String(v||'').startsWith('fr')?'fr-BE':String(v||'').slice(0,2)||'en');
+  const getLang=()=>supported(new URLSearchParams(location.search).get('lang')||localStorage.getItem(KEY)||navigator.language||'en');
+  const allMaps=()=>{const a=[];Object.keys(BASE).forEach(l=>Object.keys(BASE[l]).forEach(k=>a.push([k,l,BASE[l][k]])));return a.sort((a,b)=>Math.max(a[0].length,a[2].length)-Math.max(b[0].length,b[2].length)).reverse()};
+  const maps=allMaps();
   const originals=new WeakMap();
-  const globallyTranslated=new WeakSet();
-  function selector(){return document.querySelector('#pageLanguage,#language,.language,select[id*="Language"],select[aria-label="Language"]')}
-  function addSelector(){let s=selector();if(s)return s;const host=document.querySelector('header .wrap,header,.nav,.header-tools')||document.body;s=document.createElement('select');s.className='language';s.id='chsGlobalLanguage';s.setAttribute('aria-label','Language');s.innerHTML='<option value="en">🇬🇧 EN</option><option value="es">🇪🇸 ES</option><option value="nl">🇳🇱 NL</option><option value="fr">🇫🇷 FR</option><option value="de">🇩🇪 DE</option>';s.style.cssText='min-width:110px;margin:8px;padding:8px 10px;border-radius:999px;border:1px solid #d7cdbf;background:#fff;font-weight:700;';host.appendChild(s);return s}
-  function translateElement(root,lang){
-    const dict=T[lang]||T[lang==='fr-BE'?'fr':lang]||{};
-    const entries=Object.keys(dict).sort((a,b)=>b.length-a.length);
-    const walk=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
-    const nodes=[];let n;
-    while(n=walk.nextNode())nodes.push(n);
-    nodes.forEach(node=>{
-      if(!node.parentElement||['SCRIPT','STYLE','NOSCRIPT','OPTION'].includes(node.parentElement.tagName)||node.parentElement.closest('[data-i18n-skip]'))return;
-      if(!originals.has(node))originals.set(node,node.nodeValue);
-      const source=originals.get(node);
-      if(lang==='en'){
-        if(globallyTranslated.has(node)){node.nodeValue=source;globallyTranslated.delete(node)}
-        return;
-      }
-      // Leave text owned by a page-specific translator alone unless this engine translated it.
-      if(!globallyTranslated.has(node)&&node.nodeValue!==source)return;
-      let text=source;
-      for(const key of entries){if(text.includes(key))text=text.split(key).join(dict[key])}
-      if(text!==source){node.nodeValue=text;globallyTranslated.add(node)}
-      else if(globallyTranslated.has(node)){node.nodeValue=source;globallyTranslated.delete(node)}
-    });
-    root.querySelectorAll?.('[placeholder]').forEach(e=>{
-      const source=e.dataset.originalPlaceholder||e.dataset.chsOrigPlaceholder||e.placeholder;
-      if(!e.dataset.chsOrigPlaceholder)e.dataset.chsOrigPlaceholder=source;
-      if(lang==='en'){
-        if(e.dataset.chsI18nApplied==='1'){e.placeholder=source;delete e.dataset.chsI18nApplied}
-        return;
-      }
-      if(e.dataset.chsI18nApplied!=='1'&&e.placeholder!==source)return;
-      let text=source;
-      for(const key of entries){if(text.includes(key))text=text.split(key).join(dict[key])}
-      if(text!==source){e.placeholder=text;e.dataset.chsI18nApplied='1'}
-      else if(e.dataset.chsI18nApplied==='1'){e.placeholder=source;delete e.dataset.chsI18nApplied}
-    });
-    document.documentElement.lang=lang;
-  }
-  function normalizeLang(lang,s){
-    if(!LANGS.includes(lang))return 'en';
-    const values=s?Array.from(s.options||[]).map(o=>o.value):[];
-    if(lang==='fr-BE'&&values.includes('fr'))return 'fr';
-    if(lang==='fr'&&values.includes('fr-BE'))return 'fr-BE';
-    return lang;
-  }
-  function selectorValue(lang,s){
-    const values=s?Array.from(s.options||[]).map(o=>o.value):[];
-    if(lang==='fr-BE'&&!values.includes('fr-BE')&&values.includes('fr'))return 'fr';
-    if(lang==='fr'&&!values.includes('fr')&&values.includes('fr-BE'))return 'fr-BE';
-    return lang;
-  }
-  function setLang(lang,save){
-    const s=selector()||addSelector();
-    lang=normalizeLang(lang,s);
-    if(s)s.value=selectorValue(lang,s);
-    if(save){localStorage.setItem(KEY,lang);localStorage.setItem(LEGACY_KEY,lang)}
-    translateElement(document.body,lang);
-    document.querySelectorAll('select.language').forEach(el=>{if(el!==s)el.value=selectorValue(lang,el)});
-  }
-  function init(){
-    const s=selector()||addSelector();
-    const params=new URLSearchParams(location.search);
-    const saved=params.get('lang')||localStorage.getItem(KEY)||localStorage.getItem(LEGACY_KEY)||'en';
-    const lang=normalizeLang(saved,s);
-    if(s&&!s.dataset.chsBound){
-      s.dataset.chsBound='1';
-      s.addEventListener('change',()=>setLang(s.value,true));
+
+  function translateText(text,lang){
+    let out=String(text);
+    const target=BASE[lang]||BASE.fr;
+    for(const [key,source,value] of maps){
+      if(source===lang)continue;
+      if(!out.includes(value))continue;
+      const replacement=target[key];
+      if(replacement&&replacement!==value)out=out.split(value).join(replacement);
     }
-    setLang(lang,false);
-    new MutationObserver(muts=>{
-      const current=normalizeLang(localStorage.getItem(KEY)||localStorage.getItem(LEGACY_KEY)||'en',selector());
-      muts.forEach(m=>m.addedNodes.forEach(node=>{if(node.nodeType===1)translateElement(node,current)}));
-    }).observe(document.body,{childList:true,subtree:true});
+    for(const key of Object.keys(BASE.en).sort((a,b)=>b.length-a.length)){
+      if(out.includes(key)&&target[key]&&target[key]!==key)out=out.split(key).join(target[key]);
+    }
+    return out;
   }
-  if(document.readyState==='loading'||document.readyState==='interactive')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+
+  function translateRoot(root,lang){
+    if(!root)return;
+    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+    const nodes=[];let n;while(n=walker.nextNode())nodes.push(n);
+    nodes.forEach(node=>{
+      const p=node.parentElement;
+      if(!p||['SCRIPT','STYLE','NOSCRIPT','OPTION'].includes(p.tagName)||p.closest('[data-i18n-skip]'))return;
+      const current=node.nodeValue;
+      const translated=translateText(current,lang);
+      if(translated!==current)node.nodeValue=translated;
+    });
+    root.querySelectorAll?.('[placeholder]').forEach(el=>{const v=el.placeholder;const t=translateText(v,lang);if(t!==v)el.placeholder=t});
+    root.querySelectorAll?.('[title]').forEach(el=>{const v=el.getAttribute('title');const t=translateText(v,lang);if(t!==v)el.setAttribute('title',t)});
+  }
+
+  function setLanguage(lang,save){
+    lang=supported(lang);
+    if(save){try{localStorage.setItem(KEY,lang)}catch(_){} }
+    document.documentElement.lang=lang;
+    document.querySelectorAll('select').forEach(s=>{
+      const has=Array.from(s.options||[]).some(o=>LANGS.includes(o.value)||o.value==='fr-BE');
+      if(has){const wanted=lang==='fr-BE'&&Array.from(s.options).some(o=>o.value==='fr')?'fr':lang;if(s.value!==wanted)s.value=wanted;}
+    });
+    translateRoot(document.body,lang);
+    window.dispatchEvent(new CustomEvent('caveHomesLanguageChanged',{detail:{lang}}));
+  }
+
+  function bind(){
+    document.addEventListener('change',function(e){
+      const s=e.target;
+      if(!(s instanceof HTMLSelectElement))return;
+      if(!Array.from(s.options||[]).some(o=>LANGS.includes(o.value)||o.value==='fr-BE'))return;
+      const lang=supported(s.value);
+      setLanguage(lang,true);
+      setTimeout(()=>setLanguage(lang,false),0);
+      setTimeout(()=>setLanguage(lang,false),150);
+    },true);
+    const lang=getLang();
+    setLanguage(lang,false);
+    const observer=new MutationObserver(mutations=>{
+      const active=getLang();
+      let added=false;
+      mutations.forEach(m=>m.addedNodes.forEach(node=>{if(node.nodeType===1){added=true;translateRoot(node,active)}}));
+      if(added)setTimeout(()=>setLanguage(active,false),0);
+    });
+    if(document.body)observer.observe(document.body,{childList:true,subtree:true});
+  }
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();
 })();
