@@ -7268,6 +7268,22 @@
         "Cave Homes Community": "Cave Homes Community",
         "Property Search": "Immobiliensuche",
       });
+      Object.assign(translations.es, {
+        "Cave Homes Spain · Homes and local care":"Cave Homes Spain · Viviendas y asistencia en la zona",
+        "Looking specifically for a cave home?":"¿Buscas específicamente una casa cueva?",
+        "Explore cave houses for sale in Spain →":"Explora casas cueva en venta en España →",
+        "Browse homes, advertise your property, get property viewings and local support or arrange checks when you are away.":"Explora viviendas, anuncia tu propiedad, solicita visitas y asistencia en la zona o concierta revisiones cuando estés fuera.",
+        "Browse cave homes, houses, fincas, cortijos, apartments and land across southern Spain.":"Explora casas cueva, casas, fincas, cortijos, apartamentos y terrenos en el sur de España.",
+        "Stay informed":"Mantente informado",
+        "STAY INFORMED":"MANTENTE INFORMADO",
+        "Noticias, advice and the local market.":"Noticias, consejos y mercado local.",
+        "News, advice and the local market.":"Noticias, consejos y mercado local.",
+        "Useful updates for people buying, selling or renovating distinctive property in inland Granada.":"Información útil para quienes compran, venden o reforman propiedades singulares en el interior de Granada.",
+        "See live asking-price figures from the properties currently published on Cave Homes Spain.":"Consulta los precios de oferta actuales de las propiedades publicadas en Cave Homes Spain.",
+        "Explore cave homes and rural properties, advertise your own, or get Property Viewing & Local Support with video viewings, area visits and practical help with your purchase.":"Explora casas cueva y propiedades rurales, anuncia tu inmueble o solicita visitas en vídeo, recorridos por la zona y ayuda práctica durante la compra.",
+        "Map":"Mapa",
+        "List":"Lista"
+      });
       const setLanguage = (window.setSiteLanguage = function (
         lang,
         persist = false,
@@ -7275,7 +7291,8 @@
         const dict = translations[lang] || {};
         textNodes.forEach((node) => {
           const original = node.original.trim(),
-            translated = dict[original] || original;
+            normalized = original.replace(/\\s+/g, " "),
+            translated = dict[original] || dict[normalized] || original;
           node.nodeValue = node.original.replace(original, translated);
         });
         document.querySelectorAll(".homepage-buyer-link").forEach(link => {
@@ -7291,18 +7308,6 @@
         if (persist) localStorage.setItem("caveHomesLanguageManual", lang);
         const selector = document.getElementById("languageSelect");
         if (selector) selector.value = lang;
-        document.querySelectorAll(".mobile-dock>a").forEach((link) => {
-          [...link.childNodes]
-            .filter((n) => n.nodeType === Node.TEXT_NODE && n.nodeValue.trim())
-            .forEach((n) => {
-              const original = n.datasetOriginal || n.nodeValue.trim();
-              n.datasetOriginal = original;
-              n.nodeValue = n.nodeValue.replace(
-                n.nodeValue.trim(),
-                dict[original] || original,
-              );
-            });
-        });
         if (publicHomes.length) renderPublicHomes();
         if (window.CHSActiveHome && document.getElementById("propertyModal").classList.contains("open")) openProperty(window.CHSActiveHome, false);
       });
