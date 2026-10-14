@@ -2,7 +2,7 @@
 (function(){
   if(document.querySelector('script[src="/site-i18n.js"]'))return;
   const script=document.createElement('script');
-  script.src='/site-i18n.js';
+  script.src='/site-i18n.js?v=20261014-language-fix';
   script.defer=true;
   document.head.appendChild(script);
 })();
