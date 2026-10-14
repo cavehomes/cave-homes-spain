@@ -7299,6 +7299,31 @@
         "Learn more →":"Más información →",
         "View the latest figures →":"Ver las últimas cifras →"
       });
+      // Use complete phrases for the other supported languages as well.
+      const extraHomeCopy = {
+        "fr-BE": {
+          "Cave Homes Spain · Homes and local care":"Cave Homes Spain · Biens immobiliers et assistance locale",
+          "Looking specifically for a cave home?":"Vous recherchez une maison troglodyte ?",
+          "Explore cave houses for sale in Spain →":"Découvrez les maisons troglodytes à vendre en Espagne →",
+          "Browse homes, advertise your property, get property viewings and local support or arrange checks when you are away.":"Découvrez des biens, publiez votre annonce, demandez une visite et une assistance locale ou organisez des contrôles en votre absence.",
+          "News, advice and the local market.":"Actualités, conseils et marché local."
+        },
+        de: {
+          "Cave Homes Spain · Homes and local care":"Cave Homes Spain · Immobilien und Unterstützung vor Ort",
+          "Looking specifically for a cave home?":"Suchen Sie gezielt ein Höhlenhaus?",
+          "Explore cave houses for sale in Spain →":"Höhlenhäuser zum Verkauf in Spanien entdecken →",
+          "Browse homes, advertise your property, get property viewings and local support or arrange checks when you are away.":"Entdecken Sie Immobilien, inserieren Sie Ihr Eigentum, buchen Sie Besichtigungen und Unterstützung vor Ort oder vereinbaren Sie Kontrollen während Ihrer Abwesenheit.",
+          "News, advice and the local market.":"Nachrichten, Ratgeber und der lokale Markt."
+        },
+        nl: {
+          "Cave Homes Spain · Homes and local care":"Cave Homes Spain · Woningen en lokale ondersteuning",
+          "Looking specifically for a cave home?":"Zoekt u specifiek een grotwoning?",
+          "Explore cave houses for sale in Spain →":"Bekijk grotwoningen te koop in Spanje →",
+          "Browse homes, advertise your property, get property viewings and local support or arrange checks when you are away.":"Bekijk woningen, plaats uw advertentie, vraag bezichtigingen en lokale hulp aan of regel controles wanneer u weg bent.",
+          "News, advice and the local market.":"Nieuws, advies en de lokale woningmarkt."
+        }
+      };
+      Object.keys(extraHomeCopy).forEach(lang=>Object.assign(translations[lang],extraHomeCopy[lang]));
       const setLanguage = (window.setSiteLanguage = function (
         lang,
         persist = false,
