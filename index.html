@@ -7333,6 +7333,25 @@
       Object.assign(translations["nl"],{"Useful updates for people buying, selling or renovating distinctive property in inland Granada.":"Nuttige informatie voor wie bijzondere woningen in het binnenland van Granada koopt, verkoopt of renoveert.","Inland Granada property pulse":"Vastgoedmarkt in het binnenland van Granada","See live asking-price figures from the properties currently published on Cave Homes Spain.":"Bekijk de actuele vraagprijzen van woningen die op Cave Homes Spain worden aangeboden.","View the latest figures →":"Bekijk de nieuwste cijfers →","STAY INFORMED":"BLIJF OP DE HOOGTE","News, advice and the local market.":"Nieuws, advies en de lokale woningmarkt."});
       Object.assign(translations["fr-BE"],{"Useful updates for people buying, selling or renovating distinctive property in inland Granada.":"Informations utiles pour acheter, vendre ou rénover un bien immobilier atypique dans l’arrière-pays de Grenade.","Inland Granada property pulse":"Le marché immobilier dans l’arrière-pays de Grenade","See live asking-price figures from the properties currently published on Cave Homes Spain.":"Consultez les prix demandés pour les biens actuellement publiés sur Cave Homes Spain.","View the latest figures →":"Voir les derniers chiffres →","STAY INFORMED":"RESTEZ INFORMÉ"});
       Object.assign(translations["es"],{"Inland Granada property pulse":"Panorama inmobiliario del interior de Granada","See live asking-price figures from the properties currently published on Cave Homes Spain.":"Consulta los precios de oferta de las propiedades anunciadas en Cave Homes Spain.","View the latest figures →":"Ver las últimas cifras →"});
+      // Translate stable homepage sections directly, including multiline text nodes.
+      const latestSection = document.querySelector(".chs-latest .section-head");
+      const marketCard = document.querySelector('.chs-latest-grid a[href="/market-update.html"]');
+      const fixedCopy = [
+        [latestSection, ".eyebrow", "Stay informed"],
+        [latestSection, "h2", "News, advice and the local market."],
+        [latestSection, "p:not(.eyebrow)", "Useful updates for people buying, selling or renovating distinctive property in inland Granada."],
+        [marketCard, "span", "MARKET UPDATE"],
+        [marketCard, "h3", "Inland Granada property pulse"],
+        [marketCard, "p", "See live asking-price figures from the properties currently published on Cave Homes Spain."],
+        [marketCard, "b", "View the latest figures →"]
+      ];
+      function applyFixedCopy(lang) {
+        const dict = translations[lang] || {};
+        fixedCopy.forEach(([root, selector, english]) => {
+          const el = root?.querySelector(selector);
+          if (el) el.textContent = dict[english] || english;
+        });
+      }
       const setLanguage = (window.setSiteLanguage = function (
         lang,
         persist = false,
@@ -7344,6 +7363,7 @@
             translated = dict[original] || dict[normalized] || original;
           node.nodeValue = node.original.replace(original, translated);
         });
+        applyFixedCopy(lang);
         document.querySelectorAll(".homepage-buyer-link").forEach(link => {
           const url = new URL(link.getAttribute("href"), location.origin);
           url.searchParams.set("lang", lang);
