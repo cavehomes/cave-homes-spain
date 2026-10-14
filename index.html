@@ -5132,6 +5132,20 @@
 .hero .sunflower-hero-mark{display:none!important}
 @media(max-width:760px){.hero{background-image:linear-gradient(180deg,rgba(15,25,19,.73),rgba(15,25,19,.43) 50%,rgba(15,25,19,.12)),url("/cave-sunflower-hero.webp")!important;background-position:center,66% center!important}}
 </style>
+<style id="mobile-photo-framing">
+@media(max-width:760px){
+  #top.hero{display:block!important;min-height:0!important;height:auto!important;padding:0!important;background:#24382f!important}
+  #top.hero::before{content:"";display:block;width:100%;aspect-ratio:3/2;background:url("/cave-sunflower-hero.webp") center/cover no-repeat}
+  #top.hero .hero-copy{width:calc(100% - 36px)!important;max-width:540px!important;margin:0 auto!important;padding:24px 0 30px!important}
+  #top.hero .eyebrow{font-size:.65rem!important;letter-spacing:.13em!important;margin:0 0 12px!important}
+  #top.hero h1{max-width:none!important;font-size:clamp(2.25rem,9vw,3.2rem)!important;line-height:1.06!important;margin:0 0 16px!important;text-shadow:none!important}
+  #top.hero .hero-copy>p:not(.eyebrow){max-width:none!important;background:none!important;backdrop-filter:none!important;box-shadow:none!important;border:0!important;border-radius:0!important;padding:0!important;font-size:.95rem!important;line-height:1.55!important;margin:0 0 20px!important;text-shadow:none!important}
+  #top.hero .hero-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:9px!important;max-width:none!important;margin:0!important}
+  #top.hero .hero-actions .btn{width:auto!important;min-width:0!important;min-height:46px!important;margin:0!important;padding:11px 8px!important;font-size:.82rem!important;white-space:normal!important}
+  #top.hero .hero-actions .btn:first-child,#top.hero .hero-actions .homepage-buyer-link{grid-column:1/-1!important}
+  #top.hero .trust-row{display:none!important}
+}
+</style>
 </head>
   <body data-version="16">
     <div class="v11-topline">
