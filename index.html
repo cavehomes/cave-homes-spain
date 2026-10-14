@@ -7291,7 +7291,7 @@
         const dict = translations[lang] || {};
         textNodes.forEach((node) => {
           const original = node.original.trim(),
-            normalized = original.replace(/\\s+/g, " "),
+            normalized = original.replace(/\s+/g, " "),
             translated = dict[original] || dict[normalized] || original;
           node.nodeValue = node.original.replace(original, translated);
         });
