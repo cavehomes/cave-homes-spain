@@ -4812,6 +4812,14 @@
 @media(max-width:760px){.hero{min-height:680px!important}.hero .hero-copy{width:calc(100% - 38px);padding-top:65px;padding-bottom:215px}.hero h1{font-size:clamp(2.65rem,11.8vw,4rem)}.hero .hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;max-width:420px}.hero .hero-actions .btn{display:flex;justify-content:center;align-items:center;text-align:center;padding:12px 8px;min-height:50px}.hero .hero-actions .homepage-buyer-link{grid-column:1/-1}.sunflower-hero-mark{right:0;bottom:118px;font-size:55px}.trust-row{width:calc(100% - 26px);grid-template-columns:repeat(3,minmax(0,1fr));transform:translate(-50%,52%)}.trust-item{padding:12px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px}.trust-icon{font-size:1.3rem}.trust-item strong{font-size:.8rem;line-height:1.2}.trust-item span:not(.trust-icon){font-size:.68rem;line-height:1.3}.hero-search{padding-top:75px}}
 @media(max-width:390px){.hero .hero-copy{padding-bottom:240px}.hero .hero-actions .btn{font-size:.78rem}.trust-item span:not(.trust-icon){font-size:.62rem}}
 @media(prefers-reduced-motion:reduce){.hero .hero-actions .btn{transition:none}}
+
+/* SVG sunflower artwork replaces emoji; art-directed to avoid covering CTAs */
+.hero{isolation:isolate}
+.hero .hero-copy{z-index:2}
+.sunflower-hero-mark{position:absolute!important;left:auto!important;right:0!important;bottom:0!important;width:min(62vw,900px)!important;height:auto!important;max-height:54%!important;object-fit:contain!important;object-position:right bottom!important;transform:none!important;opacity:.94!important;z-index:0!important;filter:drop-shadow(0 7px 12px rgba(0,0,0,.15))!important;pointer-events:none!important}
+.hero .trust-row{z-index:4}
+@media(max-width:760px){.sunflower-hero-mark{width:95vw!important;max-height:35%!important;bottom:22px!important;opacity:.82!important}.hero .hero-copy{position:relative;z-index:2}.hero .hero-actions{position:relative;z-index:3}}
+@media(max-width:420px){.sunflower-hero-mark{max-height:30%!important;opacity:.75!important}}
 </style>
 
     <style id="energy-compliance-styles">
@@ -5235,7 +5243,7 @@
             >
           </div>
         </div>
-        <span class="sunflower-hero-mark" aria-hidden="true"><span>🌻</span><span>🌻</span><span>🌻</span></span><div class="trust-row">
+        <img class="sunflower-hero-mark" src="/sunflowers-hero.svg" alt="" aria-hidden="true" loading="eager" decoding="async" /><div class="trust-row">
           <div class="trust-item">
             <span class="trust-icon">⌂</span>
             <div>
