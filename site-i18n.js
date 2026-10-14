@@ -1,6 +1,6 @@
 (function(){
 'use strict';
-if(location.pathname==='/admin.html'||location.pathname==='/property-care-staff.html')return;
+if(location.pathname==='/'||location.pathname==='/index.html'||location.pathname==='/admin.html'||location.pathname==='/property-care-staff.html')return;
 const KEY='caveHomesLanguageManual';
 const LANGS=['en','es','nl','fr','de'];
 const D={
