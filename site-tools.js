@@ -1,3 +1,12 @@
+/* Load the shared translation engine wherever the common site tools are loaded. */
+(function(){
+  if(document.querySelector('script[src="/site-i18n.js"]'))return;
+  const script=document.createElement('script');
+  script.src='/site-i18n.js';
+  script.defer=true;
+  document.head.appendChild(script);
+})();
+
 (function(){
   const measurementId='G-E1EN0E3688';
   const hasConsent=()=>localStorage.getItem('caveHomesAnalyticsConsent')==='accepted';
