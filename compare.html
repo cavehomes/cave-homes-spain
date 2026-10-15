@@ -51,4 +51,4 @@ $('enquire').onclick=()=>window.chsTrack?.('comparison_enquiry_start',{property_
 render();
 (async()=>{try{if(!window.supabase)throw Error('Client unavailable');const db=window.supabase.createClient('https://lesgzlhvrlxgtfuocadq.supabase.co','sb_publishable_pPS6fORJPGFcGBIUPcxOxQ_1g4vazyg');const {data,error}=await db.from('properties').select('*').eq('published',true).order('created_at',{ascending:false});if(error)throw error;homes=data||[];selected=[...new Set(selected.map(id=>homes.find(h=>key(h)===id||h.title===id)).filter(Boolean).map(key))].slice(0,3);loaded=true;persist();render()}catch(e){console.warn('Comparison unavailable',e);failed=true;render()}})();
 </script>
-</body></html>
+<script src="/site-tools.js?v=shared-explore"></script></body></html>
