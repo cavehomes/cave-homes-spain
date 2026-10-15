@@ -132,3 +132,18 @@
   };
   if('requestIdleCallback' in window)requestIdleCallback(start,{timeout:1800});else setTimeout(start,300);
 })();
+/* Optional full-page Google translation for editorial pages; no API key required. */
+(function(){
+ if(document.getElementById('chs-automatic-translate'))return;
+ function init(){
+  if(document.getElementById('chs-automatic-translate'))return;
+  var bar=document.createElement('div');bar.id='chs-automatic-translate';
+  bar.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 18px;background:#fffaf2;border-bottom:1px solid #ded8cd;color:#253c31;font:14px Arial,sans-serif';
+  var label=document.createElement('label');label.textContent='Translate this page';label.htmlFor='chs-translate-language';
+  var select=document.createElement('select');select.id='chs-translate-language';select.setAttribute('aria-label','Translate the whole page');select.style.cssText='padding:8px 10px;border:1px solid #9baba0;border-radius:8px;background:white;color:#253c31';
+  [['','Choose language'],['en','English'],['es','Español'],['de','Deutsch'],['fr','Français'],['nl','Nederlands']].forEach(function(item){var opt=document.createElement('option');opt.value=item[0];opt.textContent=item[1];select.appendChild(opt)});
+  select.addEventListener('change',function(){var lang=select.value;if(!lang)return;var url=new URL(location.href);url.searchParams.delete('lang');if(lang==='en'){location.href=url.href;return}location.href='https://translate.google.com/translate?sl=en&tl='+encodeURIComponent(lang)+'&u='+encodeURIComponent(url.href)});
+  bar.appendChild(label);bar.appendChild(select);var header=document.querySelector('header');if(header)header.insertAdjacentElement('afterend',bar);else document.body.insertBefore(bar,document.body.firstChild);
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
