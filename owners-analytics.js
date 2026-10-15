@@ -170,9 +170,21 @@
     };
   }
 
-  try {
-    setupWebsiteAnalyticsDashboard();
-  } catch (error) {
-    console.warn("Website analytics dashboard unavailable", error);
+  function initialiseAnalytics(attempt) {
+    try {
+      if (document.getElementById("analyticsView")) return;
+      if (!window.CHSOwnerDb || typeof window.switchView !== "function" || !document.querySelector("#homeView .dashboard-actions") || !document.getElementById("addView")) {
+        if (attempt < 20) window.setTimeout(function () { initialiseAnalytics(attempt + 1); }, 250);
+        return;
+      }
+      setupWebsiteAnalyticsDashboard();
+    } catch (error) {
+      console.warn("Website analytics dashboard unavailable", error);
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () { initialiseAnalytics(0); }, { once: true });
+  } else {
+    initialiseAnalytics(0);
   }
 })();
