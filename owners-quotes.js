@@ -24,15 +24,16 @@
   function updateButtons() {
     const saved = !!state?.saved && !state.dirty;
     field('quoteEmail').disabled = busy || !saved || !emailValid(state?.q || {});
-    field('quoteSent').disabled = busy || !saved || ['booked', 'completed'].includes(state?.previous?.stage);
-    field('quoteSave').disabled = busy; field('quoteClose').disabled = busy;
-    ['quoteService','quoteScope','quotePrice','quoteDates','quoteAccess'].forEach(id => { field(id).disabled = busy; });
+    field('quoteSent').disabled = busy || !saved || ['quote_accepted', 'booked', 'completed'].includes(state?.previous?.stage);
+    field('quoteCustomerLink').disabled = busy || !saved || !window.CHSQuoteLinks;
+    field('quoteSave').disabled = busy || ['quote_accepted','booked','completed'].includes(state?.previous?.stage); field('quoteClose').disabled = busy;
+    ['quoteService','quoteScope','quotePrice','quoteDates','quoteAccess'].forEach(id => { field(id).disabled = busy || ['quote_accepted','booked','completed'].includes(state?.previous?.stage); });
   }
   function preview() { if (!state) return; field('quotePreview').value = body(values(), state.q); updateButtons(); }
   function createDialog() {
     if (dialog) return;
     dialog = document.createElement('dialog'); dialog.id = 'quoteDialog'; dialog.className = 'followup-dialog'; dialog.setAttribute('aria-labelledby', 'quoteTitle');
-    dialog.innerHTML = '<div class="inquiry-reader-head"><h2 id="quoteTitle">Create a quote</h2><button id="quoteClose" class="inquiry-reader-close" type="button" aria-label="Close quote">×</button></div><p id="quoteBuyer"></p><p class="followup-private">Save this draft privately, review it, then open it in your email app. Mark Quote sent only after you have sent it.</p><form id="quoteForm"><div class="followup-fields"><div class="field followup-notes"><label for="quoteService">Service *</label><input id="quoteService" required maxlength="250"></div><div class="field followup-notes"><label for="quoteScope">What is included *</label><textarea id="quoteScope" rows="5" required maxlength="5000"></textarea><small>Edit the suggested wording to match exactly what you are offering.</small></div><div class="field"><label for="quotePrice">Total quoted price (€) *</label><input id="quotePrice" type="number" min="0" max="99999999.99" step="0.01" inputmode="decimal" required></div><div class="field"><label for="quoteDates">Proposed dates</label><input id="quoteDates" maxlength="250" placeholder="Dates or a date range"></div><div class="field followup-notes"><label for="quoteAccess">Access and appointment arrangements</label><textarea id="quoteAccess" rows="3" maxlength="2500"></textarea></div><div class="field followup-notes"><label for="quotePreview">Email draft preview</label><textarea id="quotePreview" class="quote-preview" rows="12" readonly></textarea><small>Your private follow-up notes are not included in this email.</small></div></div><div class="followup-save"><button id="quoteSave" class="btn green" type="submit">Save quote draft</button><button id="quoteEmail" class="secondary" type="button" disabled>Open email draft</button><button id="quoteSent" class="secondary" type="button" disabled>Mark Quote sent</button><p id="quoteStatus" role="status" aria-live="polite"></p></div></form>';
+    dialog.innerHTML = '<div class="inquiry-reader-head"><h2 id="quoteTitle">Create a quote</h2><button id="quoteClose" class="inquiry-reader-close" type="button" aria-label="Close quote">×</button></div><p id="quoteBuyer"></p><p class="followup-private">Save this draft privately, review it, then open it in your email app. Mark Quote sent only after you have sent it.</p><form id="quoteForm"><div class="followup-fields"><div class="field followup-notes"><label for="quoteService">Service *</label><input id="quoteService" required maxlength="250"></div><div class="field followup-notes"><label for="quoteScope">What is included *</label><textarea id="quoteScope" rows="5" required maxlength="5000"></textarea><small>Edit the suggested wording to match exactly what you are offering.</small></div><div class="field"><label for="quotePrice">Total quoted price (€) *</label><input id="quotePrice" type="number" min="0" max="99999999.99" step="0.01" inputmode="decimal" required></div><div class="field"><label for="quoteDates">Proposed dates</label><input id="quoteDates" maxlength="250" placeholder="Dates or a date range"></div><div class="field followup-notes"><label for="quoteAccess">Access and appointment arrangements</label><textarea id="quoteAccess" rows="3" maxlength="2500"></textarea></div><div class="field followup-notes"><label for="quotePreview">Email draft preview</label><textarea id="quotePreview" class="quote-preview" rows="12" readonly></textarea><small>Your private follow-up notes are not included in this email.</small></div></div><div class="followup-save"><button id="quoteSave" class="btn green" type="submit">Save quote draft</button><button id="quoteEmail" class="secondary" type="button" disabled>Open email draft</button><button id="quoteCustomerLink" class="secondary" type="button" disabled>Customer quote link</button><button id="quoteSent" class="secondary" type="button" disabled>Mark Quote sent</button><p id="quoteStatus" role="status" aria-live="polite"></p></div></form>';
     document.body.appendChild(dialog); form = field('quoteForm');
     field('quoteClose').onclick = () => { if (!busy) dialog.close(); };
     dialog.addEventListener('cancel', event => { if (busy) event.preventDefault(); });
@@ -46,6 +47,7 @@
       field('quoteStatus').textContent = 'Email draft opened. Review and send it in your email app, then return here to mark Quote sent.';
     };
     field('quoteSent').onclick = markSent;
+    field('quoteCustomerLink').onclick = () => { if (!state?.saved || state.dirty || busy) return; const saved = state, trigger = returnFocus; dialog.close(); window.CHSQuoteLinks?.open(saved.q,saved.previous,saved.db,saved.refresh,trigger); };
   }
   function open(q, record, db, refresh, trigger) {
     createDialog();
@@ -75,7 +77,7 @@
     if (current.generation === generation) field('quoteStatus').textContent = error.code === 'CONFLICT' || error.code === '23505' ? 'This enquiry changed in another session. Your draft is still here; copy anything you need before closing and reopening to load the latest details.' : 'Could not save the quote. Your draft is still here. Check your connection and admin access, then try again.';
   }
   async function saveDraft(event) {
-    event.preventDefault(); if (!state || busy || !form.reportValidity()) return;
+    event.preventDefault(); if (!state || busy || ['quote_accepted','booked','completed'].includes(state.previous?.stage) || !form.reportValidity()) return;
     const data = values(), price = Number(data.priceText);
     if (!data.service || !data.scope || data.priceText === '' || !Number.isFinite(price) || price < 0 || price > 99999999.99 || data.service.length > 250 || data.scope.length > 5000 || data.dates.length > 250 || data.access.length > 2500) { field('quoteStatus').textContent = 'Please check the service, included work and total price.'; return; }
     busy = true; updateButtons(); field('quoteStatus').textContent = 'Saving draft…'; const current = state;
@@ -88,7 +90,7 @@
     finally { busy = false; if (state) preview(); }
   }
   async function markSent() {
-    if (!state?.saved || state.dirty || busy || ['booked', 'completed'].includes(state.previous?.stage)) return;
+    if (!state?.saved || state.dirty || busy || ['quote_accepted', 'booked', 'completed'].includes(state.previous?.stage)) return;
     busy = true; updateButtons(); field('quoteStatus').textContent = 'Updating booking stage…'; const current = state;
     try {
       if (!await persist(current, { stage: 'quote_sent', updated_at: new Date().toISOString() })) return;
@@ -104,3 +106,4 @@
   }
   window.CHSOwnerQuotes = { open, reset };
 })();
+

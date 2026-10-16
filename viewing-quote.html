@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src https://lesgzlhvrlxgtfuocadq.supabase.co; img-src 'self'; base-uri 'none'; form-action 'none'">
+ <meta name="theme-color" content="#1f3b30">
+ <title>Your private quote | Cave Homes Spain</title>
+ <link rel="icon" href="/app/app-icon-192.png"><link rel="stylesheet" href="/viewing-quote.css">
+ <script src="/viewing-quote.js" defer></script>
+</head>
+<body>
+ <header><a href="/">Cave Homes <span>Spain</span></a><label><span class="sr-only">Language</span><select id="language" aria-label="Language"><option value="en">English</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="nl">Nederlands</option></select></label></header>
+ <main>
+  <p class="eyebrow" data-copy="eyebrow">PROPERTY VIEWING & LOCAL SUPPORT</p>
+  <h1 data-copy="title">Your private quote</h1>
+  <p class="intro" data-copy="intro">Review your service, what is included and the total price before accepting.</p>
+  <p id="status" role="status" aria-live="polite">Loading your quote…</p>
+  <section id="quote" class="card" hidden aria-labelledby="service">
+   <p class="eyebrow" data-copy="service">YOUR SERVICE</p><h2 id="service"></h2>
+   <div class="price"><span data-copy="total">Total quoted price</span><strong id="price"></strong><small data-copy="payment">No payment is taken on this page.</small></div>
+   <dl><dt data-copy="scope">What is included</dt><dd id="scope"></dd><dt data-copy="area">Property or area</dt><dd id="area"></dd><dt data-copy="dates">Proposed dates</dt><dd id="dates"></dd><dt data-copy="access">Access and arrangements</dt><dd id="access"></dd><dt data-copy="expiry">Quote valid until</dt><dd id="expiry"></dd></dl>
+   <p class="notice" data-copy="notice">Accepting the quote records your agreement to the service and total price. Your visit is confirmed separately once access and final arrangements are agreed.</p>
+  </section>
+  <section id="accepted" class="success card" hidden tabindex="-1"><h2 data-copy="acceptedTitle">Thank you — quote accepted</h2><p data-copy="acceptedBody">Your acceptance has been recorded. Paul will contact you to confirm access and final arrangements. No payment has been taken.</p><p id="acceptedTime"></p></section>
+  <form id="acceptForm" class="card" hidden>
+   <h2 data-copy="acceptTitle">Happy to go ahead?</h2>
+   <label for="customerName" data-copy="name">Your full name</label><input id="customerName" name="name" autocomplete="name" required maxlength="120">
+   <label class="consent"><input id="agreed" type="checkbox" required><span data-copy="agree">I agree to the service scope and total price shown. I understand that the visit is confirmed only after Cave Homes Spain confirms access and final arrangements.</span></label>
+   <button id="acceptButton" type="submit" data-copy="accept">Accept this quote</button><p id="acceptStatus" role="status" aria-live="polite"></p>
+  </form>
+  <footer><p data-copy="private">This link is private. Please share it only with people involved in your enquiry.</p><a id="contact" href="mailto:cavehomesspain@gmail.com?subject=My%20Viewing%20%26%20Local%20Support%20quote" data-copy="contact">Ask Paul a question or request a change</a></footer>
+ </main>
+</body></html>

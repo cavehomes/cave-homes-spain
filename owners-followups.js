@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  const stages = [['new', 'New'], ['contacted', 'Contacted'], ['quote_sent', 'Quote sent'], ['booked', 'Booked'], ['completed', 'Completed']];
+  const stages = [['new', 'New'], ['contacted', 'Contacted'], ['quote_sent', 'Quote sent'], ['quote_accepted', 'Quote accepted'], ['booked', 'Booked'], ['completed', 'Completed']];
   let records = new Map(), available = false, loadError = '', generation = 0, dialog, editor, editing, busy = false, returnFocus;
   const support = q => /^(?:Buyer Assistance|Property Viewing & Local Support|Viewing & Local Support)(?:\s*[—–-]|\s+enquiry|\s+request)/i.test(String(q.subject || ''));
   const today = () => {
@@ -19,9 +19,10 @@
       if (result.error) throw result.error;
       records = new Map((result.data || []).map(row => [String(row.enquiry_id), row]));
       available = true; loadError = '';
+      try { await window.CHSQuoteLinks?.load(db); } catch (_) { loadError = 'Customer quote links could not be loaded. Refresh to try again. Your existing follow-up details are still available.'; }
     } catch (_) { if (token === generation) { available = false; loadError = 'Private follow-up details could not be loaded. Refresh to try again.'; } }
   }
-  function reset() { generation++; records.clear(); available = false; loadError = ''; if (dialog?.open) dialog.close(); editing = null; }
+  function reset() { window.CHSQuoteLinks?.reset(); generation++; records.clear(); available = false; loadError = ''; if (dialog?.open) dialog.close(); editing = null; }
   function matches(q, stage, followup) { return (!stage || stage === 'all' || get(q).stage === stage) && (followup !== 'due' || isDue(q)); }
   function compare(a, b) {
     const due = Number(isDue(b)) - Number(isDue(a));
@@ -35,8 +36,8 @@
     if (!target) return;
     target.replaceChildren();
     if (!available) return;
-    for (const [key, label] of stages) { const item = document.createElement('span'); item.className = 'followup-count'; item.textContent = label + ': ' + rows.filter(q => get(q).stage === key).length; target.appendChild(item); }
-    const due = document.createElement('strong'); due.className = 'followup-due-count'; due.textContent = 'Follow-ups due: ' + rows.filter(isDue).length; target.appendChild(due);
+    for (const [key, label] of stages) { const item = document.createElement('button'); item.type = 'button'; item.className = 'secondary followup-count'; item.onclick = () => { const filter = document.getElementById('assistanceStageFilter'); filter.value = key; document.getElementById('assistanceDueFilter').value = 'all'; filter.dispatchEvent(new Event('change')); }; item.textContent = label + ': ' + rows.filter(q => get(q).stage === key).length; target.appendChild(item); }
+    const due = document.createElement('button'); due.type = 'button'; due.className = 'secondary followup-due-count'; due.onclick = () => { const filter = document.getElementById('assistanceDueFilter'); filter.value = 'due'; document.getElementById('assistanceStageFilter').value = 'all'; filter.dispatchEvent(new Event('change')); }; due.textContent = 'Follow-ups due: ' + rows.filter(isDue).length; target.appendChild(due);
   }
   function makeEditor() {
     if (dialog) return;
@@ -95,8 +96,10 @@
     }
     const quoteButton = document.createElement('button'); quoteButton.type = 'button'; quoteButton.className = 'secondary quote-edit'; quoteButton.textContent = get(q).quote_saved_at ? 'Review quote' : 'Create a quote'; quoteButton.disabled = !available || !window.CHSOwnerQuotes; quoteButton.onclick = () => { if (available) window.CHSOwnerQuotes?.open(q, get(q), db, refresh, quoteButton); }; actions.appendChild(quoteButton);
     const button = document.createElement('button'); button.type = 'button'; button.className = 'secondary followup-edit'; button.textContent = 'Manage follow-up'; button.disabled = !available; button.onclick = () => open(q, db, refresh, button); actions.appendChild(button);
+    window.CHSQuoteLinks?.decorate(card, q, get(q), db, refresh, available);
     window.CHSOwnerBookings?.decorate(card, q, get(q), db, refresh, available);
     window.CHSOwnerReports?.decorate(card, q, get(q), db, refresh);
   }
   window.CHSOwnerFollowups = { load, reset, get, isDue, matches, compare, summary, decorate };
 })();
+
