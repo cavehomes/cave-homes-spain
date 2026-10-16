@@ -6,7 +6,7 @@
   const complete = row => row.quote_saved_at && row.quote_service && row.quote_scope && row.quoted_price !== null;
   async function load(db) {
     const version = generation;
-    const result = await db.from('viewing_quote_offers').select('enquiry_id,token_hash,issued_at,expires_at,revoked_at,accepted_at,accepted_name,quote_saved_at');
+    const result = await db.from('viewing_quote_offers').select('enquiry_id,token_hash,snapshot,issued_at,expires_at,revoked_at,accepted_at,accepted_name,quote_saved_at');
     if (version !== generation) return;
     if (result.error) { ready = false; throw result.error; }
     offers = new Map((result.data || []).map(o => [String(o.enquiry_id), o]));
@@ -34,14 +34,16 @@
     if (!current) return;
     const offer = offers.get(String(current.q.id)), row = current.row;
     const locked = ['quote_accepted','booked','completed'].includes(row.stage) || !!offer?.accepted_at;
-    const active = offer && !offer.revoked_at && new Date(offer.expires_at) > new Date();
+    const matching = offer && offer.quote_saved_at === row.quote_saved_at && Number(offer.snapshot?.price) === Number(row.quoted_price);
+    const active = offer && matching && !offer.revoked_at && new Date(offer.expires_at) > new Date();
     field('quoteLinkCreate').disabled = busy || !ready || locked || !complete(row) || !field('quoteLinkReviewed').checked;
     field('quoteLinkCreate').textContent = offer ? 'Replace customer link' : 'Create customer link';
     field('quoteLinkRevoke').disabled = busy || !offer || !!offer.revoked_at;
     field('quoteLinkClose').disabled = busy;
     field('quoteLinkReviewed').disabled = busy || locked;
-    field('quoteLinkSummary').textContent = row.quote_service + '\n\n' + row.quote_scope + '\n\nTotal: ' + new Intl.NumberFormat('en-GB', {style:'currency',currency:'EUR'}).format(Number(row.quoted_price)) + '\nDates: ' + (row.quote_dates || 'To be agreed') + '\nAccess: ' + (row.quote_access || 'To be agreed');
-    field('quoteLinkHistory').textContent = offer?.accepted_at ? 'Accepted by ' + offer.accepted_name + ' on ' + stamp(offer.accepted_at) + '. Review the booking and confirm final arrangements.' : offer?.revoked_at ? 'The previous link was withdrawn.' : offer ? 'Link expires ' + stamp(offer.expires_at) + '. Replacing it immediately disables the previous link.' : 'Links expire after 14 days. A reminder to follow up will be added to your tracker.';
+    const shown = offer?.accepted_at ? offer.snapshot : {service:row.quote_service,scope:row.quote_scope,price:row.quoted_price,dates:row.quote_dates,access:row.quote_access};
+    field('quoteLinkSummary').textContent = shown.service + '\n\n' + shown.scope + '\n\nTotal: ' + new Intl.NumberFormat('en-GB', {style:'currency',currency:'EUR'}).format(Number(shown.price)) + '\nDates: ' + (shown.dates || 'To be agreed') + '\nAccess: ' + (shown.access || 'To be agreed');
+    field('quoteLinkHistory').textContent = offer?.accepted_at ? 'Accepted by ' + offer.accepted_name + ' on ' + stamp(offer.accepted_at) + '. These are the terms accepted by the customer. Review the booking and confirm final arrangements.' : offer?.revoked_at ? 'The previous link was withdrawn.' : offer && !matching ? 'The saved quote has changed. Create a replacement link before sharing it.' : offer ? 'Link expires ' + stamp(offer.expires_at) + '. Replacing it immediately disables the previous link.' : 'Links expire after 14 days. A reminder to follow up will be added to your tracker.';
     const saved = links.get(String(current.q.id));
     const show = active && !locked && saved?.hash === offer.token_hash;
     field('quoteLinkOutput').hidden = !show;
