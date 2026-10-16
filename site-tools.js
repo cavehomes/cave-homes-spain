@@ -2,11 +2,21 @@
 (function(){
   if(window.__chsSiteToolsLoaded)return;
   window.__chsSiteToolsLoaded=true;
+  // Translate a stable English source page, including when switching languages from a translated copy.
+  window.chsTranslatePage=function(lang){
+    if(!['en','es','de','fr','nl','sv','no','ru','fi'].includes(lang))return;
+    var url=new URL(location.href);
+    url.protocol='https:';url.hostname='cavehomesspain.com';url.port='';
+    Array.from(url.searchParams.keys()).forEach(function(key){if(key.indexOf('_x_tr_')===0)url.searchParams.delete(key)});
+    url.searchParams.set('lang','en');
+    if(lang==='en'){location.href=url.href;return}
+    location.href='https://translate.google.com/translate?sl=en&tl='+encodeURIComponent(lang)+'&u='+encodeURIComponent(url.href);
+  };
 /* Load the shared translation engine wherever the common site tools are loaded. */
 (function(){
   if(document.querySelector('script[src="/site-i18n.js"]'))return;
   const script=document.createElement('script');
-  script.src='/site-i18n.js?v=20261014-language-fix';
+  script.src='/site-i18n.js?v=20261016-google-compatibility';
   script.defer=true;
   document.head.appendChild(script);
 })();
@@ -146,7 +156,7 @@
   var label=document.createElement('label');label.textContent='Translate this page';label.htmlFor='chs-translate-language';
   var select=document.createElement('select');select.id='chs-translate-language';select.setAttribute('aria-label','Translate the whole page');select.style.cssText='min-width:0;max-width:100%;flex:1 1 150px;padding:8px 10px;border:1px solid #9baba0;border-radius:8px;background:white;color:#253c31';
   [['','Choose language'],['en','English'],['es','Español'],['de','Deutsch'],['fr','Français'],['nl','Nederlands'],['sv','Svenska'],['no','Norsk'],['ru','Русский'],['fi','Suomi']].forEach(function(item){var opt=document.createElement('option');opt.value=item[0];opt.textContent=item[1];select.appendChild(opt)});
-  select.addEventListener('change',function(){var lang=select.value;if(!lang)return;var url=new URL(location.href);url.searchParams.delete('lang');if(lang==='en'){location.href=url.href;return}location.href='https://translate.google.com/translate?sl=en&tl='+encodeURIComponent(lang)+'&u='+encodeURIComponent(url.href)});
+  select.addEventListener('change',function(){if(select.value)window.chsTranslatePage(select.value)});
   bar.appendChild(label);bar.appendChild(select);var header=document.querySelector('header');if(header)header.insertAdjacentElement('afterend',bar);else document.body.insertBefore(bar,document.body.firstChild);
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
@@ -166,8 +176,7 @@
  document.addEventListener('change',function(event){
   var select=event.target;if(!select.matches||!select.matches(selectors)||!extras.some(function(item){return item[0]===select.value}))return;
   event.stopImmediatePropagation();
-  var url=new URL(location.href);url.searchParams.delete('lang');
-  location.href='https://translate.google.com/translate?sl=en&tl='+encodeURIComponent(select.value)+'&u='+encodeURIComponent(url.href);
+  window.chsTranslatePage(select.value);
  },true);
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',addOptions,{once:true});else addOptions();
 })();

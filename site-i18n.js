@@ -1,5 +1,7 @@
 (function(){
 'use strict';
+// Google translates the DOM itself; do not restore English over its translated text.
+if(location.hostname.endsWith('.translate.goog'))return;
 if(location.pathname==='/'||location.pathname==='/index.html'||location.pathname==='/admin.html'||location.pathname==='/property-care-staff.html')return;
 const KEY='caveHomesLanguageManual';
 const LANGS=['en','es','nl','fr','de'];

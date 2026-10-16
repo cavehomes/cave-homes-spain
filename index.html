@@ -7450,6 +7450,7 @@
         lang,
         persist = false,
       ) {
+        if (location.hostname.endsWith(".translate.goog")) return;
         const dict = translations[lang] || {};
         textNodes.forEach((node) => {
           const original = node.original.trim(),
