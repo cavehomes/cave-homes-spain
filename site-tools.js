@@ -1,3 +1,7 @@
+/* Shared features initialise once even if a page includes this script twice. */
+(function(){
+  if(window.__chsSiteToolsLoaded)return;
+  window.__chsSiteToolsLoaded=true;
 /* Load the shared translation engine wherever the common site tools are loaded. */
 (function(){
   if(document.querySelector('script[src="/site-i18n.js"]'))return;
@@ -85,11 +89,11 @@
   const file=location.pathname.split('/').pop()||'index.html',place=places[file];
   if(!place)return;
   const hero=document.querySelector('main .hero, main section.hero');
-  if(!hero)return;
+  if(!hero||document.querySelector('.chs-weather'))return;
   const style=document.createElement('style');
   style.textContent='.chs-weather{display:grid;grid-template-columns:1fr auto;align-items:center;gap:18px;margin:0 0 24px;padding:18px 20px;border:1px solid #d7cdbf;border-radius:16px;background:#fff;box-shadow:0 8px 24px rgba(31,48,40,.07)}.chs-weather small,.chs-weather strong{display:block}.chs-weather small{color:#5f6963;font-weight:700}.chs-weather strong{font:700 1.25rem Georgia,serif;color:#214b3a}.chs-weather-now{font-size:1.45rem;font-weight:900;color:#ad5535;text-align:right}.chs-weather-now small{font-size:.76rem;font-weight:700}@media(max-width:480px){.chs-weather{grid-template-columns:1fr}.chs-weather-now{text-align:left}}';
   document.head.appendChild(style);
-  const box=document.createElement('aside');box.className='chs-weather';box.setAttribute('aria-live','polite');
+  const box=document.createElement('aside');box.className='chs-weather';box.setAttribute('aria-live','polite');box.setAttribute('aria-label','Current weather in '+place[0]);
   box.innerHTML='<div><small>LOCAL WEATHER</small><strong>'+place[0]+' today</strong></div><div class="chs-weather-now">Loading…</div>';
   hero.insertAdjacentElement('afterend',box);
   const code={0:'Clear',1:'Mainly clear',2:'Partly cloudy',3:'Cloudy',45:'Fog',48:'Fog',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',73:'Snow',75:'Heavy snow',80:'Rain showers',81:'Rain showers',82:'Heavy showers',95:'Thunderstorms'};
@@ -169,4 +173,6 @@
   document.body.appendChild(shade);document.body.appendChild(drawer);
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+
 })();
