@@ -52,6 +52,7 @@
     }).catch(()=>{});
   }
   function enable(){
+    if(window.__chsDisableAnalytics || /^\/admin(?:\.html)?\/?$/.test(location.pathname))return false;
     if(!hasConsent())return false;
     if(typeof window.enableAnalytics==='function')window.enableAnalytics();
     else{
