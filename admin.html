@@ -2266,6 +2266,11 @@
               </div>
             </div>
             <div class="field">
+                <label for="totalRooms">Total number of rooms (optional)</label>
+                <input id="totalRooms" type="number" min="0" max="2147483647" step="1" inputmode="numeric" placeholder="e.g. 5" aria-describedby="totalRoomsHelp" />
+                <small id="totalRoomsHelp">Include bedrooms, living rooms, kitchens, bathrooms and other rooms. Leave blank if unknown or not applicable.</small>
+              </div>
+            <div class="field">
               <label for="propertyType">Property type</label
               ><select id="propertyType">
                 <option>Cave Home</option>
@@ -3836,6 +3841,10 @@
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner"></span> Saving';
         try {
+          const roomsValue = $("totalRooms").value.trim();
+          const totalRooms = roomsValue === "" ? null : Number(roomsValue);
+          if (totalRooms !== null && (!Number.isInteger(totalRooms) || totalRooms < 0 || totalRooms > 2147483647))
+            throw Error("Please enter a whole number of rooms, or leave it blank.");
           const images = await uploadPhotos([...$("photo").files]);
           if (!images.length) throw Error("Please add at least one photo.");
           const energySelection = $("energyConsumption").value || "waiting";
@@ -3856,6 +3865,7 @@
             province: $("province").value.trim(),
             price: +$("price").value,
             bedrooms: +$("bedrooms").value,
+            total_rooms: totalRooms,
             property_type: $("propertyType").value,
             furnishing_status: $("furnishingStatus").value || null,
             energy_status: energyExempt
@@ -3992,7 +4002,7 @@
         $("draftList").innerHTML = homes
           .map(
             (h) =>
-              `<article class="home" data-type="${esc(h.property_type || "Cave Home")}"><img src="${esc(h.main_image_url)}" alt=""><div class="home-body"><div class="home-head"><div><span class="status">PRIVATE DRAFT</span><span class="status property-type">${esc(h.property_type || "Cave Home")}</span>${h.energy_status === "waiting" ? '<span class="status">ENERGY RATING PENDING</span>' : ""}<h3>${esc(h.title)}</h3></div><span class="photo-badge">📷 ${photoTotal(h)}</span></div><div class="meta">${esc(h.town)}, ${esc(h.province || "")} · €${Number(h.price).toLocaleString()} · ${esc(h.bedrooms)} beds${h.furnishing_status ? ` · ${esc(h.furnishing_status === "furnished" ? "Furnished" : "Unfurnished")}` : ""}</div><div class="actions"><button class="btn outline" onclick="editHome('${h.id}')">Edit</button><button class="btn green" onclick="publishHome('${h.id}')">Approve & publish</button><button class="btn danger" style="grid-column:1/-1" onclick="deleteHome('${h.id}')">Delete draft</button></div></div></article>`,
+              `<article class="home" data-type="${esc(h.property_type || "Cave Home")}"><img src="${esc(h.main_image_url)}" alt=""><div class="home-body"><div class="home-head"><div><span class="status">PRIVATE DRAFT</span><span class="status property-type">${esc(h.property_type || "Cave Home")}</span>${h.energy_status === "waiting" ? '<span class="status">ENERGY RATING PENDING</span>' : ""}<h3>${esc(h.title)}</h3></div><span class="photo-badge">📷 ${photoTotal(h)}</span></div><div class="meta">${esc(h.town)}, ${esc(h.province || "")} · €${Number(h.price).toLocaleString()} · ${esc(h.bedrooms)} beds${h.total_rooms != null ? ` · ${esc(h.total_rooms)} rooms total` : ""}${h.furnishing_status ? ` · ${esc(h.furnishing_status === "furnished" ? "Furnished" : "Unfurnished")}` : ""}</div><div class="actions"><button class="btn outline" onclick="editHome('${h.id}')">Edit</button><button class="btn green" onclick="publishHome('${h.id}')">Approve & publish</button><button class="btn danger" style="grid-column:1/-1" onclick="deleteHome('${h.id}')">Delete draft</button></div></div></article>`,
           )
           .join("");
       }
@@ -4018,6 +4028,7 @@
         $("province").value = h.province || "";
         $("price").value = h.price || "";
         $("bedrooms").value = h.bedrooms || "";
+        $("totalRooms").value = h.total_rooms ?? "";
         $("propertyType").value = h.property_type || "Cave Home";
         $("furnishingStatus").value = h.furnishing_status || "";
         $("energyConsumption").value =
@@ -4082,7 +4093,7 @@
           )
           .map(
             (h) =>
-              `<article class="home" data-type="${esc(h.property_type || "Cave Home")}"><img src="${esc(h.main_image_url)}" alt=""><div class="home-body"><div class="home-head"><div><span class="status">LIVE</span><span class="status property-type">${esc(h.property_type || "Cave Home")}</span>${h.featured ? '<span class="status featured">FEATURED ✦ · POSITION ' + (Number(h.featured_order) || 100) + "</span>" : ""}<h3>${esc(h.title)}</h3></div><span class="photo-badge">📷 ${photoTotal(h)}</span></div><div class="meta">${esc(h.town)}, ${esc(h.province || "")} · €${Number(h.price).toLocaleString()}</div><div class="actions"><button class="btn outline" onclick="editHome('${h.id}')">Edit details</button><button class="btn outline" onclick="unpublishHome('${h.id}')">Move to drafts</button><button class="btn ${h.featured ? "outline" : "green"}" style="grid-column:1/-1" onclick="toggleFeatured('${h.id}',${!!h.featured})">${h.featured ? "Remove featured" : "Make featured ✦"}</button><button class="btn danger" style="grid-column:1/-1" onclick="deleteLiveHome('${h.id}')">Delete property<span class="danger-note">Permanent action</span></button></div><a class="public-link" href="/?home=${encodeURIComponent(h.id)}" target="_blank">View on website ↗</a></div></article>`,
+              `<article class="home" data-type="${esc(h.property_type || "Cave Home")}"><img src="${esc(h.main_image_url)}" alt=""><div class="home-body"><div class="home-head"><div><span class="status">LIVE</span><span class="status property-type">${esc(h.property_type || "Cave Home")}</span>${h.featured ? '<span class="status featured">FEATURED ✦ · POSITION ' + (Number(h.featured_order) || 100) + "</span>" : ""}<h3>${esc(h.title)}</h3></div><span class="photo-badge">📷 ${photoTotal(h)}</span></div><div class="meta">${esc(h.town)}, ${esc(h.province || "")} · €${Number(h.price).toLocaleString()}${h.total_rooms != null ? ` · ${esc(h.total_rooms)} rooms total` : ""}</div><div class="actions"><button class="btn outline" onclick="editHome('${h.id}')">Edit details</button><button class="btn outline" onclick="unpublishHome('${h.id}')">Move to drafts</button><button class="btn ${h.featured ? "outline" : "green"}" style="grid-column:1/-1" onclick="toggleFeatured('${h.id}',${!!h.featured})">${h.featured ? "Remove featured" : "Make featured ✦"}</button><button class="btn danger" style="grid-column:1/-1" onclick="deleteLiveHome('${h.id}')">Delete property<span class="danger-note">Permanent action</span></button></div><a class="public-link" href="/?home=${encodeURIComponent(h.id)}" target="_blank">View on website ↗</a></div></article>`,
           )
           .join("");
       }
