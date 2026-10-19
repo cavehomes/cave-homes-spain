@@ -29,6 +29,7 @@
       }
     </script>
     <script src="/site-tools.js?v=20261015-weather-once" defer></script>
+    <script src="/property-video.js?v=20261019"></script>
     <script src="/property-copy-v16.js?v=16"></script>
     <script src="/weekly-featured.js?v=20261013"></script>
     <script src="/buyer-request-v16.js?v=16" defer></script><script src="/v16-tracking.js?v=16" defer></script>
@@ -5891,6 +5892,7 @@
           <h2 id="modalTitle"></h2>
           <div class="modal-price" id="modalPrice"></div>
           <div class="modal-facts" id="modalFacts"></div>
+          <div id="modalPropertyVideo" hidden></div>
           <span class="v15-detail-label">About this property</span>
           <p class="modal-description" id="modalDescription"></p>
           <div class="modal-actions">
@@ -9242,6 +9244,7 @@
           /\s*Source:\s*tucueva\.com\s*[—-]\s*confirm bedroom count before publishing\.?/gi,
           "",
         );
+        window.CHSPropertyVideo?.mount(document.getElementById("modalPropertyVideo"), home, modalLang);
         const buyerAssistance = document.getElementById("modalBuyerAssistance");
         const buyerAssistanceUrl = new URL("/buyer-assistance.html", location.origin);
         buyerAssistanceUrl.searchParams.set("lang", modalLang || "en");
@@ -9299,6 +9302,7 @@
         document.getElementById("modalClose").focus();
       }
       function closeProperty(updateUrl = true) {
+        window.CHSPropertyVideo?.stop(document.getElementById("modalPropertyVideo"));
         modal.classList.remove("open");
         document.body.style.overflow = "";
         document.title = "Cave Homes Spain | Character Homes in Andalucía";

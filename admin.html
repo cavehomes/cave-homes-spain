@@ -2393,6 +2393,20 @@
                 placeholder="Describe the rooms, outside space, condition and special features..."
               ></textarea>
             </div>
+            <div class="field">
+              <label for="propertyVideoFile">Property video (optional)</label>
+              <input id="propertyVideoFile" type="file" accept="video/mp4,video/webm,.mp4,.webm" aria-describedby="propertyVideoHelp">
+              <small id="propertyVideoHelp">Choose one MP4 or WebM video from your phone, up to 50 MB. Keep the app open while it uploads. The video appears on the listing when the property is published.</small>
+            </div>
+            <div class="field">
+              <label for="propertyVideoUrl">Or paste a video link</label>
+              <input id="propertyVideoUrl" type="url" inputmode="url" maxlength="2048" placeholder="https://…" aria-describedby="propertyVideoUrlHelp">
+              <small id="propertyVideoUrlHelp">YouTube, Vimeo or a direct MP4/WebM link. For a large video, use a video link instead of uploading.</small>
+              <button id="removePropertyVideo" type="button" class="btn outline" style="margin-top:10px">Remove video</button>
+              <progress id="ownerVideoProgress" class="owner-video-progress" value="0" max="100" aria-label="Video upload progress" hidden></progress>
+              <p id="ownerVideoStatus" role="status" aria-live="polite"></p>
+              <div id="ownerVideoPreview" class="owner-video-preview"></div>
+            </div>
             <button class="btn" id="saveBtn" type="submit">
               Save as private draft
             </button>
@@ -3033,6 +3047,10 @@
       </main>
     </div>
     <link rel="stylesheet" href="/owners-attention.css?v=20261019-links">
+    <link rel="stylesheet" href="/property-video.css?v=20261019">
+    <script src="/property-video.js?v=20261019"></script>
+    <script src="/tus-upload-4.3.1.min.js"></script>
+    <script src="/owners-property-video.js?v=20261019"></script>
     <script src="/owners-attention.js?v=20261019-links"></script>
     <script src="/owners-viewing-reports.js?v=20261013"></script>
     <script src="/owners-bookings.js?v=20261013"></script>
@@ -3077,6 +3095,7 @@
           if (location.hash === "#approvals")
             setTimeout(() => switchView("approvals"), 100);
         } else {
+          window.CHSOwnerVideo?.load();
           window.CHSOwnerReports?.reset();
           window.CHSOwnerQuotes?.reset();
           window.CHSOwnerBookings?.reset();
@@ -3844,7 +3863,10 @@
         const btn = $("saveBtn");
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner"></span> Saving';
+        let videoUpload, videoSaved = false;
+        const savingId = $("editId").value;
         try {
+          const videoSelection = window.CHSOwnerVideo.validate();
           const roomsValue = $("totalRooms").value.trim();
           const totalRooms = roomsValue === "" ? null : Number(roomsValue);
           if (totalRooms !== null && (!Number.isInteger(totalRooms) || totalRooms < 0 || totalRooms > 2147483647))
@@ -3863,7 +3885,10 @@
               energySelection === "renovation_exempt" ||
               energySelection === "renovation_waiting",
             renovationUnconfirmed = energySelection === "renovation_exempt";
+          videoUpload = await window.CHSOwnerVideo.prepare(db, videoSelection);
+          if ($("editId").value !== savingId) throw Error("The property changed while saving. Please save it again.");
           const property = {
+            video_url: videoUpload.url,
             title: $("title").value.trim(),
             town: $("town").value.trim(),
             province: $("province").value.trim(),
@@ -3895,9 +3920,11 @@
           };
           const id = $("editId").value;
           const result = id
-            ? await db.from("properties").update(property).eq("id", id)
-            : await db.from("properties").insert(property);
+            ? await db.from("properties").update(property).eq("id", id).select("id").single()
+            : await db.from("properties").insert(property).select("id").single();
           if (result.error) throw result.error;
+          videoSaved = true;
+          await videoUpload.commit();
           const wasLive = property.published;
           resetForm();
           showNotice(
@@ -3909,6 +3936,8 @@
           updateDashboardCounts();
           setTimeout(() => switchView(wasLive ? "live" : "drafts"), 800);
         } catch (error) {
+          if (videoUpload && !videoSaved) await videoUpload.rollback().catch(() => {});
+          $("ownerVideoProgress").hidden = true;
           showNotice(
             "formNotice",
             error.message || "The home could not be saved.",
@@ -3920,6 +3949,7 @@
         }
       });
       function resetForm() {
+        window.CHSOwnerVideo.load();
         $("homeForm").reset();
         $("editId").value = "";
         $("existingImage").value = "";
@@ -4027,6 +4057,7 @@
           : "Edit private draft";
         $("editMode").classList.remove("hidden");
         showPhotoPreview(savedImages);
+        window.CHSOwnerVideo.load(h.video_url || "");
         $("title").value = h.title || "";
         $("town").value = h.town || "";
         $("province").value = h.province || "";
@@ -4139,7 +4170,7 @@
           .from("properties")
           .delete()
           .eq("id", id)
-          .select("id");
+          .select("id,video_url");
         if (error) {
           alert("Could not delete property: " + error.message);
           return false;
@@ -4150,6 +4181,7 @@
           );
           return false;
         }
+        await window.CHSOwnerVideo.remove(db, data[0].video_url).catch(() => {});
         alert("Property deleted successfully.");
         updateDashboardCounts();
         return true;
@@ -6188,6 +6220,7 @@
           card.focus({preventScroll:true});
         }
       }
+      window.CHSOwnerVideo.init();
       setupOwnersV7();
       setupOwnersV8();
       window.CHSOwnerAttention?.init({db, open:openOwnerAttentionItem, openSection:openOwnerAttentionSection});
