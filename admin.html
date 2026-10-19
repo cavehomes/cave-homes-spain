@@ -3032,8 +3032,8 @@
         </section>
       </main>
     </div>
-    <link rel="stylesheet" href="/owners-attention.css?v=20261019">
-    <script src="/owners-attention.js?v=20261019"></script>
+    <link rel="stylesheet" href="/owners-attention.css?v=20261019-links">
+    <script src="/owners-attention.js?v=20261019-links"></script>
     <script src="/owners-viewing-reports.js?v=20261013"></script>
     <script src="/owners-bookings.js?v=20261013"></script>
     <script src="/owners-quote-links.js?v=20261016"></script>
@@ -6126,6 +6126,31 @@
           .forEach((tab) => (tab.onclick = () => switchView(tab.dataset.view)));
         switchView("home");
       }
+      async function openOwnerAttentionSection(key) {
+        if (!ownerSessionActive) return;
+        const destination = {messages:"inquiries",searches:"buyerRequests",followups:"buyer",jobs:"care",bookings:"buyer",listings:"drafts",live:"live"}[key];
+        if (!destination) return;
+        if (destination === "buyer") {
+          $("assistanceEnquirySearch").value = "";
+          $("assistanceStageFilter").value = key === "bookings" ? "booked" : "all";
+          $("assistanceDueFilter").value = key === "followups" ? "due" : "all";
+        } else if (destination === "inquiries") {
+          $("inquirySearch").value = "";
+          if ($("inquiryStatusFilter")) $("inquiryStatusFilter").value = "unread";
+        } else if (destination === "buyerRequests") {
+          $("buyerRequestSearch").value = "";
+          $("buyerRequestStatus").value = "active";
+        } else if (destination === "drafts" || destination === "live") {
+          const prefix = destination === "drafts" ? "draft" : "live";
+          $(prefix + "Search").value = "";
+          $(prefix + "TypeFilter").value = "";
+        }
+        await switchView(destination);
+        if (!ownerSessionActive) return;
+        const target = $(destination === "care" ? "careJobList" : destination + "View");
+        target?.scrollIntoView({behavior:"smooth", block:"start"});
+        if (target) { target.tabIndex = -1; target.focus({preventScroll:true}); }
+      }
       async function openOwnerAttentionItem(item) {
         if (!ownerSessionActive) return;
         if (item.kind === "property") {
@@ -6165,7 +6190,7 @@
       }
       setupOwnersV7();
       setupOwnersV8();
-      window.CHSOwnerAttention?.init({db, open:openOwnerAttentionItem});
+      window.CHSOwnerAttention?.init({db, open:openOwnerAttentionItem, openSection:openOwnerAttentionSection});
       $("buyerRequestSearch")?.addEventListener("input", renderBuyerRequests);
       $("buyerRequestStatus")?.addEventListener("change", renderBuyerRequests);
       if ("serviceWorker" in navigator)

@@ -62,8 +62,17 @@
     grid.replaceChildren();
     groups.forEach(group => {
       const article = document.createElement('article'); article.className = 'owner-attention-card'; article.dataset.group = group.key;
-      const heading = document.createElement('h3'); heading.textContent = group.title;
-      const count = document.createElement('strong'); count.className = 'owner-attention-count'; count.textContent = group.unavailable || (group.partial && !group.items.length) ? '—' : String(group.items.length) + (group.partial ? '+' : ''); heading.appendChild(count);
+      const openSection = async key => {
+        try { await options.openSection(key); }
+        catch (_) { status.textContent = 'This section could not be opened. Please try again.'; }
+      };
+      const heading = document.createElement('h3');
+      const headingButton = document.createElement('button'); headingButton.type = 'button'; headingButton.className = 'owner-attention-heading';
+      headingButton.setAttribute('aria-label', 'Open ' + group.title.toLowerCase());
+      const headingText = document.createElement('span'); headingText.textContent = group.title;
+      const count = document.createElement('strong'); count.className = 'owner-attention-count'; count.textContent = group.unavailable || (group.partial && !group.items.length) ? '—' : String(group.items.length) + (group.partial ? '+' : '');
+      headingButton.append(headingText, count); headingButton.onclick = () => openSection(group.key); heading.appendChild(headingButton);
+      article.onclick = event => { if (!event.target.closest('button,a,input,select,textarea')) openSection(group.key); };
       const hint = document.createElement('p'); hint.className = 'owner-attention-hint'; hint.textContent = group.hint;
       article.append(heading, hint);
       if (group.unavailable || group.partial) { const warning = document.createElement('p'); warning.className = 'owner-attention-warning'; warning.textContent = group.unavailable ? 'Could not load this list. Tap Refresh to try again.' : 'Some jobs could not be loaded. Tap Refresh to check the full list.'; article.appendChild(warning); }
@@ -87,6 +96,18 @@
           article.appendChild(more);
         }
       } else if (!group.unavailable && !group.partial) { const empty = document.createElement('p'); empty.className = 'owner-attention-empty'; empty.textContent = group.empty; article.appendChild(empty); }
+      const links = document.createElement('div'); links.className = 'owner-attention-links';
+      const destinations = {
+        messages:[['messages','Open enquiries →'],['searches','Buyer search requests →']],
+        followups:[['followups','Open follow-ups →']],
+        jobs:[['jobs','Property Care jobs →'],['bookings','Viewing bookings →']],
+        listings:[['listings','Private drafts →'],['live','Live properties →']]
+      };
+      destinations[group.key].forEach(([key,label]) => {
+        const button = document.createElement('button'); button.type = 'button'; button.textContent = label;
+        button.onclick = () => openSection(key); links.appendChild(button);
+      });
+      article.appendChild(links);
       grid.appendChild(article);
     });
   }
