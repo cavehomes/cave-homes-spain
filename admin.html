@@ -3032,6 +3032,8 @@
         </section>
       </main>
     </div>
+    <link rel="stylesheet" href="/owners-attention.css?v=20261019">
+    <script src="/owners-attention.js?v=20261019"></script>
     <script src="/owners-viewing-reports.js?v=20261013"></script>
     <script src="/owners-bookings.js?v=20261013"></script>
     <script src="/owners-quote-links.js?v=20261016"></script>
@@ -3057,6 +3059,7 @@
       db.auth.onAuthStateChange((_, session) => setSession(session));
       function setSession(session) {
         ownerSessionActive = !!session;
+        window.CHSOwnerAttention?.session(session?.user?.id || null);
         $("loginView").classList.toggle("hidden", !!session);
         $("appView").classList.toggle("hidden", !session);
         if (session) {
@@ -3130,13 +3133,14 @@
         $("businessesView").classList.toggle("hidden", view !== "businesses");
         $("rentalsView").classList.toggle("hidden", view !== "rentals");
         $("communityView").classList.toggle("hidden", view !== "community");
-        if (view === "buyer") loadInquiries();
-        if (view === "care") loadCareData();
-        if (view === "drafts") loadDrafts();
-        if (view === "live") loadLiveHomes();
-        if (view === "approvals") loadInquiries();
-        if (view === "inquiries") loadInquiries();
-        if (view === "buyerRequests") loadInquiries();
+        if (onHome) window.CHSOwnerAttention?.refresh();
+        if (view === "buyer") return loadInquiries();
+        if (view === "care") return loadCareData();
+        if (view === "drafts") return loadDrafts();
+        if (view === "live") return loadLiveHomes();
+        if (view === "approvals") return loadInquiries();
+        if (view === "inquiries") return loadInquiries();
+        if (view === "buyerRequests") return loadInquiries();
         if (view === "businesses") loadBusinesses();
         if (view === "rentals") loadRentals();
         if (view === "community") loadCommunityModeration();
@@ -4223,6 +4227,7 @@
         $("approvalCount").textContent = pending;
         $("approvalCount").classList.toggle("hidden", !pending);
         $("pendingStat").textContent = pending;
+        window.CHSOwnerAttention?.changed();
       }
       function longRentalDetails(q) {
         try {
@@ -5278,6 +5283,7 @@
       const updateDashboardCountsV6 = updateDashboardCounts;
       updateDashboardCounts = async function () {
         await updateDashboardCountsV6();
+        window.CHSOwnerAttention?.changed();
         const { data } = await db.from("properties").select("status");
         if ($("soldStat"))
           $("soldStat").textContent = (data || []).filter(
@@ -5675,6 +5681,7 @@
           return;
         }
         careJobs = data || [];
+        window.CHSOwnerAttention?.changed();
         renderCareJobs();
       }
       function renderCareJobs() {
@@ -5690,7 +5697,7 @@
               ),
               status = job.status.replace("_", " "),
               active = !["completed", "cancelled"].includes(job.status);
-            return `<article class="care-property"><div><strong>${job.priority === "urgent" ? "URGENT · " : ""}${esc(job.title)}</strong><span>${esc(job.care_properties?.name || "Property")} · ${esc(worker?.full_name || "Employee")}</span><span>${new Date(job.scheduled_for).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })} · ${esc(status)}</span>${job.instructions ? `<span>${esc(job.instructions)}</span>` : ""}</div>${active ? `<button class="care-delete" type="button" onclick="cancelCareJob('${job.id}')">Cancel job</button>` : ""}</article>`;
+            return `<article class="care-property" data-care-job-id="${esc(job.id)}"><div><strong>${job.priority === "urgent" ? "URGENT · " : ""}${esc(job.title)}</strong><span>${esc(job.care_properties?.name || "Property")} · ${esc(worker?.full_name || "Employee")}</span><span>${new Date(job.scheduled_for).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })} · ${esc(status)}</span>${job.instructions ? `<span>${esc(job.instructions)}</span>` : ""}</div>${active ? `<button class="care-delete" type="button" onclick="cancelCareJob('${job.id}')">Cancel job</button>` : ""}</article>`;
           })
           .join("");
       }
@@ -6119,8 +6126,46 @@
           .forEach((tab) => (tab.onclick = () => switchView(tab.dataset.view)));
         switchView("home");
       }
+      async function openOwnerAttentionItem(item) {
+        if (!ownerSessionActive) return;
+        if (item.kind === "property") {
+          await switchView(item.view);
+          if (!ownerSessionActive) return;
+          if (!homes.some(home => String(home.id) === String(item.id))) throw Error("Property unavailable");
+          editHome(item.id);
+          $("title").focus();
+          return;
+        }
+        // Clear previous filters so the selected task is always visible.
+        if (item.view === "buyer") {
+          $("assistanceEnquirySearch").value = "";
+          $("assistanceStageFilter").value = "all";
+          $("assistanceDueFilter").value = "all";
+        } else if (item.view === "inquiries") {
+          $("inquirySearch").value = "";
+          if ($("inquiryStatusFilter")) $("inquiryStatusFilter").value = "all";
+        } else if (item.view === "buyerRequests") {
+          $("buyerRequestSearch").value = "";
+          $("buyerRequestStatus").value = "all";
+        }
+        await switchView(item.view);
+        if (!ownerSessionActive) return;
+        const container = $(item.view === "care" ? "careJobList" : item.view === "buyer" ? "assistanceEnquiryList" : item.view === "buyerRequests" ? "buyerRequestList" : "inquiryList");
+        const card = [...(container?.querySelectorAll("article") || [])].find(card => String(card.dataset.enquiryId || card.dataset.careJobId) === String(item.id));
+        if (!card) { alert("This item may have changed or been completed. Return Home and refresh the task list."); return; }
+        if (item.view === "buyer" || item.view === "inquiries") {
+          openInquiryReader(card);
+        } else {
+          document.querySelectorAll(".owner-attention-target").forEach(node => node.classList.remove("owner-attention-target"));
+          card.classList.add("owner-attention-target");
+          card.tabIndex = -1;
+          card.scrollIntoView({behavior:"smooth", block:"center"});
+          card.focus({preventScroll:true});
+        }
+      }
       setupOwnersV7();
       setupOwnersV8();
+      window.CHSOwnerAttention?.init({db, open:openOwnerAttentionItem});
       $("buyerRequestSearch")?.addEventListener("input", renderBuyerRequests);
       $("buyerRequestStatus")?.addEventListener("change", renderBuyerRequests);
       if ("serviceWorker" in navigator)
